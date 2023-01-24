@@ -2,7 +2,7 @@ import type { UserAuth } from '../typings/authTypes';
 
 import { shell } from '../main';
 
-export const getAuhFromInput = (): UserAuth => {
+export const getAuthFromInput = (): UserAuth => {
   console.log('Enter the URL of Bakaláři')
   const apiEndpoint = shell.getInput();
   console.log('Enter your username')
