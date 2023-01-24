@@ -1,3 +1,7 @@
-import { testFetch } from './functions/fetchFunctions';
+import { Shell } from './shell';
 
-testFetch();
+const shell = new Shell();
+
+while (true) {
+  shell.getInput();
+}
