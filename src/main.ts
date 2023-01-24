@@ -1,1 +1,3 @@
-console.log('Hello, world!');
+import { testFetch } from './functions/fetchFunctions';
+
+testFetch();
