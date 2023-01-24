@@ -1,5 +1,7 @@
 import prompt from 'prompt-sync';
 
+import { C_GREEN, C_CYAN, C_END } from './main';
+
 const defaultPrompt = prompt({
   sigint: true,
 });
@@ -15,7 +17,7 @@ export class Shell {
   };
 
   getCommand = (): string => {
-    const command = defaultPrompt(`[${this.userName}@${this.hostName}]$ `);
+    const command = defaultPrompt(`[${C_GREEN}${this.userName}${C_END}@${C_CYAN}${this.hostName}${C_END}]$ `);
     return command;
   };
 

@@ -7,14 +7,25 @@ import {
 import { fetchToken } from './functions/fetchFunctions';
 import { saveAuth } from './functions/authFunctions';
 
+// Constants
 export const shell = new Shell();
 export const HOSTNAME = 'bakalari';
 export const BANNER_FOLDER = 'banners';
 export const DATA_FOLDER = 'data';
 
+// Colors
+export const C_RED = '\x1b[31m';
+export const C_GREEN = '\x1b[32m';
+export const C_YELLOW = '\x1b[33m';
+export const C_BLUE = '\x1b[34m';
+export const C_MAGENTA = '\x1b[35m';
+export const C_CYAN = '\x1b[36m';
+export const C_END = '\x1b[0m';
+
 (async () => {
   shell.setHostname(HOSTNAME);
   printBanner('welcome');
+
   const auth = getAuthFromCache() ?? getAuthFromInput();
   const tokenData = await fetchToken(auth);
 
@@ -25,5 +36,10 @@ export const DATA_FOLDER = 'data';
 
   saveAuth(auth);
   shell.setUserName(auth.userName);
-  shell.getCommand();
+
+  let programRunning = true;
+  while (programRunning) {
+    const command = shell.getCommand();
+    if (command === 'exit') programRunning = false;
+  }
 })();
