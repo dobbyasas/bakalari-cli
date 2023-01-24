@@ -12,5 +12,12 @@ export const BANNER_FOLDER = 'banners';
   printBanner('welcome');
   const auth = getAuthFromInput();
   const tokenData = await fetchToken(auth);
-  console.log(tokenData);
+
+  if (!tokenData) {
+    console.log('Incorrect login!');
+    return;
+  }
+
+  shell.setUserName(auth.userName);
+  shell.getCommand();
 })();

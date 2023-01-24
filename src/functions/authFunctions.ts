@@ -9,6 +9,7 @@ export const getAuthFromInput = (): UserAuth => {
   const userName = shell.getInput();
   console.log('Enter your password')
   const password = shell.getInput();
+  console.log('');
 
   return {
     apiEndpoint,
