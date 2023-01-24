@@ -16,9 +16,27 @@ export class Shell {
     return input;
   };
 
-  getCommand = (): string => {
+  getCommand = (): {
+    keywords: string[];
+    options: string[];
+  } => {
     const command = defaultPrompt(`[${C_GREEN}${this.userName}${C_END}@${C_CYAN}${this.hostName}${C_END}]$ `);
-    return command;
+    const commandString = command.replace(/\s+/g, ' ');
+    const commandItems = commandString.split(' ');
+    
+    const keywords: string[] = [];
+    const options: string[] = [];
+
+    commandItems.forEach(item => {
+      item.startsWith('-')
+        ? options.push(...item.replace('-', '').split(''))
+        : keywords.push(item);
+    });
+    
+    return {
+      keywords,
+      options,
+    };
   };
 
   setInputPrompt = (prompt: string) => this.inputPrompt = prompt;

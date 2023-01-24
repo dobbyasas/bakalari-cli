@@ -40,6 +40,7 @@ export const C_END = '\x1b[0m';
   let programRunning = true;
   while (programRunning) {
     const command = shell.getCommand();
-    if (command === 'exit') programRunning = false;
+    if (command.keywords[0] === 'exit') programRunning = false;
+    console.log(command);
   }
 })();
