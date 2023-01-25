@@ -6,6 +6,7 @@ import {
 } from './functions/authFunctions';
 import { fetchToken } from './functions/fetchFunctions';
 import { saveAuth } from './functions/authFunctions';
+import { handleCommand } from './functions/commandFunctions';
 
 // Constants
 export const shell = new Shell();
@@ -41,6 +42,6 @@ export const C_END = '\x1b[0m';
   while (programRunning) {
     const command = shell.getCommand();
     if (command.keywords[0] === 'exit') programRunning = false;
-    console.log(command);
+    handleCommand(command.keywords, command.options);
   }
 })();
