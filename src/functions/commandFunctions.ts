@@ -37,6 +37,21 @@ export const handleCommand = async (
       break;
     }
 
+    case 'timetable':
+    case 'rozvrh': {
+      const { Days, Subjects } = await fetchFromAPI(auth, token, 'timetable/actual') as Timetable;
+      if (!Days) return;
+      Days.forEach(day => {
+        let row = '';
+        day.Atoms.forEach(atom => {
+          const subject = Subjects.find(subject => subject.Id === atom.SubjectId);
+          if (subject) row += `${subject.Abbrev} `;
+        });
+        console.log(row);
+      });
+      break;
+    }
+
     default:
       console.log(`Neznámý příkaz: ${keywords[0]}`)
       break;
