@@ -25,7 +25,9 @@ export const C_END = '\x1b[0m';
 
 (async () => {
   shell.setHostname(HOSTNAME);
-  printBanner('welcome');
+  printBanner('welcome', {
+    newLine: true,
+  });
 
   const auth = getAuthFromCache() ?? getAuthFromInput();
   const tokenData = await fetchToken(auth);
@@ -41,7 +43,10 @@ export const C_END = '\x1b[0m';
   let programRunning = true;
   while (programRunning) {
     const command = shell.getCommand();
-    if (command.keywords[0] === 'exit') programRunning = false;
+    if (command.keywords[0].toLowerCase() === 'exit') {
+      programRunning = false;
+      break;
+    }
     handleCommand(command.keywords, command.options);
   }
 })();
