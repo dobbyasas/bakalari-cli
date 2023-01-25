@@ -47,6 +47,6 @@ export const C_END = '\x1b[0m';
       programRunning = false;
       break;
     }
-    handleCommand(command.keywords, command.options);
+    await handleCommand(command.keywords, command.options, auth, tokenData.access_token);
   }
 })();
