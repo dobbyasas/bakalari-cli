@@ -14,6 +14,13 @@ export const HOSTNAME = 'bakalari';
 export const BANNER_FOLDER = 'banners';
 export const DATA_FOLDER = 'data';
 export const CELL_SPACING = 1;
+export const WEEK_DAYS = [
+  'Po',
+  'Út',
+  'St',
+  'Čt',
+  'Pá',
+];
 
 // Colors
 export const C_RED = '\x1b[31m';

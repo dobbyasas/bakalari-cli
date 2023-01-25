@@ -1,6 +1,7 @@
 import { printBanner } from './bannerFunctions';
 import { fetchFromAPI } from './fetchFunctions';
 import { formatTimetable } from './formattingFunctions';
+import { CELL_SPACING } from '../main';
 
 import type { UserAuth, APITokenObject } from '../typings/authTypes';
 import type { Timetable } from '../typings/timetableTypes';
@@ -42,7 +43,7 @@ export const handleCommand = async (
     case 'rozvrh': {
       const timetable = await fetchFromAPI(auth, token, 'timetable/actual') as Timetable;
       if (!timetable) return;
-      formatTimetable(timetable);
+      formatTimetable(timetable, CELL_SPACING);
       break;
     }
 
