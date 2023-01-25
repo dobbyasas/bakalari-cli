@@ -13,6 +13,7 @@ export const shell = new Shell();
 export const HOSTNAME = 'bakalari';
 export const BANNER_FOLDER = 'banners';
 export const DATA_FOLDER = 'data';
+export const CELL_SPACING = 1;
 
 // Colors
 export const C_RED = '\x1b[31m';

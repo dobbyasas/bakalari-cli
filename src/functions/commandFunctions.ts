@@ -1,5 +1,6 @@
 import { printBanner } from './bannerFunctions';
 import { fetchFromAPI } from './fetchFunctions';
+import { formatTimetable } from './formattingFunctions';
 
 import type { UserAuth, APITokenObject } from '../typings/authTypes';
 import type { Timetable } from '../typings/timetableTypes';
@@ -39,16 +40,9 @@ export const handleCommand = async (
 
     case 'timetable':
     case 'rozvrh': {
-      const { Days, Subjects } = await fetchFromAPI(auth, token, 'timetable/actual') as Timetable;
-      if (!Days) return;
-      Days.forEach(day => {
-        let row = '';
-        day.Atoms.forEach(atom => {
-          const subject = Subjects.find(subject => subject.Id === atom.SubjectId);
-          if (subject) row += `${subject.Abbrev} `;
-        });
-        console.log(row);
-      });
+      const timetable = await fetchFromAPI(auth, token, 'timetable/actual') as Timetable;
+      if (!timetable) return;
+      formatTimetable(timetable);
       break;
     }
 
