@@ -2,6 +2,7 @@ import { printBanner } from './bannerFunctions';
 import { fetchFromAPI } from './fetchFunctions';
 
 import type { UserAuth, APITokenObject } from '../typings/authTypes';
+import type { Timetable } from '../typings/timetableTypes';
 
 export const handleCommand = async (
   keywords: string[],
@@ -16,9 +17,13 @@ export const handleCommand = async (
       printBanner('help');
       break;
 
-    case 'test': {
-      const data = await fetchFromAPI(auth, token, 'timetable/actual');
-      console.log(data);
+    case 'hours':
+    case 'hodiny': {
+      const { Hours } = await fetchFromAPI(auth, token, 'timetable/actual') as Timetable;
+      if (!Hours) break;
+      Hours.forEach(hour => {
+        console.log(`${hour.Caption}: ${hour.BeginTime}-${hour.EndTime}`);
+      });
       break;
     }
 
