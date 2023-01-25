@@ -1,10 +1,13 @@
 import prompt from 'prompt-sync';
 
+import { C_GREEN, C_CYAN, C_END } from './main';
+
 const defaultPrompt = prompt({
   sigint: true,
 });
 
 export class Shell {
+  userName = 'user';
   hostName = '';
   inputPrompt = '> ';
 
@@ -13,11 +16,30 @@ export class Shell {
     return input;
   };
 
-  getCommand = (): string => {
-    const command = defaultPrompt(`[user@${this.hostName}]$ `);
-    return command;
+  getCommand = (): {
+    keywords: string[];
+    options: string[];
+  } => {
+    const command = defaultPrompt(`[${C_GREEN}${this.userName}${C_END}@${C_CYAN}${this.hostName}${C_END}]$ `);
+    const commandString = command.replace(/\s+/g, ' ');
+    const commandItems = commandString.split(' ');
+    
+    const keywords: string[] = [];
+    const options: string[] = [];
+
+    commandItems.forEach(item => {
+      item.startsWith('-')
+        ? options.push(...item.replace('-', '').split(''))
+        : keywords.push(item);
+    });
+    
+    return {
+      keywords,
+      options,
+    };
   };
 
   setInputPrompt = (prompt: string) => this.inputPrompt = prompt;
+  setUserName = (prompt: string) => this.userName = prompt;
   setHostname = (prompt: string) => this.hostName = prompt;
 }
