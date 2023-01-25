@@ -1,5 +1,5 @@
 export type APIEndpoint = string;
-export type APIEndpointRoute = string;
+export type APIEndpointRoute = 'timetable/actual' | 'timetable/permanent';
 export type UserName = string;
 export type UserPassword = string;
 export type APITokenObject = {

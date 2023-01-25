@@ -27,6 +27,16 @@ export const handleCommand = async (
       break;
     }
 
+    case 'teachers':
+    case 'ucitele': {
+      const { Teachers } = await fetchFromAPI(auth, token, 'timetable/permanent') as Timetable;
+      if (!Teachers) break;
+      Teachers.forEach(teacher => {
+        console.log(`${teacher.Abbrev} - ${teacher.Name}`);
+      });
+      break;
+    }
+
     default:
       console.log(`Neznámý příkaz: ${keywords[0]}`)
       break;

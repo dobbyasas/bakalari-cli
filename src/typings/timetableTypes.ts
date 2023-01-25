@@ -5,6 +5,13 @@ export type Hour = {
   EndTime: string;
 };
 
+export type Teacher = {
+  Id: string;
+  Abbrev: string;
+  Name: string;
+};
+
 export type Timetable = {
   Hours: Hour[];
+  Teachers: Teacher[];
 };
