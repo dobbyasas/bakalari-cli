@@ -11,7 +11,7 @@ export const getAuthFromInput = (): UserAuth => {
   console.log('Enter your username')
   const userName = shell.getInput();
   console.log('Enter your password')
-  const password = shell.getInput();
+  const password = shell.getPassword();
   console.log('');
 
   return {

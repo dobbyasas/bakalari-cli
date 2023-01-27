@@ -12,10 +12,18 @@ import type { Change } from './typings/timetableTypes';
 
 // Constants
 export const shell = new Shell();
+export const PASSWORD_SYMBOL = '*';
 export const HOSTNAME = 'bakalari';
 export const BANNER_FOLDER = 'banners';
 export const DATA_FOLDER = 'data';
 export const CELL_SPACING = 1;
+export const COMMANDS: string[] = [
+  'help', 'napoveda',
+  'hours', 'hodiny',
+  'teachers', 'ucitele',
+  'timetable', 'rozvrh',
+  'changes', 'zmeny',
+];
 export const WEEK_DAYS = [
   'Po',
   'Út',
