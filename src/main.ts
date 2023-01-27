@@ -8,11 +8,27 @@ import { fetchToken } from './functions/fetchFunctions';
 import { saveAuth } from './functions/authFunctions';
 import { handleCommand } from './functions/commandFunctions';
 
+import type { Change } from './typings/timetableTypes';
+
 // Constants
 export const shell = new Shell();
 export const HOSTNAME = 'bakalari';
 export const BANNER_FOLDER = 'banners';
 export const DATA_FOLDER = 'data';
+export const CELL_SPACING = 1;
+export const WEEK_DAYS = [
+  'Po',
+  'Út',
+  'St',
+  'Čt',
+  'Pá',
+];
+export const CHANGE_TYPES: {[key in Change['ChangeType']]: string} = {
+  'Added': 'Přidáno',
+  'Canceled': 'Odebráno',
+  'RoomChanged': 'Změna třídy',
+  'Substitution': 'Suplování',
+};
 
 // Colors
 export const C_RED = '\x1b[31m';
