@@ -1,4 +1,4 @@
-import { WEEK_DAYS } from '../main';
+import { CELL_SPACING, WEEK_DAYS } from '../main';
 
 import type { Timetable } from '../typings/timetableTypes';
 
@@ -13,10 +13,11 @@ const getLongestSubjectNameLength = (subjects: Timetable['Subjects']) => {
 export const formatTimetable = (timetable: Timetable, cellSpacing: number) => {
   const { Hours, Days, Subjects } = timetable;
 
+  const minHour = Math.min(...Hours.map(hour => hour.Id)) ?? 0;
   const longestWeekDayLength = getLongestWeekDayLength(WEEK_DAYS);
   const longestSubjectNameLength = getLongestSubjectNameLength(Subjects);
 
-  let hourRow = ' '.repeat(longestWeekDayLength) + ' '.repeat(cellSpacing);
+  let hourRow = ' '.repeat(longestWeekDayLength + cellSpacing);
   Hours.forEach(hour => {
     hourRow += hour.Caption.padEnd(longestSubjectNameLength + cellSpacing, ' ');
   });
@@ -24,10 +25,17 @@ export const formatTimetable = (timetable: Timetable, cellSpacing: number) => {
 
   Days.forEach(day => {
     let row = `${WEEK_DAYS[day.DayOfWeek - 1]}${' '.repeat(cellSpacing)}`;
-    day.Atoms.forEach(atom => {
-      const subject = Subjects.find(subject => subject.Id === atom.SubjectId);
-      if (subject) row += `${subject.Abbrev.padEnd(longestSubjectNameLength + cellSpacing, ' ')} `;
-    });
+    for (let i = 0; i < Hours.length; i++) {
+      const atom = day.Atoms.find(atom => atom.HourId === i + minHour);
+      if (!atom) {
+        row += ' '.repeat(longestSubjectNameLength + CELL_SPACING);
+        continue;
+      }
+      const subject = Subjects.find(subject => subject.Id === atom?.SubjectId);
+      row += subject
+        ? `${(subject?.Abbrev ?? ' ').padEnd(longestSubjectNameLength + cellSpacing, ' ')}`
+        : ' '.repeat(longestSubjectNameLength + CELL_SPACING);
+    }
     console.log(row);
   });
 };
