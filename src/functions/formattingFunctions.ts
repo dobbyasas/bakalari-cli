@@ -1,6 +1,6 @@
 import { CELL_SPACING, WEEK_DAYS } from '../main';
 
-import type { Timetable } from '../typings/timetableTypes';
+import type { Timetable, Change } from '../typings/timetableTypes';
 
 const getLongestWeekDayLength = (weekDays: string[]) => {
   return Math.max(...weekDays.map(weekDay => weekDay.length));
@@ -38,4 +38,8 @@ export const formatTimetable = (timetable: Timetable, cellSpacing: number) => {
     }
     console.log(row);
   });
+};
+
+export const displayChanges = (changes: Change[]) => {
+  console.log(changes);
 };

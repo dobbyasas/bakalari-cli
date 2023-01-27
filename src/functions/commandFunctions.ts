@@ -1,10 +1,10 @@
 import { printBanner } from './bannerFunctions';
 import { fetchFromAPI } from './fetchFunctions';
-import { formatTimetable } from './formattingFunctions';
+import { formatTimetable, displayChanges } from './formattingFunctions';
 import { CELL_SPACING } from '../main';
 
 import type { UserAuth, APITokenObject } from '../typings/authTypes';
-import type { Timetable } from '../typings/timetableTypes';
+import type { Timetable, Change } from '../typings/timetableTypes';
 
 export const handleCommand = async (
   keywords: string[],
@@ -47,8 +47,22 @@ export const handleCommand = async (
       break;
     }
 
+    case 'changes':
+    case 'zmeny': {
+      const timetable = await fetchFromAPI(auth, token, 'timetable/actual') as Timetable;
+      if (!timetable) return;
+      const changes: Change[] = [];
+      timetable.Days.map(day => day.Atoms.map(atom => atom.Change)).forEach(change => {
+        change.forEach(item => {
+          if (item) changes.push(item);
+        });
+      });
+      displayChanges(changes);
+      break;
+    }
+
     default:
       console.log(`Neznámý příkaz: ${keywords[0]}`)
       break;
   }
-};
+}
