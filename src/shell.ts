@@ -1,18 +1,34 @@
 import prompt from 'prompt-sync';
+import promptHistory from 'prompt-sync-history';
 
-import { C_GREEN, C_CYAN, C_END } from './main';
+import {
+  COMMANDS,
+  PASSWORD_SYMBOL,
+  C_GREEN,
+  C_CYAN,
+  C_END
+} from './main';
 
 const defaultPrompt = prompt({
   sigint: true,
+  history: promptHistory(),
+  autocomplete: () => COMMANDS,
 });
 
 export class Shell {
   userName = 'user';
-  hostName = '';
+  hostName = 'host';
   inputPrompt = '> ';
 
   getInput = (): string => {
     const input = defaultPrompt(this.inputPrompt);
+    return input;
+  };
+
+  getPassword = (): string => {
+    const input = defaultPrompt(this.inputPrompt, {
+      echo: PASSWORD_SYMBOL,
+    });
     return input;
   };
 
