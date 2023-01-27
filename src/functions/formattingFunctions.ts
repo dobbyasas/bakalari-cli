@@ -1,4 +1,4 @@
-import { CELL_SPACING, WEEK_DAYS } from '../main';
+import { CELL_SPACING, WEEK_DAYS, CHANGE_TYPES } from '../main';
 
 import type { Timetable, Change } from '../typings/timetableTypes';
 
@@ -40,6 +40,13 @@ export const formatTimetable = (timetable: Timetable, cellSpacing: number) => {
   });
 };
 
+export const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`;
+};
+
 export const displayChanges = (changes: Change[]) => {
-  console.log(changes);
+  changes.forEach(change =>  {
+    console.log(`${formatDate(change.Day)} (${change.Hours}): ${CHANGE_TYPES[change.ChangeType]} ${change.Description}`);
+  });
 };

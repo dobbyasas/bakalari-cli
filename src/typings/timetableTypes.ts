@@ -19,7 +19,8 @@ export type Room = {
 
 export type Change = {
   Day: string;
-  ChangeType: 'Added' | 'Removed' | 'RoomChanged' | 'Substitution';
+  Hours: string;
+  ChangeType: 'Added' | 'Canceled' | 'RoomChanged' | 'Substitution';
   Description: string;
 };
 
