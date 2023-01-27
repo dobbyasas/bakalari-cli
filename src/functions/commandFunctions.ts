@@ -1,5 +1,4 @@
 import { printBanner } from './bannerFunctions';
-import { fetchFromAPI } from './fetchFunctions';
 import { formatTimetable, displayChanges } from './formattingFunctions';
 import { CELL_SPACING } from '../main';
 
@@ -65,4 +64,4 @@ export const handleCommand = async (
       console.log(`Neznámý příkaz: ${keywords[0]}`)
       break;
   }
-}
+};
