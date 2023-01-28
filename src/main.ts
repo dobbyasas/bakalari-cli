@@ -24,6 +24,7 @@ export const COMMANDS: string[] = [
   'teachers', 'ucitele',
   'timetable', 'rozvrh',
   'changes', 'zmeny',
+  'final', 'pololeti',
   'logout', 'odhlasit',
 ];
 export const WEEK_DAYS = [

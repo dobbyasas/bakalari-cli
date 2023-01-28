@@ -6,6 +6,7 @@ import { shell, CELL_SPACING } from '../main';
 
 import type { UserAuth, APITokenObject } from '../typings/authTypes';
 import type { Timetable, Change } from '../typings/timetableTypes';
+import type { FinalMarksResult } from '../typings/markTypes';
 
 export const handleCommand = async (
   keywords: string[],
@@ -61,6 +62,15 @@ export const handleCommand = async (
         });
       });
       displayChanges(changes);
+      break;
+    }
+
+    case 'final':
+    case 'pololeti': {
+      const finalMarks = await fetchFromAPI(auth, token, 'marks/final') as FinalMarksResult;
+      if (!finalMarks) return;
+      console.log(finalMarks);
+      finalMarks.CertificateTerms.map(f => console.log(f.FinalMarks));
       break;
     }
 
