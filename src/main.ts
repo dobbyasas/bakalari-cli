@@ -8,6 +8,7 @@ import { fetchToken } from './functions/fetchFunctions';
 import { saveAuth } from './functions/authFunctions';
 import { handleCommand } from './functions/commandFunctions';
 
+import { UserAuth, APITokenObject } from './typings/authTypes';
 import type { Change } from './typings/timetableTypes';
 
 // Constants
@@ -23,6 +24,7 @@ export const COMMANDS: string[] = [
   'teachers', 'ucitele',
   'timetable', 'rozvrh',
   'changes', 'zmeny',
+  'logout', 'odhlasit',
 ];
 export const WEEK_DAYS = [
   'Po',
@@ -47,30 +49,48 @@ export const C_MAGENTA = '\x1b[35m';
 export const C_CYAN = '\x1b[36m';
 export const C_END = '\x1b[0m';
 
+const handleLogin = async (): Promise<{
+  auth: UserAuth;
+  tokenData: APITokenObject;
+} | null> => {
+  const auth = getAuthFromCache() ?? getAuthFromInput();
+  const tokenData = await fetchToken(auth);
+
+  if (!tokenData) {
+    console.log('Incorrect login!');
+    return null;
+  }
+
+  saveAuth(auth);
+  shell.setUserName(auth.userName);
+
+  return {
+    auth,
+    tokenData,
+  };
+};
+
 (async () => {
   shell.setHostname(HOSTNAME);
   printBanner('welcome', {
     newLine: true,
   });
 
-  const auth = getAuthFromCache() ?? getAuthFromInput();
-  const tokenData = await fetchToken(auth);
-
-  if (!tokenData) {
-    console.log('Incorrect login!');
-    return;
-  }
-
-  saveAuth(auth);
-  shell.setUserName(auth.userName);
+  const loginData = await handleLogin();
+  if (!loginData) return;
 
   let programRunning = true;
   while (programRunning) {
     const command = shell.getCommand();
-    if (command.keywords[0].toLowerCase() === 'exit') {
-      programRunning = false;
-      break;
-    }
-    await handleCommand(command.keywords, command.options, auth, tokenData.access_token);
+    await handleCommand(
+      command.keywords,
+      command.options,
+      loginData.auth,
+      loginData.tokenData.access_token,
+      () => {
+        programRunning = false;
+      },
+      handleLogin,
+    );
   }
 })();

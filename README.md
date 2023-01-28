@@ -9,3 +9,4 @@
 | teachers  | ucitele   | vypíše všechny učitele ve stálém rozvrhu |
 | timetable | rozvrh    | vypíše aktuální rozvrh                   |
 | changes   | zmeny     | vypíše změny v aktuálním rozvrhu         |
+| logout    | odhlasit  | odhlásí uživatele a vymaže data o loginu |

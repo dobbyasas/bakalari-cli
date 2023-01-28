@@ -1,7 +1,8 @@
 import { printBanner } from './bannerFunctions';
 import { formatTimetable, displayChanges } from './formattingFunctions';
 import { fetchFromAPI } from './fetchFunctions';
-import { CELL_SPACING } from '../main';
+import { deleteAuth } from './authFunctions';
+import { shell, CELL_SPACING } from '../main';
 
 import type { UserAuth, APITokenObject } from '../typings/authTypes';
 import type { Timetable, Change } from '../typings/timetableTypes';
@@ -11,6 +12,8 @@ export const handleCommand = async (
   options: string[],
   auth: UserAuth,
   token: APITokenObject['access_token'],
+  quitFunction: () => void,
+  loginFunction: () => Promise<unknown>,
 ) => {
   if (keywords.length === 0) return;
   switch (keywords[0].toLowerCase()) {
@@ -60,6 +63,28 @@ export const handleCommand = async (
       displayChanges(changes);
       break;
     }
+
+    case 'logout':
+    case 'odhlasit': {
+      deleteAuth();
+      console.log('Byl jste úspěšně odhlášen.');
+      console.log('Chcete se znovu přihlásit? [Y/n]');
+      
+      const response = shell.getInput();
+      if (response.length && response[0].trim().toLowerCase() === 'n') {
+        quitFunction();
+        break;
+      }
+
+      console.log('');
+      await loginFunction();
+      
+      break;
+    }
+
+    case 'exit':
+      quitFunction();
+      break;
 
     default:
       console.log(`Neznámý příkaz: ${keywords[0]}`)

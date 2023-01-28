@@ -41,3 +41,9 @@ export const saveAuth = (auth: UserAuth) => {
     JSON.stringify(auth, null, 2)
   );
 };
+
+export const deleteAuth = () => {
+  if (fs.existsSync(`${DATA_FOLDER}/auth.json`)) {
+    fs.rmSync(`${DATA_FOLDER}/auth.json`)
+  }
+};
