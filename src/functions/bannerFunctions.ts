@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-import { BANNER_FOLDER } from '../main';
+import { BANNER_FOLDER } from '../constants';
 
 export const printBanner = (banner: string, options?: {
   newLine?: boolean,

@@ -3,7 +3,7 @@ import {
   COLUMN_SPACING,
   WEEK_DAYS,
   CHANGE_TYPES,
-} from '../main';
+} from '../constants';
 
 import type { Timetable, Subject, Change } from '../typings/timetableTypes';
 import { FinalMarksResult } from '../typings/markTypes';

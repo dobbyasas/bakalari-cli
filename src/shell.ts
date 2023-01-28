@@ -7,7 +7,7 @@ import {
   C_GREEN,
   C_CYAN,
   C_END,
-} from './main';
+} from './constants';
 
 const defaultPrompt = prompt({
   sigint: true,

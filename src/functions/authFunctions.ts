@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 import { shell } from '../main';
-import { DATA_FOLDER } from '../main';
+import { DATA_FOLDER } from '../constants';
 
 import type { UserAuth } from '../typings/authTypes';
 

@@ -2,7 +2,8 @@ import { printBanner } from './bannerFunctions';
 import { formatTimetable, displayChanges, formatFinalMarks } from './formattingFunctions';
 import { fetchFromAPI } from './fetchFunctions';
 import { deleteAuth } from './authFunctions';
-import { shell, CELL_SPACING } from '../main';
+import { shell } from '../main';
+import { CELL_SPACING } from '../constants';
 
 import type { UserAuth, APITokenObject } from '../typings/authTypes';
 import type { Timetable, Change } from '../typings/timetableTypes';
