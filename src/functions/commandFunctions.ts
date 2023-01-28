@@ -1,5 +1,5 @@
 import { printBanner } from './bannerFunctions';
-import { formatTimetable, displayChanges } from './formattingFunctions';
+import { formatTimetable, displayChanges, formatFinalMarks } from './formattingFunctions';
 import { fetchFromAPI } from './fetchFunctions';
 import { deleteAuth } from './authFunctions';
 import { shell, CELL_SPACING } from '../main';
@@ -69,8 +69,7 @@ export const handleCommand = async (
     case 'pololeti': {
       const finalMarks = await fetchFromAPI(auth, token, 'marks/final') as FinalMarksResult;
       if (!finalMarks) return;
-      console.log(finalMarks);
-      finalMarks.CertificateTerms.map(f => console.log(f.FinalMarks));
+      formatFinalMarks(finalMarks);
       break;
     }
 

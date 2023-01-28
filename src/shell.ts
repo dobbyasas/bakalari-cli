@@ -6,7 +6,7 @@ import {
   PASSWORD_SYMBOL,
   C_GREEN,
   C_CYAN,
-  C_END
+  C_END,
 } from './main';
 
 const defaultPrompt = prompt({

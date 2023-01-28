@@ -1,7 +1,17 @@
+import type { Subject } from './timetableTypes';
+
+export type FinalMark = {
+  MarkDate: string;
+  EditDate: string;
+  MarkText: string;
+  SubjectId: Subject['Id'];
+  Id: string;
+};
+
 export type FinalMarksResult = {
   CertificateTerms: {
-    FinalMarks: any[];
-    Subjects: [];
+    FinalMarks: FinalMark[];
+    Subjects: Subject[];
     GradeName: string;
     Grade: number;
     YearInSchool: 1,

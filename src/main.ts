@@ -2,7 +2,7 @@ import { Shell } from './shell';
 import { printBanner } from './functions/bannerFunctions';
 import {
   getAuthFromCache,
-  getAuthFromInput
+  getAuthFromInput,
 } from './functions/authFunctions';
 import { fetchToken } from './functions/fetchFunctions';
 import { saveAuth } from './functions/authFunctions';
@@ -18,6 +18,7 @@ export const HOSTNAME = 'bakalari';
 export const BANNER_FOLDER = 'banners';
 export const DATA_FOLDER = 'data';
 export const CELL_SPACING = 1;
+export const COLUMN_SPACING = 2;
 export const COMMANDS: string[] = [
   'help', 'napoveda',
   'hours', 'hodiny',
