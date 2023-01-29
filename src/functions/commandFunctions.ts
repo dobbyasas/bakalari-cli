@@ -3,7 +3,7 @@ import { formatTimetable, displayChanges, formatFinalMarks } from './formattingF
 import { fetchFromAPI } from './fetchFunctions';
 import { deleteAuth } from './authFunctions';
 import { shell } from '../main';
-import { CELL_SPACING } from '../constants';
+import { CELL_SPACING, APP_LOGO } from '../constants';
 
 import type { UserAuth, APITokenObject } from '../typings/authTypes';
 import type { Timetable, Change } from '../typings/timetableTypes';
@@ -71,6 +71,13 @@ export const handleCommand = async (
       const finalMarks = await fetchFromAPI(auth, token, 'marks/final') as FinalMarksResult;
       if (!finalMarks) return;
       formatFinalMarks(finalMarks);
+      break;
+    }
+
+    case 'bfetch': {
+      APP_LOGO.forEach(line => {
+        console.log(line);
+      });
       break;
     }
 

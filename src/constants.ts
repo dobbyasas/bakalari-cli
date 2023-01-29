@@ -18,6 +18,7 @@ export const COMMANDS: string[] = [
   'timetable', 'rozvrh',
   'changes', 'zmeny',
   'final', 'pololeti',
+  'bfetch',
   'logout', 'odhlasit',
 ];
 export const WEEK_DAYS = [
@@ -42,3 +43,16 @@ export const C_BLUE = '\x1b[34m';
 export const C_MAGENTA = '\x1b[35m';
 export const C_CYAN = '\x1b[36m';
 export const C_END = '\x1b[0m';
+
+// Extra
+export const APP_LOGO = [
+  `${C_BLUE}██████████████████${C_END}`,
+  `${C_BLUE}██████${C_END}██████${C_BLUE}██████${C_END}`,
+  `${C_BLUE}██${C_END}████${C_BLUE}██████${C_END}████${C_BLUE}██${C_END}`,
+  `${C_BLUE}██${C_END}██${C_BLUE}██████████${C_END}██${C_BLUE}██${C_END}`,
+  `${C_BLUE}██${C_END}██${C_BLUE}████${C_END}██████${C_BLUE}████${C_END}`,
+  `${C_BLUE}██${C_END}██${C_BLUE}██████████${C_END}██${C_BLUE}██${C_END}`,
+  `${C_BLUE}██${C_END}████${C_BLUE}██████${C_END}████${C_BLUE}██${C_END}`,
+  `${C_BLUE}██████${C_END}██████${C_BLUE}██████${C_END}`,
+  `${C_BLUE}██████████████████${C_END}`,
+];
