@@ -1,7 +1,8 @@
 import * as fs from 'fs';
+import CryptoJS from 'crypto-js';
 
 import { shell } from '../main';
-import { DATA_FOLDER } from '../constants';
+import { DATA_FOLDER, PASSWORD_KEY } from '../constants';
 
 import type { UserAuth } from '../typings/authTypes';
 
@@ -25,7 +26,11 @@ export const getAuthFromCache = (): UserAuth | null => {
   if (!fs.existsSync(`${DATA_FOLDER}/auth.json`)) return null;
   const authData = fs.readFileSync(`${DATA_FOLDER}/auth.json`);
   const auth = JSON.parse(authData.toString());
-  return auth;
+
+  return {
+    ...auth,
+    password: CryptoJS.AES.decrypt(auth.password, PASSWORD_KEY).toString(CryptoJS.enc.Utf8),
+  };
 };
 
 const createAuthFolder = () => {
@@ -38,7 +43,10 @@ export const saveAuth = (auth: UserAuth) => {
   createAuthFolder();
   fs.writeFileSync(
     `${DATA_FOLDER}/auth.json`,
-    JSON.stringify(auth, null, 2)
+    JSON.stringify({
+      ...auth,
+      password: CryptoJS.AES.encrypt(auth.password, PASSWORD_KEY).toString(),
+    }, null, 2)
   );
 };
 
