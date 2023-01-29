@@ -7,7 +7,7 @@ import {
 import { fetchToken } from './functions/fetchFunctions';
 import { saveAuth } from './functions/authFunctions';
 import { handleCommand } from './functions/commandFunctions';
-import { HOSTNAME } from './constants';
+import { HOSTNAME, RELEASE_NUMBER } from './constants';
 
 import { UserAuth, APITokenObject } from './typings/authTypes';
 
@@ -38,6 +38,9 @@ const handleLogin = async (): Promise<{
   shell.setHostname(HOSTNAME);
   printBanner('welcome', {
     newLine: true,
+    placeholders: {
+      'release': RELEASE_NUMBER,
+    },
   });
 
   const loginData = await handleLogin();

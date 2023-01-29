@@ -1,5 +1,9 @@
 import type { Change } from './typings/timetableTypes';
 
+// Release Constants
+export const RELEASE_NUMBER = '1.0.0';
+export const RELEASE_PLACEHOLDER = '{release}';
+
 // Constants
 export const PASSWORD_SYMBOL = '*';
 export const HOSTNAME = 'bakalari';
