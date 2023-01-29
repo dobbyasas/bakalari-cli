@@ -1,3 +1,4 @@
 Bakaláři CLI
+Release {release}
 Made by Robin Patrik Sloup
 © 2023

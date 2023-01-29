@@ -6,8 +6,8 @@ import {
   PASSWORD_SYMBOL,
   C_GREEN,
   C_CYAN,
-  C_END
-} from './main';
+  C_END,
+} from './constants';
 
 const defaultPrompt = prompt({
   sigint: true,

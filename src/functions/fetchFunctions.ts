@@ -27,7 +27,7 @@ export const fetchToken = async (auth: UserAuth): Promise<APITokenObject | null>
 
 export const fetchFromAPI = async (auth: UserAuth, token: APITokenObject['access_token'], endpointUrl: APIEndpointRoute) => {
   try {
-    const req = await fetch(`${auth.apiEndpoint}/api/3/${endpointUrl}`, {
+    const req = await fetch(`${auth.apiEndpoint}/api/3${endpointUrl}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

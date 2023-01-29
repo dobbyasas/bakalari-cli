@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import CryptoJS from 'crypto-js';
 
-import { shell, PASSWORD_KEY } from '../main';
-import { DATA_FOLDER } from '../main';
+import { shell } from '../main';
+import { DATA_FOLDER, PASSWORD_KEY } from '../constants';
 
 import type { UserAuth } from '../typings/authTypes';
 
@@ -48,4 +48,10 @@ export const saveAuth = (auth: UserAuth) => {
       password: CryptoJS.AES.encrypt(auth.password, PASSWORD_KEY).toString(),
     }, null, 2)
   );
+};
+
+export const deleteAuth = () => {
+  if (fs.existsSync(`${DATA_FOLDER}/auth.json`)) {
+    fs.rmSync(`${DATA_FOLDER}/auth.json`)
+  }
 };
