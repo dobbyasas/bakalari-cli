@@ -12,6 +12,7 @@ import type { Change } from './typings/timetableTypes';
 
 // Constants
 export const shell = new Shell();
+export const PASSWORD_KEY = 'qLGT7kpULFOc';
 export const PASSWORD_SYMBOL = '*';
 export const HOSTNAME = 'bakalari';
 export const BANNER_FOLDER = 'banners';
