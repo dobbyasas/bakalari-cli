@@ -1,7 +1,7 @@
 import type { Change } from './typings/timetableTypes';
 
 // Release Constants
-export const RELEASE_NUMBER = '1.0.1';
+export const RELEASE_NUMBER = '1.0.2';
 export const RELEASE_PLACEHOLDER = '{release}';
 
 // Constants
@@ -17,6 +17,7 @@ export const COMMANDS: string[] = [
   'hours', 'hodiny',
   'teachers', 'ucitele',
   'timetable', 'rozvrh',
+  'marks', 'znamky',
   'changes', 'zmeny',
   'final', 'pololeti',
   'bfetch',

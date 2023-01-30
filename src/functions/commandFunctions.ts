@@ -15,7 +15,7 @@ import {
 
 import type { UserAuth, APITokenObject } from '../typings/authTypes';
 import type { Timetable, Change } from '../typings/timetableTypes';
-import type { FinalMarksResult } from '../typings/markTypes';
+import type { MarksResult, FinalMarksResult } from '../typings/markTypes';
 import type { APIVersionResponse } from '../typings/authTypes';
 
 export const handleCommand = async (
@@ -58,6 +58,17 @@ export const handleCommand = async (
       const timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
       if (!timetable) return;
       formatTimetable(timetable, CELL_SPACING);
+      break;
+    }
+
+    case 'marks':
+    case 'znamky': {
+      const marks = await fetchFromAPI(auth, token, '/marks') as MarksResult;
+      if (!marks) return;
+      const longestSubjectNameLength = Math.max(...marks.Subjects.map(subject => subject.Subject.Abbrev.length));
+      marks.Subjects.forEach(subject => {
+        console.log(`${subject.Subject.Abbrev.padEnd(longestSubjectNameLength, ' ')}${' '.repeat(CELL_SPACING)}${subject.AverageText}`);
+      });
       break;
     }
 

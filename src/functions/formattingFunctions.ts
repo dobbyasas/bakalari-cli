@@ -13,7 +13,7 @@ const getLongestWeekDayLength = (weekDays: string[]) => {
 };
 
 const getLongestSubjectNameLength = (subjects: Timetable['Subjects']) => {
-  return Math.max(...subjects.map(subject => subject['Abbrev'].length));
+  return Math.max(...subjects.map(subject => subject.Abbrev.length));
 };
 
 export const formatTimetable = (timetable: Timetable, cellSpacing: number) => {

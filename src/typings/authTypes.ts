@@ -1,5 +1,5 @@
 export type APIEndpoint = string;
-export type APIEndpointRoute = '' | '/timetable/actual' | '/timetable/permanent' | '/marks/final';
+export type APIEndpointRoute = '' | '/timetable/actual' | '/timetable/permanent' | '/marks' | '/marks/final';
 export type UserName = string;
 export type UserPassword = string;
 

@@ -8,6 +8,7 @@
 | hours     | hodiny    | vypíše kdy začíná a končí jaká hodina    |
 | teachers  | ucitele   | vypíše všechny učitele ve stálém rozvrhu |
 | timetable | rozvrh    | vypíše aktuální rozvrh                   |
+| marks     | znamky    | vypíše známky ze všech předmětů          |
 | changes   | zmeny     | vypíše změny v aktuálním rozvrhu         |
 | final     | pololeti  | vypíše konečné známky z každého pololetí |
 | bfetch    | bfetch    | vypíše informace o aplikaci a API        |
