@@ -12,7 +12,7 @@ export interface Absence extends AbsenceBase {
 }
 
 export interface SubjectAbsence extends AbsenceBase {
-  SubjectName: string
+  SubjectName: string;
   LessonsCount: number;
   Base: number;
 }

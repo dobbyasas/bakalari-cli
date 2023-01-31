@@ -32,7 +32,7 @@ export type SubjectMark = {
 };
 
 export type MarksResult = {
-  Subjects: SubjectMark[]; 
+  Subjects: SubjectMark[];
 };
 
 export type FinalMark = {
@@ -49,7 +49,7 @@ export type FinalMarksResult = {
     Subjects: Subject[];
     GradeName: string;
     Grade: number;
-    YearInSchool: 1,
+    YearInSchool: number;
     SchoolYear: string;
     Semester: string;
     SemesterName: string;

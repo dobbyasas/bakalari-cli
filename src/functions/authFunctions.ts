@@ -7,11 +7,11 @@ import { DATA_FOLDER, PASSWORD_KEY } from '../constants';
 import type { UserAuth } from '../typings/authTypes';
 
 export const getAuthFromInput = (): UserAuth => {
-  console.log('Enter the URL of Bakaláři')
+  console.log('Enter the URL of Bakaláři');
   const apiEndpoint = shell.getInput();
-  console.log('Enter your username')
+  console.log('Enter your username');
   const userName = shell.getInput();
-  console.log('Enter your password')
+  console.log('Enter your password');
   const password = shell.getPassword();
   console.log('');
 
@@ -29,7 +29,9 @@ export const getAuthFromCache = (): UserAuth | null => {
 
   return {
     ...auth,
-    password: CryptoJS.AES.decrypt(auth.password, PASSWORD_KEY).toString(CryptoJS.enc.Utf8),
+    password: CryptoJS.AES.decrypt(auth.password, PASSWORD_KEY).toString(
+      CryptoJS.enc.Utf8
+    ),
   };
 };
 
@@ -43,15 +45,19 @@ export const saveAuth = (auth: UserAuth) => {
   createAuthFolder();
   fs.writeFileSync(
     `${DATA_FOLDER}/auth.json`,
-    JSON.stringify({
-      ...auth,
-      password: CryptoJS.AES.encrypt(auth.password, PASSWORD_KEY).toString(),
-    }, null, 2)
+    JSON.stringify(
+      {
+        ...auth,
+        password: CryptoJS.AES.encrypt(auth.password, PASSWORD_KEY).toString(),
+      },
+      null,
+      2
+    )
   );
 };
 
 export const deleteAuth = () => {
   if (fs.existsSync(`${DATA_FOLDER}/auth.json`)) {
-    fs.rmSync(`${DATA_FOLDER}/auth.json`)
+    fs.rmSync(`${DATA_FOLDER}/auth.json`);
   }
 };

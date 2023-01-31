@@ -1,4 +1,11 @@
-export type APIEndpointRoute = '' | '/timetable/actual' | `/timetable/actual?date=${string}` | '/timetable/permanent' | '/marks' | '/marks/final' | '/absence/student';
+export type APIEndpointRoute =
+  | ''
+  | '/timetable/actual'
+  | `/timetable/actual?date=${string}`
+  | '/timetable/permanent'
+  | '/marks'
+  | '/marks/final'
+  | '/absence/student';
 
 export type APITokenObject = {
   access_token: string;

@@ -13,29 +13,31 @@ export const DATA_FOLDER = 'data';
 export const CELL_SPACING = 1;
 export const COLUMN_SPACING = 2;
 export const COMMANDS: string[] = [
-  'help', 'napoveda',
-  'hours', 'hodiny',
-  'teachers', 'ucitele',
-  'timetable', 'rozvrh',
-  'marks', 'znamky',
-  'changes', 'zmeny',
-  'final', 'pololeti',
+  'help',
+  'napoveda',
+  'hours',
+  'hodiny',
+  'teachers',
+  'ucitele',
+  'timetable',
+  'rozvrh',
+  'marks',
+  'znamky',
+  'changes',
+  'zmeny',
+  'final',
+  'pololeti',
   'absence',
   'bfetch',
-  'logout', 'odhlasit',
+  'logout',
+  'odhlasit',
 ];
-export const WEEK_DAYS = [
-  'Po',
-  'Út',
-  'St',
-  'Čt',
-  'Pá',
-];
-export const CHANGE_TYPES: {[key in Change['ChangeType']]: string} = {
-  'Added': 'Přidáno',
-  'Canceled': 'Odebráno',
-  'RoomChanged': 'Změna třídy',
-  'Substitution': 'Suplování',
+export const WEEK_DAYS = ['Po', 'Út', 'St', 'Čt', 'Pá'];
+export const CHANGE_TYPES: { [key in Change['ChangeType']]: string } = {
+  Added: 'Přidáno',
+  Canceled: 'Odebráno',
+  RoomChanged: 'Změna třídy',
+  Substitution: 'Suplování',
 };
 
 // Colors

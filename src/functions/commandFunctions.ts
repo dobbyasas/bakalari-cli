@@ -37,7 +37,7 @@ export const handleCommand = async (
   auth: UserAuth,
   token: APITokenObject['access_token'],
   quitFunction: () => void,
-  loginFunction: () => Promise<unknown>,
+  loginFunction: () => Promise<unknown>
 ) => {
   if (keywords.length === 0) return;
   switch (keywords[0].toLowerCase()) {
@@ -48,9 +48,13 @@ export const handleCommand = async (
 
     case 'hours':
     case 'hodiny': {
-      const { Hours } = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+      const { Hours } = (await fetchFromAPI(
+        auth,
+        token,
+        '/timetable/actual'
+      )) as Timetable;
       if (!Hours) return;
-      Hours.forEach(hour => {
+      Hours.forEach((hour) => {
         console.log(`${hour.Caption}: ${hour.BeginTime}-${hour.EndTime}`);
       });
       break;
@@ -58,9 +62,13 @@ export const handleCommand = async (
 
     case 'teachers':
     case 'ucitele': {
-      const { Teachers } = await fetchFromAPI(auth, token, '/timetable/permanent') as Timetable;
+      const { Teachers } = (await fetchFromAPI(
+        auth,
+        token,
+        '/timetable/permanent'
+      )) as Timetable;
       if (!Teachers) return;
-      Teachers.forEach(teacher => {
+      Teachers.forEach((teacher) => {
         console.log(`${teacher.Abbrev} - ${teacher.Name}`);
       });
       break;
@@ -71,21 +79,39 @@ export const handleCommand = async (
       let timetable: Timetable | null = null;
 
       // Checking if the [s, p, n] options are not used at the same time
-      if (options.filter(option => ['s', 'p', 'n'].includes(option)).length > 1) {
+      if (
+        options.filter((option) => ['s', 'p', 'n'].includes(option)).length > 1
+      ) {
         console.log(`${keywords[0]}: Možnosti -s, -p a -n nelze kombinovat!`);
         return;
       }
 
       if (options.includes('s')) {
-        timetable = await fetchFromAPI(auth, token, '/timetable/permanent') as Timetable;
+        timetable = (await fetchFromAPI(
+          auth,
+          token,
+          '/timetable/permanent'
+        )) as Timetable;
       } else if (options.includes('p')) {
         const previousWeekDate = getPreviousWeekFormattedDate();
-        timetable = await fetchFromAPI(auth, token, `/timetable/actual?date=${previousWeekDate}`) as Timetable;
+        timetable = (await fetchFromAPI(
+          auth,
+          token,
+          `/timetable/actual?date=${previousWeekDate}`
+        )) as Timetable;
       } else if (options.includes('n')) {
         const nextWeekDate = getNextWeekFormattedDate();
-        timetable = await fetchFromAPI(auth, token, `/timetable/actual?date=${nextWeekDate}`) as Timetable;
+        timetable = (await fetchFromAPI(
+          auth,
+          token,
+          `/timetable/actual?date=${nextWeekDate}`
+        )) as Timetable;
       } else {
-        timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+        timetable = (await fetchFromAPI(
+          auth,
+          token,
+          '/timetable/actual'
+        )) as Timetable;
       }
       if (!timetable) return;
       formatTimetable(timetable, CELL_SPACING, options.includes('m'));
@@ -94,60 +120,103 @@ export const handleCommand = async (
 
     case 'marks':
     case 'znamky': {
-      const marks = await fetchFromAPI(auth, token, '/marks') as MarksResult;
+      const marks = (await fetchFromAPI(auth, token, '/marks')) as MarksResult;
       if (!marks) return;
       if (keywords.length === 1) {
-        const longestSubjectNameLength = Math.max(...marks.Subjects.map(subject => subject.Subject.Abbrev.length));
-        marks.Subjects.forEach(subject => {
-          console.log(`${(subject.Subject.Abbrev.trimEnd() + ':').padEnd(longestSubjectNameLength + 1, ' ')}${' '.repeat(CELL_SPACING)}${subject.AverageText}`);
+        const longestSubjectNameLength = Math.max(
+          ...marks.Subjects.map((subject) => subject.Subject.Abbrev.length)
+        );
+        marks.Subjects.forEach((subject) => {
+          console.log(
+            `${(subject.Subject.Abbrev.trimEnd() + ':').padEnd(
+              longestSubjectNameLength + 1,
+              ' '
+            )}${' '.repeat(CELL_SPACING)}${subject.AverageText}`
+          );
         });
       } else {
         const subjectName = keywords[1].toLowerCase();
-        const targetSubject = marks.Subjects.find(subject => subject.Subject.Abbrev.trimEnd().toLowerCase() === subjectName);
+        const targetSubject = marks.Subjects.find(
+          (subject) =>
+            subject.Subject.Abbrev.trimEnd().toLowerCase() === subjectName
+        );
         if (!targetSubject) {
           console.log(`Předmět ${subjectName.toUpperCase()} nebyl nalezen!`);
           return;
         }
 
-        const longestMarkTextLength = Math.max(...targetSubject.Marks.map(mark => mark.MarkText.length));
-        const longestMarkCaptionLength = Math.max(...targetSubject.Marks.map(mark => mark.Caption.length));
-        const longestMarkWeightLength = Math.max(...targetSubject.Marks.map(mark => String(mark.Weight).length));
+        const longestMarkTextLength = Math.max(
+          ...targetSubject.Marks.map((mark) => mark.MarkText.length)
+        );
+        const longestMarkCaptionLength = Math.max(
+          ...targetSubject.Marks.map((mark) => mark.Caption.length)
+        );
+        const longestMarkWeightLength = Math.max(
+          ...targetSubject.Marks.map((mark) => String(mark.Weight).length)
+        );
 
-        if (!options.includes('m')) console.log(targetSubject.Subject.Name + '\n');
+        if (!options.includes('m'))
+          console.log(targetSubject.Subject.Name + '\n');
 
-        targetSubject.Marks.forEach(mark => {
-          console.log(`${mark.MarkText.padEnd(longestMarkTextLength + CELL_SPACING, ' ')}${`(Váha: ${mark.Weight}):`.padEnd(9 + longestMarkWeightLength + CELL_SPACING, ' ')}${mark.Caption.padEnd(longestMarkCaptionLength + COLUMN_SPACING, ' ')}(${getFormattedDate(mark.MarkDate)})`);
+        targetSubject.Marks.forEach((mark) => {
+          console.log(
+            `${mark.MarkText.padEnd(
+              longestMarkTextLength + CELL_SPACING,
+              ' '
+            )}${`(Váha: ${mark.Weight}):`.padEnd(
+              9 + longestMarkWeightLength + CELL_SPACING,
+              ' '
+            )}${mark.Caption.padEnd(
+              longestMarkCaptionLength + COLUMN_SPACING,
+              ' '
+            )}(${getFormattedDate(mark.MarkDate)})`
+          );
         });
 
-        if (!options.includes('m')) console.log(`\nPrůměr: ${targetSubject.AverageText}`);
+        if (!options.includes('m'))
+          console.log(`\nPrůměr: ${targetSubject.AverageText}`);
       }
       break;
     }
 
     case 'changes':
     case 'zmeny': {
-      const timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+      const timetable = (await fetchFromAPI(
+        auth,
+        token,
+        '/timetable/actual'
+      )) as Timetable;
       if (!timetable) return;
       const changes: Change[] = [];
-      timetable.Days.map(day => day.Atoms.map(atom => atom.Change)).forEach(change => {
-        change.forEach(item => {
-          if (item) changes.push(item);
-        });
-      });
+      timetable.Days.map((day) => day.Atoms.map((atom) => atom.Change)).forEach(
+        (change) => {
+          change.forEach((item) => {
+            if (item) changes.push(item);
+          });
+        }
+      );
       displayChanges(changes);
       break;
     }
 
     case 'final':
     case 'pololeti': {
-      const finalMarks = await fetchFromAPI(auth, token, '/marks/final') as FinalMarksResult;
+      const finalMarks = (await fetchFromAPI(
+        auth,
+        token,
+        '/marks/final'
+      )) as FinalMarksResult;
       if (!finalMarks) return;
       formatFinalMarks(finalMarks);
       break;
     }
 
     case 'absence': {
-      const { AbsencesPerSubject } = await fetchFromAPI(auth, token, '/absence/student') as AbsenceResult;
+      const { AbsencesPerSubject } = (await fetchFromAPI(
+        auth,
+        token,
+        '/absence/student'
+      )) as AbsenceResult;
       if (!AbsencesPerSubject) return;
       printBanner('absenceLegend', {
         newLine: true,
@@ -165,7 +234,7 @@ export const handleCommand = async (
     }
 
     case 'bfetch': {
-      const apiInfo = await fetchFromAPI(auth, token, '') as APIVersionResult;
+      const apiInfo = (await fetchFromAPI(auth, token, '')) as APIVersionResult;
       if (!apiInfo) return;
 
       const hostLine = `${C_BLUE}${auth.userName}${C_END}@${C_BLUE}${HOSTNAME}${C_BLUE}`;
@@ -177,7 +246,9 @@ export const handleCommand = async (
       ];
 
       APP_LOGO.forEach((line, index) => {
-        console.log(`${line}${' '.repeat(COLUMN_SPACING)}${dataLines[index] ?? ''}`);
+        console.log(
+          `${line}${' '.repeat(COLUMN_SPACING)}${dataLines[index] ?? ''}`
+        );
       });
       break;
     }
@@ -187,7 +258,7 @@ export const handleCommand = async (
       deleteAuth();
       console.log('Byl jste úspěšně odhlášen.');
       console.log('Chcete se znovu přihlásit? [Y/n]');
-      
+
       const response = shell.getInput();
       if (response.length && response[0].trim().toLowerCase() === 'n') {
         quitFunction();
@@ -196,7 +267,7 @@ export const handleCommand = async (
 
       console.log('');
       await loginFunction();
-      
+
       break;
     }
 
@@ -205,7 +276,7 @@ export const handleCommand = async (
       break;
 
     default:
-      console.log(`Neznámý příkaz: ${keywords[0]}`)
+      console.log(`Neznámý příkaz: ${keywords[0]}`);
       break;
   }
 };
