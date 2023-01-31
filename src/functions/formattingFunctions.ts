@@ -3,6 +3,12 @@ import {
   COLUMN_SPACING,
   WEEK_DAYS,
   CHANGE_TYPES,
+  C_RED,
+  C_YELLOW,
+  C_GREEN,
+  C_BLUE,
+  C_MAGENTA,
+  C_END,
 } from '../constants';
 
 import type { Timetable, Subject, Change } from '../typings/timetableTypes';
@@ -135,11 +141,11 @@ export const formatAbsence = (absencesPerSubject: AbsenceResult['AbsencesPerSubj
   absencesPerSubject.forEach(subject => {
     let row = `${(subject.SubjectName + ':').padEnd(longestSubjectNameLength + COLUMN_SPACING + 1, ' ')}`;
     row += String(subject.LessonsCount).padEnd(longestLessonsCountLength + CELL_SPACING, ' ');
-    row += String(subject.Base).padEnd(longestBaseLength + CELL_SPACING, ' ');
-    row += String(subject.School).padEnd(longestSchoolLength + CELL_SPACING, ' ');
-    row += String(subject.Late).padEnd(longestLateLength + CELL_SPACING, ' ');
-    row += String(subject.Soon).padEnd(longestSoonLength + CELL_SPACING, ' ');
-    row += String(subject.DistanceTeaching).padEnd(longestDistanceTeachingLength + CELL_SPACING, ' ');
+    row += C_GREEN + String(subject.Base).padEnd(longestBaseLength + CELL_SPACING, ' ') + C_END;
+    row += C_BLUE + String(subject.School).padEnd(longestSchoolLength + CELL_SPACING, ' ') + C_END;
+    row += C_RED + String(subject.Late).padEnd(longestLateLength + CELL_SPACING, ' ') + C_END;
+    row += C_YELLOW + String(subject.Soon).padEnd(longestSoonLength + CELL_SPACING, ' ') + C_END;
+    row += C_MAGENTA + String(subject.DistanceTeaching).padEnd(longestDistanceTeachingLength + CELL_SPACING, ' ') + C_END;
     console.log(row);
   });
 };

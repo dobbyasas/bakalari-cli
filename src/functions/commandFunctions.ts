@@ -17,7 +17,11 @@ import {
   CELL_SPACING,
   APP_LOGO,
   COLUMN_SPACING,
+  C_RED,
+  C_YELLOW,
+  C_GREEN,
   C_BLUE,
+  C_MAGENTA,
   C_END,
 } from '../constants';
 
@@ -145,6 +149,17 @@ export const handleCommand = async (
     case 'absence': {
       const { AbsencesPerSubject } = await fetchFromAPI(auth, token, '/absence/student') as AbsenceResult;
       if (!AbsencesPerSubject) return;
+      printBanner('absenceLegend', {
+        newLine: true,
+        placeholders: {
+          end: C_END,
+          baseColor: C_GREEN,
+          lateColor: C_RED,
+          soonColor: C_YELLOW,
+          schoolColor: C_BLUE,
+          distanceColor: C_MAGENTA,
+        },
+      });
       formatAbsence(AbsencesPerSubject);
       break;
     }

@@ -1,0 +1,6 @@
+Celkový počet hodin
+{baseColor}Celková{end}
+{schoolColor}Nezapočtená{end}
+{lateColor}Pozdní příchod{end}
+{soonColor}Brzký odchod{end}
+{distanceColor}Distanční výuka{end}
