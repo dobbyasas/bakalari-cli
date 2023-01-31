@@ -20,10 +20,11 @@ import {
   C_END,
 } from '../constants';
 
-import type { UserAuth, APITokenObject } from '../typings/authTypes';
+import type { UserAuth } from '../typings/authTypes';
+import type { APITokenObject, APIVersionResult } from '../typings/apiTypes';
 import type { Timetable, Change } from '../typings/timetableTypes';
 import type { MarksResult, FinalMarksResult } from '../typings/markTypes';
-import type { APIVersionResponse } from '../typings/authTypes';
+import type { AbsenceResult } from '../typings/absenceTypes';
 
 export const handleCommand = async (
   keywords: string[],
@@ -43,7 +44,7 @@ export const handleCommand = async (
     case 'hours':
     case 'hodiny': {
       const { Hours } = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
-      if (!Hours) break;
+      if (!Hours) return;
       Hours.forEach(hour => {
         console.log(`${hour.Caption}: ${hour.BeginTime}-${hour.EndTime}`);
       });
@@ -53,7 +54,7 @@ export const handleCommand = async (
     case 'teachers':
     case 'ucitele': {
       const { Teachers } = await fetchFromAPI(auth, token, '/timetable/permanent') as Timetable;
-      if (!Teachers) break;
+      if (!Teachers) return;
       Teachers.forEach(teacher => {
         console.log(`${teacher.Abbrev} - ${teacher.Name}`);
       });
@@ -100,7 +101,7 @@ export const handleCommand = async (
         const targetSubject = marks.Subjects.find(subject => subject.Subject.Abbrev.trimEnd().toLowerCase() === subjectName);
         if (!targetSubject) {
           console.log(`Předmět ${subjectName.toUpperCase()} nebyl nalezen!`);
-          break;
+          return;
         }
 
         const longestMarkTextLength = Math.max(...targetSubject.Marks.map(mark => mark.MarkText.length));
@@ -140,8 +141,15 @@ export const handleCommand = async (
       break;
     }
 
+    case 'absence': {
+      const absence = await fetchFromAPI(auth, token, '/absence/student') as AbsenceResult;
+      if (!absence) return;
+      console.log(absence);
+      break;
+    }
+
     case 'bfetch': {
-      const apiInfo = await fetchFromAPI(auth, token, '') as APIVersionResponse;
+      const apiInfo = await fetchFromAPI(auth, token, '') as APIVersionResult;
       if (!apiInfo) return;
 
       const hostLine = `${C_BLUE}${auth.userName}${C_END}@${C_BLUE}${HOSTNAME}${C_BLUE}`;

@@ -2,9 +2,8 @@ import fetch from 'node-fetch';
 
 import type {
   UserAuth,
-  APITokenObject,
-  APIEndpointRoute,
 } from '../typings/authTypes';
+import { APITokenObject, APIEndpointRoute } from '../typings/apiTypes';
 
 export const fetchToken = async (auth: UserAuth): Promise<APITokenObject | null> => {
   try {

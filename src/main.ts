@@ -9,7 +9,8 @@ import { saveAuth } from './functions/authFunctions';
 import { handleCommand } from './functions/commandFunctions';
 import { HOSTNAME, RELEASE_NUMBER } from './constants';
 
-import type { UserAuth, APITokenObject } from './typings/authTypes';
+import type { UserAuth } from './typings/authTypes';
+import type { APITokenObject } from './typings/apiTypes';
 
 export const shell = new Shell();
 

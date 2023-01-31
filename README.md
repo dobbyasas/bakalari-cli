@@ -11,6 +11,7 @@
 | marks     | znamky    | vypíše známky ze všech předmětů          |
 | changes   | zmeny     | vypíše změny v aktuálním rozvrhu         |
 | final     | pololeti  | vypíše konečné známky z každého pololetí |
+| absence   | absence   | vypíše absenci z předmětů                |
 | bfetch    | bfetch    | vypíše informace o aplikaci a API        |
 | logout    | odhlasit  | odhlásí uživatele a vymaže data o loginu |
 

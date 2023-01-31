@@ -20,6 +20,7 @@ export const COMMANDS: string[] = [
   'marks', 'znamky',
   'changes', 'zmeny',
   'final', 'pololeti',
+  'absence',
   'bfetch',
   'logout', 'odhlasit',
 ];
