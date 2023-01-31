@@ -22,6 +22,7 @@ export type Change = {
   Hours: string;
   ChangeType: 'Added' | 'Canceled' | 'RoomChanged' | 'Substitution';
   Description: string;
+  TypeAbbrev: string;
 };
 
 export type Atom = {

@@ -1,5 +1,13 @@
 import { printBanner } from './bannerFunctions';
-import { formatTimetable, displayChanges, formatFinalMarks } from './formattingFunctions';
+import {
+  formatTimetable,
+  displayChanges,
+  formatFinalMarks,
+  formatAbsence,
+  getPreviousWeekFormattedDate,
+  getNextWeekFormattedDate,
+  getFormattedDate,
+} from './formattingFunctions';
 import { fetchFromAPI } from './fetchFunctions';
 import { deleteAuth } from './authFunctions';
 import { shell } from '../main';
@@ -9,14 +17,19 @@ import {
   CELL_SPACING,
   APP_LOGO,
   COLUMN_SPACING,
+  C_RED,
+  C_YELLOW,
+  C_GREEN,
   C_BLUE,
+  C_MAGENTA,
   C_END,
 } from '../constants';
 
-import type { UserAuth, APITokenObject } from '../typings/authTypes';
+import type { UserAuth } from '../typings/authTypes';
+import type { APITokenObject, APIVersionResult } from '../typings/apiTypes';
 import type { Timetable, Change } from '../typings/timetableTypes';
-import type { FinalMarksResult } from '../typings/markTypes';
-import type { APIVersionResponse } from '../typings/authTypes';
+import type { MarksResult, FinalMarksResult } from '../typings/markTypes';
+import type { AbsenceResult } from '../typings/absenceTypes';
 
 export const handleCommand = async (
   keywords: string[],
@@ -24,7 +37,7 @@ export const handleCommand = async (
   auth: UserAuth,
   token: APITokenObject['access_token'],
   quitFunction: () => void,
-  loginFunction: () => Promise<unknown>,
+  loginFunction: () => Promise<unknown>
 ) => {
   if (keywords.length === 0) return;
   switch (keywords[0].toLowerCase()) {
@@ -35,9 +48,13 @@ export const handleCommand = async (
 
     case 'hours':
     case 'hodiny': {
-      const { Hours } = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
-      if (!Hours) break;
-      Hours.forEach(hour => {
+      const { Hours } = (await fetchFromAPI(
+        auth,
+        token,
+        '/timetable/actual'
+      )) as Timetable;
+      if (!Hours) return;
+      Hours.forEach((hour) => {
         console.log(`${hour.Caption}: ${hour.BeginTime}-${hour.EndTime}`);
       });
       break;
@@ -45,9 +62,13 @@ export const handleCommand = async (
 
     case 'teachers':
     case 'ucitele': {
-      const { Teachers } = await fetchFromAPI(auth, token, '/timetable/permanent') as Timetable;
-      if (!Teachers) break;
-      Teachers.forEach(teacher => {
+      const { Teachers } = (await fetchFromAPI(
+        auth,
+        token,
+        '/timetable/permanent'
+      )) as Timetable;
+      if (!Teachers) return;
+      Teachers.forEach((teacher) => {
         console.log(`${teacher.Abbrev} - ${teacher.Name}`);
       });
       break;
@@ -55,36 +76,165 @@ export const handleCommand = async (
 
     case 'timetable':
     case 'rozvrh': {
-      const timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+      let timetable: Timetable | null = null;
+
+      // Checking if the [s, p, n] options are not used at the same time
+      if (
+        options.filter((option) => ['s', 'p', 'n'].includes(option)).length > 1
+      ) {
+        console.log(`${keywords[0]}: Možnosti -s, -p a -n nelze kombinovat!`);
+        return;
+      }
+
+      if (options.includes('s')) {
+        timetable = (await fetchFromAPI(
+          auth,
+          token,
+          '/timetable/permanent'
+        )) as Timetable;
+      } else if (options.includes('p')) {
+        const previousWeekDate = getPreviousWeekFormattedDate();
+        timetable = (await fetchFromAPI(
+          auth,
+          token,
+          `/timetable/actual?date=${previousWeekDate}`
+        )) as Timetable;
+      } else if (options.includes('n')) {
+        const nextWeekDate = getNextWeekFormattedDate();
+        timetable = (await fetchFromAPI(
+          auth,
+          token,
+          `/timetable/actual?date=${nextWeekDate}`
+        )) as Timetable;
+      } else {
+        timetable = (await fetchFromAPI(
+          auth,
+          token,
+          '/timetable/actual'
+        )) as Timetable;
+      }
       if (!timetable) return;
-      formatTimetable(timetable, CELL_SPACING);
+      formatTimetable(timetable, CELL_SPACING, options.includes('m'));
+      break;
+    }
+
+    case 'marks':
+    case 'znamky': {
+      const marks = (await fetchFromAPI(auth, token, '/marks')) as MarksResult;
+      if (!marks) return;
+      if (keywords.length === 1) {
+        const longestSubjectNameLength = Math.max(
+          ...marks.Subjects.map((subject) => subject.Subject.Abbrev.length)
+        );
+        marks.Subjects.forEach((subject) => {
+          console.log(
+            `${(subject.Subject.Abbrev.trimEnd() + ':').padEnd(
+              longestSubjectNameLength + 1,
+              ' '
+            )}${' '.repeat(CELL_SPACING)}${subject.AverageText}`
+          );
+        });
+      } else {
+        const subjectName = keywords[1].toLowerCase();
+        const targetSubject = marks.Subjects.find(
+          (subject) =>
+            subject.Subject.Abbrev.trimEnd().toLowerCase() === subjectName
+        );
+        if (!targetSubject) {
+          console.log(`Předmět ${subjectName.toUpperCase()} nebyl nalezen!`);
+          return;
+        }
+
+        const longestMarkTextLength = Math.max(
+          ...targetSubject.Marks.map((mark) => mark.MarkText.length)
+        );
+        const longestMarkCaptionLength = Math.max(
+          ...targetSubject.Marks.map((mark) => mark.Caption.length)
+        );
+        const longestMarkWeightLength = Math.max(
+          ...targetSubject.Marks.map((mark) => String(mark.Weight).length)
+        );
+
+        if (!options.includes('m'))
+          console.log(targetSubject.Subject.Name + '\n');
+
+        targetSubject.Marks.forEach((mark) => {
+          console.log(
+            `${mark.MarkText.padEnd(
+              longestMarkTextLength + CELL_SPACING,
+              ' '
+            )}${`(Váha: ${mark.Weight}):`.padEnd(
+              9 + longestMarkWeightLength + CELL_SPACING,
+              ' '
+            )}${mark.Caption.padEnd(
+              longestMarkCaptionLength + COLUMN_SPACING,
+              ' '
+            )}(${getFormattedDate(mark.MarkDate)})`
+          );
+        });
+
+        if (!options.includes('m'))
+          console.log(`\nPrůměr: ${targetSubject.AverageText}`);
+      }
       break;
     }
 
     case 'changes':
     case 'zmeny': {
-      const timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+      const timetable = (await fetchFromAPI(
+        auth,
+        token,
+        '/timetable/actual'
+      )) as Timetable;
       if (!timetable) return;
       const changes: Change[] = [];
-      timetable.Days.map(day => day.Atoms.map(atom => atom.Change)).forEach(change => {
-        change.forEach(item => {
-          if (item) changes.push(item);
-        });
-      });
+      timetable.Days.map((day) => day.Atoms.map((atom) => atom.Change)).forEach(
+        (change) => {
+          change.forEach((item) => {
+            if (item) changes.push(item);
+          });
+        }
+      );
       displayChanges(changes);
       break;
     }
 
     case 'final':
     case 'pololeti': {
-      const finalMarks = await fetchFromAPI(auth, token, '/marks/final') as FinalMarksResult;
+      const finalMarks = (await fetchFromAPI(
+        auth,
+        token,
+        '/marks/final'
+      )) as FinalMarksResult;
       if (!finalMarks) return;
       formatFinalMarks(finalMarks);
       break;
     }
 
+    case 'absence': {
+      const { AbsencesPerSubject } = (await fetchFromAPI(
+        auth,
+        token,
+        '/absence/student'
+      )) as AbsenceResult;
+      if (!AbsencesPerSubject) return;
+      printBanner('absenceLegend', {
+        newLine: true,
+        placeholders: {
+          end: C_END,
+          baseColor: C_GREEN,
+          lateColor: C_RED,
+          soonColor: C_YELLOW,
+          schoolColor: C_BLUE,
+          distanceColor: C_MAGENTA,
+        },
+      });
+      formatAbsence(AbsencesPerSubject);
+      break;
+    }
+
     case 'bfetch': {
-      const apiInfo = await fetchFromAPI(auth, token, '') as APIVersionResponse;
+      const apiInfo = (await fetchFromAPI(auth, token, '')) as APIVersionResult;
       if (!apiInfo) return;
 
       const hostLine = `${C_BLUE}${auth.userName}${C_END}@${C_BLUE}${HOSTNAME}${C_BLUE}`;
@@ -96,7 +246,9 @@ export const handleCommand = async (
       ];
 
       APP_LOGO.forEach((line, index) => {
-        console.log(`${line}${' '.repeat(COLUMN_SPACING)}${dataLines[index] ?? ''}`);
+        console.log(
+          `${line}${' '.repeat(COLUMN_SPACING)}${dataLines[index] ?? ''}`
+        );
       });
       break;
     }
@@ -106,7 +258,7 @@ export const handleCommand = async (
       deleteAuth();
       console.log('Byl jste úspěšně odhlášen.');
       console.log('Chcete se znovu přihlásit? [Y/n]');
-      
+
       const response = shell.getInput();
       if (response.length && response[0].trim().toLowerCase() === 'n') {
         quitFunction();
@@ -115,7 +267,7 @@ export const handleCommand = async (
 
       console.log('');
       await loginFunction();
-      
+
       break;
     }
 
@@ -124,7 +276,7 @@ export const handleCommand = async (
       break;
 
     default:
-      console.log(`Neznámý příkaz: ${keywords[0]}`)
+      console.log(`Neznámý příkaz: ${keywords[0]}`);
       break;
   }
 };

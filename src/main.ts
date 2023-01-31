@@ -1,15 +1,13 @@
 import { Shell } from './shell';
 import { printBanner } from './functions/bannerFunctions';
-import {
-  getAuthFromCache,
-  getAuthFromInput,
-} from './functions/authFunctions';
+import { getAuthFromCache, getAuthFromInput } from './functions/authFunctions';
 import { fetchToken } from './functions/fetchFunctions';
 import { saveAuth } from './functions/authFunctions';
 import { handleCommand } from './functions/commandFunctions';
 import { HOSTNAME, RELEASE_NUMBER } from './constants';
 
-import { UserAuth, APITokenObject } from './typings/authTypes';
+import type { UserAuth } from './typings/authTypes';
+import type { APITokenObject } from './typings/apiTypes';
 
 export const shell = new Shell();
 
@@ -39,7 +37,7 @@ const handleLogin = async (): Promise<{
   printBanner('welcome', {
     newLine: true,
     placeholders: {
-      'release': RELEASE_NUMBER,
+      release: RELEASE_NUMBER,
     },
   });
 
@@ -57,7 +55,7 @@ const handleLogin = async (): Promise<{
       () => {
         programRunning = false;
       },
-      handleLogin,
+      handleLogin
     );
   }
 })();

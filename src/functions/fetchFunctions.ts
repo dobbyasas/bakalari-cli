@@ -1,12 +1,11 @@
 import fetch from 'node-fetch';
 
-import type {
-  UserAuth,
-  APITokenObject,
-  APIEndpointRoute,
-} from '../typings/authTypes';
+import type { UserAuth } from '../typings/authTypes';
+import { APITokenObject, APIEndpointRoute } from '../typings/apiTypes';
 
-export const fetchToken = async (auth: UserAuth): Promise<APITokenObject | null> => {
+export const fetchToken = async (
+  auth: UserAuth
+): Promise<APITokenObject | null> => {
   try {
     const req = await fetch(`${auth.apiEndpoint}/api/login`, {
       method: 'POST',
@@ -25,13 +24,17 @@ export const fetchToken = async (auth: UserAuth): Promise<APITokenObject | null>
   }
 };
 
-export const fetchFromAPI = async (auth: UserAuth, token: APITokenObject['access_token'], endpointUrl: APIEndpointRoute) => {
+export const fetchFromAPI = async (
+  auth: UserAuth,
+  token: APITokenObject['access_token'],
+  endpointUrl: APIEndpointRoute
+) => {
   try {
     const req = await fetch(`${auth.apiEndpoint}/api/3${endpointUrl}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
