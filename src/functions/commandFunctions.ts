@@ -1,5 +1,11 @@
 import { printBanner } from './bannerFunctions';
-import { formatTimetable, displayChanges, formatFinalMarks } from './formattingFunctions';
+import {
+  formatTimetable,
+  displayChanges,
+  formatFinalMarks,
+  getPreviousWeekFormattedDate,
+  getNextWeekFormattedDate,
+} from './formattingFunctions';
 import { fetchFromAPI } from './fetchFunctions';
 import { deleteAuth } from './authFunctions';
 import { shell } from '../main';
@@ -66,9 +72,11 @@ export const handleCommand = async (
       if (options.includes('s')) {
         timetable = await fetchFromAPI(auth, token, '/timetable/permanent') as Timetable;
       } else if (options.includes('p')) {
-        timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+        const previousWeekDate = getPreviousWeekFormattedDate();
+        timetable = await fetchFromAPI(auth, token, `/timetable/actual?date=${previousWeekDate}`) as Timetable;
       } else if (options.includes('n')) {
-        timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+        const nextWeekDate = getNextWeekFormattedDate();
+        timetable = await fetchFromAPI(auth, token, `/timetable/actual?date=${nextWeekDate}`) as Timetable;
       } else {
         timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
       }

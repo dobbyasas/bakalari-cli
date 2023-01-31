@@ -115,3 +115,15 @@ export const formatFinalMarks = (finalMarks: FinalMarksResult) => {
     console.log(`${subject.name}:`.padEnd(longestLeftColumnTitle + COLUMN_SPACING + 1, ' ') + subject.finalMarks.join(' '.repeat(CELL_SPACING)));
   });
 };
+
+export const getPreviousWeekFormattedDate = (): string => {
+  const date = new Date();
+  date.setDate(date.getDate() - 7);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+};
+
+export const getNextWeekFormattedDate = (): string => {
+  const date = new Date();
+  date.setDate(date.getDate() + 7);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+};

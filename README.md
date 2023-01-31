@@ -13,3 +13,10 @@
 | final     | pololeti  | vypíše konečné známky z každého pololetí |
 | bfetch    | bfetch    | vypíše informace o aplikaci a API        |
 | logout    | odhlasit  | odhlásí uživatele a vymaže data o loginu |
+
+## Možnosti
+
+- timetable (rozvrh)
+  - s (stable) -> stálý
+  - p (previous) -> minulý týden
+  - n (next) -> další týden
