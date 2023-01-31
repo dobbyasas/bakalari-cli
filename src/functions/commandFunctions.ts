@@ -55,7 +55,23 @@ export const handleCommand = async (
 
     case 'timetable':
     case 'rozvrh': {
-      const timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+      let timetable: Timetable | null = null;
+
+      // Checking if the [s, p, n] options are not used at the same time
+      if (options.filter(option => ['s', 'p', 'n'].includes(option)).length > 1) {
+        console.log(`${keywords[0]}: Možnosti -s, -p a -n nelze kombinovat!`);
+        return;
+      }
+
+      if (options.includes('s')) {
+        timetable = await fetchFromAPI(auth, token, '/timetable/permanent') as Timetable;
+      } else if (options.includes('p')) {
+        timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+      } else if (options.includes('n')) {
+        timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+      } else {
+        timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
+      }
       if (!timetable) return;
       formatTimetable(timetable, CELL_SPACING);
       break;
@@ -67,7 +83,7 @@ export const handleCommand = async (
       if (!marks) return;
       const longestSubjectNameLength = Math.max(...marks.Subjects.map(subject => subject.Subject.Abbrev.length));
       marks.Subjects.forEach(subject => {
-        console.log(`${subject.Subject.Abbrev.padEnd(longestSubjectNameLength, ' ')}${' '.repeat(CELL_SPACING)}${subject.AverageText}`);
+        console.log(`${(subject.Subject.Abbrev.trimEnd() + ':').padEnd(longestSubjectNameLength + 1, ' ')}${' '.repeat(CELL_SPACING)}${subject.AverageText}`);
       });
       break;
     }

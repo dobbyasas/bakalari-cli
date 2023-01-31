@@ -99,19 +99,19 @@ export const formatFinalMarks = (finalMarks: FinalMarksResult) => {
     'Pololetí'.length,
   );
 
-  let gradeRow = 'Ročník:'.padEnd(longestLeftColumnTitle + CELL_SPACING, ' ') + ' '.repeat(CELL_SPACING);
+  let gradeRow = 'Ročník:'.padEnd(longestLeftColumnTitle + CELL_SPACING + 1, ' ') + ' '.repeat(CELL_SPACING);
   for (let i = 1; i <= totalGrades; i++) {
     gradeRow += `${i}${' '.repeat(CELL_SPACING * 2 + 1)}`;
   }
   console.log(gradeRow);
 
-  let termNumberRow = 'Pololetí:'.padEnd(longestLeftColumnTitle + CELL_SPACING, ' ') + ' '.repeat(CELL_SPACING);
+  let termNumberRow = 'Pololetí:'.padEnd(longestLeftColumnTitle + CELL_SPACING + 1, ' ') + ' '.repeat(CELL_SPACING);
   finalMarks.CertificateTerms.forEach(term => {
     termNumberRow += `${term.Semester}${' '.repeat(CELL_SPACING)}`;
   });
   console.log(`${termNumberRow}\n`);
 
   subjectData.forEach(subject => {
-    console.log(`${subject.name}:`.padEnd(longestLeftColumnTitle + COLUMN_SPACING, ' ') + ' '.repeat(CELL_SPACING) + subject.finalMarks.join(' '.repeat(CELL_SPACING)));
+    console.log(`${subject.name}:`.padEnd(longestLeftColumnTitle + COLUMN_SPACING + 1, ' ') + subject.finalMarks.join(' '.repeat(CELL_SPACING)));
   });
 };
