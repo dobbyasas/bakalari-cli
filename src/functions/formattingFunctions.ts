@@ -120,6 +120,11 @@ export const formatFinalMarks = (finalMarks: FinalMarksResult) => {
   });
 };
 
+export const getFormattedDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`;
+};
+
 export const getPreviousWeekFormattedDate = (): string => {
   const date = new Date();
   date.setDate(date.getDate() - 7);

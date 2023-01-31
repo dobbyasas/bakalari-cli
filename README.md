@@ -20,3 +20,6 @@
   - s (stable) -> stálý
   - p (previous) -> minulý týden
   - n (next) -> další týden
+
+- marks (znamky)
+  - \[SUBJECT\] -> vypíše známky z daného předmětu (např. marks MAT)

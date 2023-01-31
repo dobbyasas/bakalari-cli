@@ -5,6 +5,7 @@ import {
   formatFinalMarks,
   getPreviousWeekFormattedDate,
   getNextWeekFormattedDate,
+  getFormattedDate,
 } from './formattingFunctions';
 import { fetchFromAPI } from './fetchFunctions';
 import { deleteAuth } from './authFunctions';
@@ -89,10 +90,31 @@ export const handleCommand = async (
     case 'znamky': {
       const marks = await fetchFromAPI(auth, token, '/marks') as MarksResult;
       if (!marks) return;
-      const longestSubjectNameLength = Math.max(...marks.Subjects.map(subject => subject.Subject.Abbrev.length));
-      marks.Subjects.forEach(subject => {
-        console.log(`${(subject.Subject.Abbrev.trimEnd() + ':').padEnd(longestSubjectNameLength + 1, ' ')}${' '.repeat(CELL_SPACING)}${subject.AverageText}`);
-      });
+      if (keywords.length === 1) {
+        const longestSubjectNameLength = Math.max(...marks.Subjects.map(subject => subject.Subject.Abbrev.length));
+        marks.Subjects.forEach(subject => {
+          console.log(`${(subject.Subject.Abbrev.trimEnd() + ':').padEnd(longestSubjectNameLength + 1, ' ')}${' '.repeat(CELL_SPACING)}${subject.AverageText}`);
+        });
+      } else {
+        const subjectName = keywords[1].toLowerCase();
+        const targetSubject = marks.Subjects.find(subject => subject.Subject.Abbrev.trimEnd().toLowerCase() === subjectName);
+        if (!targetSubject) {
+          console.log(`Předmět ${subjectName.toUpperCase()} nebyl nalezen!`);
+          break;
+        }
+
+        const longestMarkTextLength = Math.max(...targetSubject.Marks.map(mark => mark.MarkText.length));
+        const longestMarkCaptionLength = Math.max(...targetSubject.Marks.map(mark => mark.Caption.length));
+        const longestMarkWeightLength = Math.max(...targetSubject.Marks.map(mark => String(mark.Weight).length));
+
+        console.log(targetSubject.Subject.Name + '\n');
+
+        targetSubject.Marks.forEach(mark => {
+          console.log(`${mark.MarkText.padEnd(longestMarkTextLength + CELL_SPACING, ' ')}${`(Váha: ${mark.Weight}):`.padEnd(9 + longestMarkWeightLength + CELL_SPACING, ' ')}${mark.Caption.padEnd(longestMarkCaptionLength + COLUMN_SPACING, ' ')}(${getFormattedDate(mark.MarkDate)})`);
+        });
+
+        console.log(`\nPrůměr: ${targetSubject.AverageText}`);
+      }
       break;
     }
 
