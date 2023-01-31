@@ -82,7 +82,7 @@ export const handleCommand = async (
         timetable = await fetchFromAPI(auth, token, '/timetable/actual') as Timetable;
       }
       if (!timetable) return;
-      formatTimetable(timetable, CELL_SPACING);
+      formatTimetable(timetable, CELL_SPACING, options.includes('m'));
       break;
     }
 

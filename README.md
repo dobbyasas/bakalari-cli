@@ -20,6 +20,7 @@
   - s (stable) -> stálý
   - p (previous) -> minulý týden
   - n (next) -> další týden
+  - m (minimal) -> nevypíše čísla hodin a názvy dnů
 
 - marks (znamky)
   - \[SUBJECT\] -> vypíše známky z daného předmětu (např. marks MAT)

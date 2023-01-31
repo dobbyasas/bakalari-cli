@@ -16,21 +16,23 @@ const getLongestSubjectNameLength = (subjects: Timetable['Subjects']) => {
   return Math.max(...subjects.map(subject => subject.Abbrev.length));
 };
 
-export const formatTimetable = (timetable: Timetable, cellSpacing: number) => {
+export const formatTimetable = (timetable: Timetable, cellSpacing: number, minimal = false) => {
   const { Hours, Days, Subjects } = timetable;
 
   const minHour = Math.min(...Hours.map(hour => hour.Id)) ?? 0;
   const longestWeekDayLength = getLongestWeekDayLength(WEEK_DAYS);
   const longestSubjectNameLength = getLongestSubjectNameLength(Subjects);
 
-  let hourRow = ' '.repeat(longestWeekDayLength + cellSpacing);
-  Hours.forEach(hour => {
-    hourRow += hour.Caption.padEnd(longestSubjectNameLength + cellSpacing, ' ');
-  });
-  console.log(hourRow);
+  if (!minimal) {
+    let hourRow = ' '.repeat(longestWeekDayLength + cellSpacing);
+    Hours.forEach(hour => {
+      hourRow += hour.Caption.padEnd(longestSubjectNameLength + cellSpacing, ' ');
+    });
+    console.log(hourRow);
+  }
 
   Days.forEach(day => {
-    let row = `${WEEK_DAYS[day.DayOfWeek - 1]}${' '.repeat(cellSpacing)}`;
+    let row = minimal ? '' : `${WEEK_DAYS[day.DayOfWeek - 1]}${' '.repeat(cellSpacing)}`;
     for (let i = 0; i < Hours.length; i++) {
       const atom = day.Atoms.find(atom => atom.HourId === i + minHour);
       if (!atom) {
