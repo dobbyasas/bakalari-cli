@@ -7,6 +7,7 @@ import {
 
 import type { Timetable, Subject, Change } from '../typings/timetableTypes';
 import { FinalMarksResult } from '../typings/markTypes';
+import { AbsenceResult } from '../typings/absenceTypes';
 
 const getLongestWeekDayLength = (weekDays: string[]) => {
   return Math.max(...weekDays.map(weekDay => weekDay.length));
@@ -119,6 +120,27 @@ export const formatFinalMarks = (finalMarks: FinalMarksResult) => {
 
   subjectData.forEach(subject => {
     console.log(`${subject.name}:`.padEnd(longestLeftColumnTitle + COLUMN_SPACING + 1, ' ') + subject.finalMarks.join(' '.repeat(CELL_SPACING)));
+  });
+};
+
+export const formatAbsence = (absencesPerSubject: AbsenceResult['AbsencesPerSubject']) => {
+  const longestSubjectNameLength = Math.max(...absencesPerSubject.map(subject => subject.SubjectName.length));
+  const longestLessonsCountLength = Math.max(...absencesPerSubject.map(subject => String(subject.School).length));
+  const longestBaseLength = Math.max(...absencesPerSubject.map(subject => String(subject.Base).length));
+  const longestSchoolLength = Math.max(...absencesPerSubject.map(subject => String(subject.School).length));
+  const longestLateLength = Math.max(...absencesPerSubject.map(subject => String(subject.Late).length));
+  const longestSoonLength = Math.max(...absencesPerSubject.map(subject => String(subject.Soon).length));
+  const longestDistanceTeachingLength = Math.max(...absencesPerSubject.map(subject => String(subject.DistanceTeaching).length));
+
+  absencesPerSubject.forEach(subject => {
+    let row = `${(subject.SubjectName + ':').padEnd(longestSubjectNameLength + COLUMN_SPACING + 1, ' ')}`;
+    row += String(subject.LessonsCount).padEnd(longestLessonsCountLength + CELL_SPACING, ' ');
+    row += String(subject.Base).padEnd(longestBaseLength + CELL_SPACING, ' ');
+    row += String(subject.School).padEnd(longestSchoolLength + CELL_SPACING, ' ');
+    row += String(subject.Late).padEnd(longestLateLength + CELL_SPACING, ' ');
+    row += String(subject.Soon).padEnd(longestSoonLength + CELL_SPACING, ' ');
+    row += String(subject.DistanceTeaching).padEnd(longestDistanceTeachingLength + CELL_SPACING, ' ');
+    console.log(row);
   });
 };
 

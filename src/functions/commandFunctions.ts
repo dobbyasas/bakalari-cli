@@ -3,6 +3,7 @@ import {
   formatTimetable,
   displayChanges,
   formatFinalMarks,
+  formatAbsence,
   getPreviousWeekFormattedDate,
   getNextWeekFormattedDate,
   getFormattedDate,
@@ -142,9 +143,9 @@ export const handleCommand = async (
     }
 
     case 'absence': {
-      const absence = await fetchFromAPI(auth, token, '/absence/student') as AbsenceResult;
-      if (!absence) return;
-      console.log(absence);
+      const { AbsencesPerSubject } = await fetchFromAPI(auth, token, '/absence/student') as AbsenceResult;
+      if (!AbsencesPerSubject) return;
+      formatAbsence(AbsencesPerSubject);
       break;
     }
 
