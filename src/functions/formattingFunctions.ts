@@ -40,7 +40,11 @@ export const formatTimetable = (timetable: Timetable, cellSpacing: number) => {
       const subject = Subjects.find(subject => subject.Id === atom?.SubjectId);
       row += subject
         ? `${(subject?.Abbrev ?? ' ').padEnd(longestSubjectNameLength + cellSpacing, ' ')}`
-        : ' '.repeat(longestSubjectNameLength + CELL_SPACING);
+        : (() => {
+          const change = atom.Change;
+          if (!change || !change.TypeAbbrev) return ' '.repeat(longestSubjectNameLength + CELL_SPACING);
+          return change.TypeAbbrev.padEnd(longestSubjectNameLength + cellSpacing, ' ');
+        })();
     }
     console.log(row);
   });
@@ -53,7 +57,7 @@ export const formatDate = (dateString: string): string => {
 
 export const displayChanges = (changes: Change[]) => {
   changes.forEach(change =>  {
-    console.log(`${formatDate(change.Day)} (${change.Hours}): ${CHANGE_TYPES[change.ChangeType]} ${change.Description}`);
+    console.log(`${formatDate(change.Day)} (${change.Hours}): (${CHANGE_TYPES[change.ChangeType]}) ${change.Description}`);
   });
 };
 
