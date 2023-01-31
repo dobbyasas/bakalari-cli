@@ -7,13 +7,15 @@ export const printBanner = (
   options?: {
     newLine?: boolean;
     placeholders?: { [key: string]: string };
+    displayError?: boolean;
   }
-) => {
+): boolean => {
   try {
     if (!fs.existsSync(`${BANNER_FOLDER}/${banner}.txt`)) {
-      console.log(`Banner ${banner} does not exist!`);
+      if (options ? options.displayError : true)
+        console.log(`Banner ${banner} does not exist!`);
       if (options?.newLine) console.log('');
-      return;
+      return false;
     }
     const bannerFile = fs.readFileSync(`${BANNER_FOLDER}/${banner}.txt`);
     let bannerText = bannerFile.toString().trimEnd();
@@ -32,7 +34,9 @@ export const printBanner = (
     }
     console.log(bannerText);
     if (options?.newLine) console.log('');
+    return true;
   } catch (error) {
     console.log(error);
+    return false;
   }
 };

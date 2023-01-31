@@ -17,6 +17,9 @@
 
 ## Možnosti
 
+- help (napoveda)
+  - \[COMMAND\] -> vypíše nápovědu k příkazu (např. `help timetable`)
+
 - timetable (rozvrh)
   - s (stable) -> stálý
   - p (previous) -> minulý týden
@@ -24,5 +27,5 @@
   - m (minimal) -> nevypíše čísla hodin a názvy dnů
 
 - marks (znamky)
-  - \[SUBJECT\] -> vypíše známky z daného předmětu (např. marks MAT)
+  - \[SUBJECT\] -> vypíše známky z daného předmětu (např. `marks MAT`)
   - m (minimal) -> nevypíše průměr a název předmětu

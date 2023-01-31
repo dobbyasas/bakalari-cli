@@ -1,4 +1,5 @@
 help      [napoveda] - vypíše nápovědu
+  [COMMAND] -> vypíše nápovědu k příkazu (např. `help timetable`)
 hours     [hodiny]   - vypíše kdy začíná a končí jaká hodina
 teachers  [ucitele]  - vypíše všechny učitele ve stálém rozvrhu
 timetable [rozvrh]   - vypíše aktuální rozvrh
@@ -7,7 +8,7 @@ timetable [rozvrh]   - vypíše aktuální rozvrh
   -n (next)     -> další týden
   -m (minimal) -> nevypíše čísla hodin a názvy dnů
 marks     [znamky]   - vypíše známky ze všech předmětů
-  [SUBJECT]    -> vypíše známky z daného předmětu (např. marks MAT)
+  [SUBJECT]    -> vypíše známky z daného předmětu (např. `marks MAT`)
   -m (minimal) -> nevypíše průměr a název předmětu
 changes   [zmeny]    - vypíše změny v aktuálním rozvrhu
 final     [pololeti] - vypíše konečné známky z každého pololetí

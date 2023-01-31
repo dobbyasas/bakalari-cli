@@ -42,9 +42,18 @@ export const handleCommand = async (
   if (keywords.length === 0) return;
   switch (keywords[0].toLowerCase()) {
     case 'help':
-    case 'napoveda':
-      printBanner('help');
+    case 'napoveda': {
+      if (keywords.length === 1) {
+        printBanner('help');
+        return;
+      }
+      const bannerExists = printBanner(`commands/${keywords[1]}`, {
+        displayError: false,
+      });
+      if (!bannerExists)
+        console.log(`Nápověda pro příkaz ${keywords[1]} zatím neexistuje!`);
       break;
+    }
 
     case 'hours':
     case 'hodiny': {
