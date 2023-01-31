@@ -107,13 +107,13 @@ export const handleCommand = async (
         const longestMarkCaptionLength = Math.max(...targetSubject.Marks.map(mark => mark.Caption.length));
         const longestMarkWeightLength = Math.max(...targetSubject.Marks.map(mark => String(mark.Weight).length));
 
-        console.log(targetSubject.Subject.Name + '\n');
+        if (!options.includes('m')) console.log(targetSubject.Subject.Name + '\n');
 
         targetSubject.Marks.forEach(mark => {
           console.log(`${mark.MarkText.padEnd(longestMarkTextLength + CELL_SPACING, ' ')}${`(Váha: ${mark.Weight}):`.padEnd(9 + longestMarkWeightLength + CELL_SPACING, ' ')}${mark.Caption.padEnd(longestMarkCaptionLength + COLUMN_SPACING, ' ')}(${getFormattedDate(mark.MarkDate)})`);
         });
 
-        console.log(`\nPrůměr: ${targetSubject.AverageText}`);
+        if (!options.includes('m')) console.log(`\nPrůměr: ${targetSubject.AverageText}`);
       }
       break;
     }

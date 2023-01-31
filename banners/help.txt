@@ -6,7 +6,8 @@ timetable [rozvrh]   - vypíše aktuální rozvrh
   -p (previous) -> minulý týden
   -n (next)     -> další týden
 marks     [znamky]   - vypíše známky ze všech předmětů
-  [SUBJECT] -> vypíše známky z daného předmětu (např. marks MAT)
+  [SUBJECT]    -> vypíše známky z daného předmětu (např. marks MAT)
+  -m (minimal) -> nevypíše průměr a název předmětu
 changes   [zmeny]    - vypíše změny v aktuálním rozvrhu
 final     [pololeti] - vypíše konečné známky z každého pololetí
 bfetch    [bfetch]   - vypíše informace o aplikaci a API

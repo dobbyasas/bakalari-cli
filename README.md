@@ -23,3 +23,4 @@
 
 - marks (znamky)
   - \[SUBJECT\] -> vypíše známky z daného předmětu (např. marks MAT)
+  - m (minimal) -> nevypíše průměr a název předmětu
