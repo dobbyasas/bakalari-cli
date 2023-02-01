@@ -1,0 +1,18 @@
+absence [absence]
+
+Vypíše absenci ze všech předmětů. Nad výpisem absence se
+vypíše legenda která říká, jaká barva koresponduje s jakým
+druhem absence.
+
+Před jednotlivými absencemi je vypsán i počet hodin
+z předmětu.
+
+Druhy absence
+-> Obecná (Zelená)
+-> Nezapočtená (Modrá)
+-> Pozdní příchod (Červená)
+-> Brzký odchod (Žlutá)
+-> Distanční výuka (Fialová)
+
+Použití
+-> absence

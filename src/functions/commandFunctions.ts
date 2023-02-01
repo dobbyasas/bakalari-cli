@@ -45,20 +45,26 @@ export const handleCommand = async (
   switch (keywords[0].toLowerCase()) {
     case 'help':
     case 'napoveda': {
-      if (keywords.length === 1) {
+      const lowercaseKeywords = keywords.map((keyword) =>
+        keyword.toLowerCase()
+      );
+
+      if (lowercaseKeywords.length === 1) {
         printBanner('help');
         return;
       }
-      const command = EN_COMMANDS.includes(keywords[1])
-        ? keywords[1]
+      const command = EN_COMMANDS.includes(lowercaseKeywords[1])
+        ? lowercaseKeywords[1]
         : COMMAND_LOOKUP_TABLE[
-            keywords[1] as keyof typeof COMMAND_LOOKUP_TABLE
-          ] ?? keywords[1];
+            lowercaseKeywords[1] as keyof typeof COMMAND_LOOKUP_TABLE
+          ] ?? lowercaseKeywords[1];
       const bannerExists = printBanner(`commands/${command}`, {
         displayError: false,
       });
       if (!bannerExists)
-        console.log(`Nápověda pro příkaz ${keywords[1]} zatím neexistuje!`);
+        console.log(
+          `Nápověda pro příkaz ${lowercaseKeywords[1]} zatím neexistuje!`
+        );
       break;
     }
 
@@ -239,9 +245,9 @@ export const handleCommand = async (
         placeholders: {
           end: C_END,
           baseColor: C_GREEN,
+          schoolColor: C_BLUE,
           lateColor: C_RED,
           soonColor: C_YELLOW,
-          schoolColor: C_BLUE,
           distanceColor: C_MAGENTA,
         },
       });

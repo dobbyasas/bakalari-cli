@@ -10,7 +10,8 @@ Zkratka může být psána velkými i malými písmeny:
 
 Options
 -m -> minimální výpis
-  (nevypíše název a průměr, pokud je volen předmět)
+  (nevypíše název a průměr, pokud je volen předmět
+[SUBJECT] -> vypíše známky z daného předmětu (např. marks MAT)
 
 Použití
 -> marks
