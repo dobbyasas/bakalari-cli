@@ -1,0 +1,13 @@
+changes [zmeny]
+
+Vypíše změny v rozvrhu z aktuálního týdne. Zobrazí se
+jejich datum, interval hodin, druh změny a její popis.
+
+Druhy změny
+-> Přidáno
+-> Odebráno
+-> Změna třídy
+-> Suplování
+
+Použití
+changes

@@ -1,12 +1,19 @@
 import prompt from 'prompt-sync';
 import promptHistory from 'prompt-sync-history';
 
-import { COMMANDS, PASSWORD_SYMBOL, C_GREEN, C_CYAN, C_END } from './constants';
+import {
+  EN_COMMANDS,
+  CZ_COMMANDS,
+  PASSWORD_SYMBOL,
+  C_GREEN,
+  C_CYAN,
+  C_END,
+} from './constants';
 
 const defaultPrompt = prompt({
   sigint: true,
   history: promptHistory(),
-  autocomplete: () => COMMANDS,
+  autocomplete: () => [...EN_COMMANDS, ...CZ_COMMANDS],
 });
 
 export class Shell {

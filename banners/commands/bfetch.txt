@@ -1,0 +1,8 @@
+bfetch [bfetch]
+
+Vypíše logo aplikace, verzi Bakaláři API a verzi samotné
+aplikace, tedy Bakaláři CLI. Mimo jiné se vypíše i jméno
+ve formátu jmeno@bakalari,
+
+Použití
+-> bfetch

@@ -1,0 +1,11 @@
+final [pololeti]
+
+Vypíše finální známky ze všech pololetí. Zobrazují se
+předměty ze všech ročníků, nevadí tedy, že předmět již
+v aktuálním ročníku není.
+
+V případě, že předmět v daném ročníku není, je známka
+nahrazena pomlčkou (-).
+
+Použití
+-> final

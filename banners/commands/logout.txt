@@ -1,0 +1,10 @@
+logout [odhlasit]
+
+Odhlásí aktivního uživatele. Po odhlášení se zobrazí
+možnost pro nové přihlášení. Tento příkaz také smaže
+soubor, kde jsou uloženy přihlašovací údaje.
+
+Pro nové uložení je třeba se přihlásit znovu.
+
+Použití
+-> logout

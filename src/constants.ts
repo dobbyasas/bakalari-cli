@@ -12,26 +12,40 @@ export const BANNER_FOLDER = 'banners';
 export const DATA_FOLDER = 'data';
 export const CELL_SPACING = 1;
 export const COLUMN_SPACING = 2;
-export const COMMANDS: string[] = [
+export const EN_COMMANDS: string[] = [
   'help',
-  'napoveda',
   'hours',
-  'hodiny',
   'teachers',
-  'ucitele',
   'timetable',
-  'rozvrh',
   'marks',
-  'znamky',
   'changes',
-  'zmeny',
   'final',
-  'pololeti',
   'absence',
   'bfetch',
   'logout',
+];
+export const CZ_COMMANDS: string[] = [
+  'napoveda',
+  'hodiny',
+  'ucitele',
+  'rozvrh',
+  'znamky',
+  'zmeny',
+  'pololeti',
+  'absence',
+  'bfetch',
   'odhlasit',
 ];
+export const COMMAND_LOOKUP_TABLE = {
+  napoveda: 'help',
+  hodiny: 'hours',
+  ucitele: 'teachers',
+  rozvrh: 'timetable',
+  znamky: 'marks',
+  zmeny: 'changes',
+  pololeti: 'final',
+  odhlasit: 'logout',
+};
 export const WEEK_DAYS = ['Po', 'Út', 'St', 'Čt', 'Pá'];
 export const CHANGE_TYPES: { [key in Change['ChangeType']]: string } = {
   Added: 'Přidáno',

@@ -1,0 +1,19 @@
+help [napoveda]
+
+Vypíše nápovědu ke všem příkazům, které v aplikaci
+existují. Také vypíše options a parametry k nim, společně
+s jejich popisem.
+
+Pro zobrazení nápovědy k danému příkazu se využivá parametr:
+help timetable
+
+Je možné zobrazit nápovědu pro příkaz jak v anglickém, tak
+i českém formátu.
+
+Options
+[COMMAND] -> vypíše nápovědu k příkazu (např. help timetable)
+
+Použití
+-> help
+-> help rozvrh
+-> help timetable

@@ -1,5 +1,5 @@
 Celkový počet hodin
-{baseColor}Celková{end}
+{baseColor}Obecná{end}
 {schoolColor}Nezapočtená{end}
 {lateColor}Pozdní příchod{end}
 {soonColor}Brzký odchod{end}

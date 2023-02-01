@@ -1,0 +1,18 @@
+timetable [rozvrh]
+
+Tento příkaz vypíše aktuální rozvrh. Vypíše i čísla hodin
+a názvy jednotlivých dní. V případě, že chceš zobrazit
+stálý rozvrh nebo rozvrh z minulého či následujícího
+týdne, využij správný option.
+
+Options:
+-s (stable)   -> stálý
+-p (previous) -> minulý týden
+-n (next)     -> další týden
+-m (minimal)  -> minimální výpis
+  (nevypíše čísla hodin a názvy dnů)
+
+Použití:
+-> timetable
+-> timetable -n
+-> timetable -pm
