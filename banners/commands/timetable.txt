@@ -5,16 +5,14 @@ a názvy jednotlivých dní. V případě, že chceš zobrazit
 stálý rozvrh nebo rozvrh z minulého či následujícího
 týdne, využij správný option.
 
-Pokud necheš vypsat čísla hodin a názvy dní, využij option
-pro minimální výpis (-m).
-
 Options:
 -s (stable)   -> stálý
 -p (previous) -> minulý týden
 -n (next)     -> další týden
 -m (minimal)  -> minimální výpis
+  (nevypíše čísla hodin a názvy dnů)
 
 Použití:
-timetable
-timetable -n
-timetable -pm
+-> timetable
+-> timetable -n
+-> timetable -pm
