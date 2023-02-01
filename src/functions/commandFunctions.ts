@@ -17,6 +17,8 @@ import {
   CELL_SPACING,
   APP_LOGO,
   COLUMN_SPACING,
+  EN_COMMANDS,
+  COMMAND_LOOKUP_TABLE,
   C_RED,
   C_YELLOW,
   C_GREEN,
@@ -47,7 +49,12 @@ export const handleCommand = async (
         printBanner('help');
         return;
       }
-      const bannerExists = printBanner(`commands/${keywords[1]}`, {
+      const command = EN_COMMANDS.includes(keywords[1])
+        ? keywords[1]
+        : COMMAND_LOOKUP_TABLE[
+            keywords[1] as keyof typeof COMMAND_LOOKUP_TABLE
+          ] ?? keywords[1];
+      const bannerExists = printBanner(`commands/${command}`, {
         displayError: false,
       });
       if (!bannerExists)
