@@ -5,3 +5,4 @@ Přesněji zobrazí zkratku učitele a jeho jméno hnad za ní.
 
 Použití:
 -> teachers
+-> ucitele

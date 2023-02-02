@@ -136,7 +136,12 @@ export const handleCommand = async (
         )) as Timetable;
       }
       if (!timetable) return;
-      formatTimetable(timetable, CELL_SPACING, options.includes('m'));
+      formatTimetable(
+        timetable,
+        CELL_SPACING,
+        options.includes('m'),
+        options.includes('r')
+      );
       break;
     }
 

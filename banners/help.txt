@@ -6,7 +6,8 @@ timetable [rozvrh]   - vypíše aktuální rozvrh
   -s (stable)   -> stálý
   -p (previous) -> minulý týden
   -n (next)     -> další týden
-  -m (minimal) -> nevypíše čísla hodin a názvy dnů
+  -m (minimal)  -> nevypíše čísla hodin a názvy dnů
+  -r (rooms)    -> vypíše názvy tříd namísto předmětů
 marks     [znamky]   - vypíše známky ze všech předmětů
   [SUBJECT]    -> vypíše známky z daného předmětu (např. `marks MAT`)
   -m (minimal) -> nevypíše průměr a název předmětu

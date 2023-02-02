@@ -6,3 +6,4 @@ nebo jak dlouhá je přestávka mezi hodinami.
 
 Použití:
 -> hours
+-> hodiny

@@ -11,8 +11,11 @@ Options:
 -n (next)     -> další týden
 -m (minimal)  -> minimální výpis
   (nevypíše čísla hodin a názvy dnů)
+-r (rooms)    -> vypíše názvy tříd namísto předmětů
 
 Použití:
 -> timetable
 -> timetable -n
 -> timetable -pm
+-> timetable
+-> rozvrh

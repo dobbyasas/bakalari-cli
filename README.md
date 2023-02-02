@@ -151,6 +151,7 @@ Enter your password
   - p (previous) -> minulý týden
   - n (next) -> další týden
   - m (minimal) -> nevypíše čísla hodin a názvy dnů
+  - r (rooms) -> vypíše názvy tříd namísto předmětů
 
 - marks (znamky)
   - \[SUBJECT\] -> vypíše známky z daného předmětu (např. `marks MAT`)

@@ -23,16 +23,22 @@ const getLongestSubjectNameLength = (subjects: Timetable['Subjects']) => {
   return Math.max(...subjects.map((subject) => subject.Abbrev.length));
 };
 
+const getLongestRoomNameLength = (rooms: Timetable['Rooms']) => {
+  return Math.max(...rooms.map((room) => room.Abbrev.length));
+};
+
 export const formatTimetable = (
   timetable: Timetable,
   cellSpacing: number,
-  minimal = false
+  minimal = false,
+  showRooms = false
 ) => {
-  const { Hours, Days, Subjects } = timetable;
+  const { Hours, Days, Subjects, Rooms } = timetable;
 
   const minHour = Math.min(...Hours.map((hour) => hour.Id)) ?? 0;
   const longestWeekDayLength = getLongestWeekDayLength(WEEK_DAYS);
   const longestSubjectNameLength = getLongestSubjectNameLength(Subjects);
+  const longestRoomNameLength = getLongestRoomNameLength(Rooms);
 
   if (!minimal) {
     let hourRow = ' '.repeat(longestWeekDayLength + cellSpacing);
@@ -55,23 +61,35 @@ export const formatTimetable = (
         row += ' '.repeat(longestSubjectNameLength + CELL_SPACING);
         continue;
       }
+
       const subject = Subjects.find(
         (subject) => subject.Id === atom?.SubjectId
       );
-      row += subject
-        ? `${(subject?.Abbrev ?? ' ').padEnd(
-            longestSubjectNameLength + cellSpacing,
-            ' '
-          )}`
-        : (() => {
-            const change = atom.Change;
-            if (!change || !change.TypeAbbrev)
-              return ' '.repeat(longestSubjectNameLength + CELL_SPACING);
-            return change.TypeAbbrev.padEnd(
+      const room = Rooms.find((room) => room.Id === atom?.RoomId);
+
+      if (!showRooms) {
+        row += subject
+          ? `${(subject?.Abbrev ?? ' ').padEnd(
               longestSubjectNameLength + cellSpacing,
               ' '
-            );
-          })();
+            )}`
+          : (() => {
+              const change = atom.Change;
+              if (!change || !change.TypeAbbrev)
+                return ' '.repeat(longestSubjectNameLength + CELL_SPACING);
+              return change.TypeAbbrev.padEnd(
+                longestSubjectNameLength + cellSpacing,
+                ' '
+              );
+            })();
+      } else {
+        row += room
+          ? `${(room?.Abbrev ?? ' ').padEnd(
+              longestRoomNameLength + cellSpacing,
+              ' '
+            )}`
+          : '-'.repeat(longestRoomNameLength) + ' '.repeat(CELL_SPACING);
+      }
     }
     console.log(row);
   });
