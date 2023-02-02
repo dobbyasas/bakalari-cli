@@ -159,13 +159,22 @@ export const handleCommand = async (
         const longestSubjectNameLength = Math.max(
           ...marks.Subjects.map((subject) => subject.Subject.Abbrev.length)
         );
+
         marks.Subjects.forEach((subject) => {
-          console.log(
-            `${(subject.Subject.Abbrev.trimEnd() + ':').padEnd(
+          let row =
+            (subject.Subject.Abbrev.trimEnd() + ':').padEnd(
               longestSubjectNameLength + 1,
               ' '
-            )}${' '.repeat(CELL_SPACING)}${subject.AverageText}`
-          );
+            ) +
+            ' '.repeat(CELL_SPACING) +
+            subject.AverageText +
+            ' '.repeat(COLUMN_SPACING);
+          if (options.includes('l')) {
+            subject.Marks.forEach((mark) => {
+              row += mark.MarkText.padEnd(2 + CELL_SPACING, ' ');
+            });
+          }
+          console.log(row);
         });
       } else {
         const subjectName = keywords[1].toLowerCase();

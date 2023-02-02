@@ -154,5 +154,6 @@ Enter your password
   - r (rooms) -> vypíše názvy tříd namísto předmětů
 
 - marks (znamky)
-  - \[SUBJECT\] -> vypíše známky z daného předmětu (např. `marks MAT`)
   - m (minimal) -> nevypíše průměr a název předmětu
+  - l (list)    -> vypíše u každého předmětu známky
+  - \[SUBJECT\] -> vypíše známky z daného předmětu (např. `marks MAT`)

@@ -37,7 +37,7 @@ export const getCurrentHourNumber = (
     .BeginTime.split(':')
     .map((timeNumber) => Number(timeNumber));
 
-  if (hours > maxHours && minutes > maxMinutes) {
+  if (hours > maxHours || (hours === maxHours && minutes > maxMinutes)) {
     return null;
   }
 
