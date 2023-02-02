@@ -4,10 +4,13 @@ import {
   displayChanges,
   formatFinalMarks,
   formatAbsence,
+} from './formattingFunctions';
+import {
   getPreviousWeekFormattedDate,
   getNextWeekFormattedDate,
   getFormattedDate,
-} from './formattingFunctions';
+  getCurrentHourNumber,
+} from './dateFunctions';
 import { fetchFromAPI } from './fetchFunctions';
 import { deleteAuth } from './authFunctions';
 import { shell } from '../main';
@@ -29,7 +32,7 @@ import {
 
 import type { UserAuth } from '../typings/authTypes';
 import type { APITokenObject, APIVersionResult } from '../typings/apiTypes';
-import type { Timetable, Change } from '../typings/timetableTypes';
+import type { Timetable, Hour, Change } from '../typings/timetableTypes';
 import type { MarksResult, FinalMarksResult } from '../typings/markTypes';
 import type { AbsenceResult } from '../typings/absenceTypes';
 
@@ -99,6 +102,7 @@ export const handleCommand = async (
     case 'timetable':
     case 'rozvrh': {
       let timetable: Timetable | null = null;
+      let currentHour: Hour['Id'] | null = null;
 
       // Checking if the [s, p, n] options are not used at the same time
       if (
@@ -134,13 +138,15 @@ export const handleCommand = async (
           token,
           '/timetable/actual'
         )) as Timetable;
+        currentHour = getCurrentHourNumber(timetable.Hours);
       }
       if (!timetable) return;
       formatTimetable(
         timetable,
         CELL_SPACING,
         options.includes('m'),
-        options.includes('r')
+        options.includes('r'),
+        currentHour ? currentHour.toString() : null
       );
       break;
     }

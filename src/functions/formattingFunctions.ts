@@ -1,4 +1,5 @@
 import {
+  C_BLACK,
   CELL_SPACING,
   COLUMN_SPACING,
   WEEK_DAYS,
@@ -9,9 +10,15 @@ import {
   C_BLUE,
   C_MAGENTA,
   C_END,
+  BG_WHITE,
 } from '../constants';
 
-import type { Timetable, Subject, Change } from '../typings/timetableTypes';
+import type {
+  Timetable,
+  Subject,
+  Hour,
+  Change,
+} from '../typings/timetableTypes';
 import { FinalMarksResult } from '../typings/markTypes';
 import { AbsenceResult } from '../typings/absenceTypes';
 
@@ -31,7 +38,8 @@ export const formatTimetable = (
   timetable: Timetable,
   cellSpacing: number,
   minimal = false,
-  showRooms = false
+  showRooms = false,
+  currentHour?: Hour['Caption'] | null
 ) => {
   const { Hours, Days, Subjects, Rooms } = timetable;
 
@@ -57,8 +65,19 @@ export const formatTimetable = (
       : `${WEEK_DAYS[day.DayOfWeek - 1]}${' '.repeat(cellSpacing)}`;
     for (let i = 0; i < Hours.length; i++) {
       const atom = day.Atoms.find((atom) => atom.HourId === i + minHour);
+      const currentDate = new Date();
+      const currentWeekDay =
+        currentDate.getDay() > 0 ? currentDate.getDay() : 7;
+      const isHourCurrent =
+        i === Number(currentHour) && currentWeekDay === day.DayOfWeek;
+      const hightlightStartString =
+        currentHour && isHourCurrent ? `${BG_WHITE}${C_BLACK}` : '';
+      const hightlightEndString = currentHour && isHourCurrent ? C_END : '';
+
       if (!atom) {
-        row += ' '.repeat(longestSubjectNameLength + CELL_SPACING);
+        row += `${hightlightStartString}${' '.repeat(
+          longestSubjectNameLength
+        )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
         continue;
       }
 
@@ -69,18 +88,20 @@ export const formatTimetable = (
 
       if (!showRooms) {
         row += subject
-          ? `${(subject?.Abbrev ?? ' ').padEnd(
-              longestSubjectNameLength + cellSpacing,
+          ? `${hightlightStartString}${(subject?.Abbrev ?? ' ').padEnd(
+              longestSubjectNameLength,
               ' '
-            )}`
+            )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`
           : (() => {
               const change = atom.Change;
               if (!change || !change.TypeAbbrev)
-                return ' '.repeat(longestSubjectNameLength + CELL_SPACING);
-              return change.TypeAbbrev.padEnd(
-                longestSubjectNameLength + cellSpacing,
+                return `${hightlightStartString}${' '.repeat(
+                  longestSubjectNameLength + CELL_SPACING
+                )}${hightlightEndString}`;
+              return `${hightlightStartString}${change.TypeAbbrev.padEnd(
+                longestSubjectNameLength,
                 ' '
-              );
+              )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
             })();
       } else {
         row += room
@@ -157,7 +178,7 @@ export const formatFinalMarks = (finalMarks: FinalMarksResult) => {
   );
 
   let gradeRow =
-    'Ročník:'.padEnd(newFunction(longestLeftColumnTitle), ' ') +
+    'Ročník:'.padEnd(longestLeftColumnTitle + CELL_SPACING + 1, ' ') +
     ' '.repeat(CELL_SPACING);
   for (let i = 1; i <= totalGrades; i++) {
     gradeRow += `${i}${' '.repeat(CELL_SPACING * 2 + 1)}`;
@@ -244,29 +265,3 @@ export const formatAbsence = (
     console.log(row);
   });
 };
-
-export const getFormattedDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`;
-};
-
-export const getPreviousWeekFormattedDate = (): string => {
-  const date = new Date();
-  date.setDate(date.getDate() - 7);
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-    2,
-    '0'
-  )}-${String(date.getDate()).padStart(2, '0')}`;
-};
-
-export const getNextWeekFormattedDate = (): string => {
-  const date = new Date();
-  date.setDate(date.getDate() + 7);
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-    2,
-    '0'
-  )}-${String(date.getDate()).padStart(2, '0')}`;
-};
-function newFunction(longestLeftColumnTitle: number): number {
-  return longestLeftColumnTitle + CELL_SPACING + 1;
-}

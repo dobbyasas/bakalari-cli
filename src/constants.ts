@@ -1,7 +1,7 @@
 import type { Change } from './typings/timetableTypes';
 
 // Release Constants
-export const RELEASE_NUMBER = '1.0.2';
+export const RELEASE_NUMBER = '1.0.3';
 export const RELEASE_PLACEHOLDER = '{release}';
 
 // Constants
@@ -55,6 +55,7 @@ export const CHANGE_TYPES: { [key in Change['ChangeType']]: string } = {
 };
 
 // Colors
+export const C_BLACK = '\x1b[30m';
 export const C_RED = '\x1b[31m';
 export const C_GREEN = '\x1b[32m';
 export const C_YELLOW = '\x1b[33m';
@@ -62,6 +63,9 @@ export const C_BLUE = '\x1b[34m';
 export const C_MAGENTA = '\x1b[35m';
 export const C_CYAN = '\x1b[36m';
 export const C_END = '\x1b[0m';
+
+// Background colors
+export const BG_WHITE = '\x1b[47m';
 
 // Extra
 export const APP_LOGO = [
