@@ -31,12 +31,24 @@ export const getCurrentHourNumber = (
   const minutes = date.getMinutes();
   let lastHour: Hour['Id'] | null = null;
 
+  if (!timetableHours || !timetableHours.length) return null;
+  const [maxHours, maxMinutes] = timetableHours
+    .slice(-1)[0]
+    .BeginTime.split(':')
+    .map((timeNumber) => Number(timeNumber));
+
+  if (hours > maxHours && minutes > maxMinutes) {
+    return null;
+  }
+
   timetableHours.forEach((timetableHour) => {
     const [tHours, tMinutes] = timetableHour.BeginTime.split(':').map(
       (timeNumber) => Number(timeNumber)
     );
 
-    if (hours >= tHours && minutes >= tMinutes) {
+    if (hours > tHours) {
+      lastHour = timetableHour['Id'];
+    } else if (hours === tHours && minutes > tMinutes) {
       lastHour = timetableHour['Id'];
     }
   });

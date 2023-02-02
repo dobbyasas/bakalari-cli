@@ -69,7 +69,7 @@ export const formatTimetable = (
       const currentWeekDay =
         currentDate.getDay() > 0 ? currentDate.getDay() : 7;
       const isHourCurrent =
-        i === Number(currentHour) && currentWeekDay === day.DayOfWeek;
+        i === Number(currentHour) - minHour && currentWeekDay === day.DayOfWeek;
       const hightlightStartString =
         currentHour && isHourCurrent ? `${BG_WHITE}${C_BLACK}` : '';
       const hightlightEndString = currentHour && isHourCurrent ? C_END : '';
@@ -105,11 +105,13 @@ export const formatTimetable = (
             })();
       } else {
         row += room
-          ? `${(room?.Abbrev ?? ' ').padEnd(
+          ? `${hightlightStartString}${(room?.Abbrev ?? '').padEnd(
               longestRoomNameLength + cellSpacing,
               ' '
-            )}`
-          : '-'.repeat(longestRoomNameLength) + ' '.repeat(CELL_SPACING);
+            )}${hightlightEndString}`
+          : `${hightlightStartString}${'-'.repeat(
+              longestRoomNameLength
+            )}${' '.repeat(CELL_SPACING)}${hightlightEndString}`;
       }
     }
     console.log(row);
