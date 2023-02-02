@@ -295,6 +295,12 @@ export const handleCommand = async (
       break;
     }
 
+    case 'clear':
+    case 'cls': {
+      console.clear();
+      break;
+    }
+
     case 'logout':
     case 'odhlasit': {
       deleteAuth();

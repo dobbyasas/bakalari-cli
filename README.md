@@ -139,6 +139,7 @@ Enter your password
 | final     | pololeti  | vypíše konečné známky z každého pololetí |
 | absence   | absence   | vypíše absenci z předmětů                |
 | bfetch    | bfetch    | vypíše informace o aplikaci a API        |
+| clear     | cls       | vyčistí obrazovku                        |
 | logout    | odhlasit  | odhlásí uživatele a vymaže data o loginu |
 
 ### Možnosti

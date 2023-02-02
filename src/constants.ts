@@ -22,6 +22,7 @@ export const EN_COMMANDS: string[] = [
   'final',
   'absence',
   'bfetch',
+  'clear',
   'logout',
 ];
 export const CZ_COMMANDS: string[] = [
@@ -34,6 +35,7 @@ export const CZ_COMMANDS: string[] = [
   'pololeti',
   'absence',
   'bfetch',
+  'cls',
   'odhlasit',
 ];
 export const COMMAND_LOOKUP_TABLE = {
@@ -45,6 +47,7 @@ export const COMMAND_LOOKUP_TABLE = {
   zmeny: 'changes',
   pololeti: 'final',
   odhlasit: 'logout',
+  cls: 'clear',
 };
 export const WEEK_DAYS = ['Po', 'Út', 'St', 'Čt', 'Pá'];
 export const CHANGE_TYPES: { [key in Change['ChangeType']]: string } = {

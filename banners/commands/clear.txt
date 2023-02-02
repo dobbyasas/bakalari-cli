@@ -1,0 +1,7 @@
+clear [cls]
+
+Vyčistí obsah obrazovky.
+
+Použití
+-> clear
+-> cls
