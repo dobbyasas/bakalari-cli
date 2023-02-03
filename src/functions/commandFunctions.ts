@@ -4,6 +4,7 @@ import {
   formatChanges,
   formatFinalMarks,
   formatAbsence,
+  columnifyData,
 } from './formattingFunctions';
 import {
   getPreviousWeekFormattedDate,
@@ -176,26 +177,24 @@ export const handleCommand = async (
       const marks = (await fetchFromAPI(auth, token, '/marks')) as MarksResult;
       if (!marks) return;
       if (keywords.length === 1) {
-        const longestSubjectNameLength = Math.max(
-          ...marks.Subjects.map((subject) => subject.Subject.Abbrev.length)
+        columnifyData(
+          [
+            marks.Subjects.map((subject) => subject.Subject.Abbrev),
+            marks.Subjects.map((subject) => subject.AverageText),
+            marks.Subjects.map((subject) =>
+              subject.Marks.map((mark) => mark.MarkText.padEnd(2, ' ')).join(
+                ' '.repeat(CELL_SPACING)
+              )
+            ),
+          ],
+          CELL_SPACING,
+          [
+            {
+              position: 1,
+              size: COLUMN_SPACING,
+            },
+          ]
         );
-
-        marks.Subjects.forEach((subject) => {
-          let row =
-            (subject.Subject.Abbrev.trimEnd() + ':').padEnd(
-              longestSubjectNameLength + 1,
-              ' '
-            ) +
-            ' '.repeat(CELL_SPACING) +
-            subject.AverageText +
-            ' '.repeat(COLUMN_SPACING);
-          if (options.includes('l')) {
-            subject.Marks.forEach((mark) => {
-              row += mark.MarkText.padEnd(2 + CELL_SPACING, ' ');
-            });
-          }
-          console.log(row);
-        });
       } else {
         const subjectName = keywords[1].toLowerCase();
         const targetSubject = marks.Subjects.find(
@@ -207,33 +206,26 @@ export const handleCommand = async (
           return;
         }
 
-        const longestMarkTextLength = Math.max(
-          ...targetSubject.Marks.map((mark) => mark.MarkText.length)
-        );
-        const longestMarkCaptionLength = Math.max(
-          ...targetSubject.Marks.map((mark) => mark.Caption.length)
-        );
-        const longestMarkWeightLength = Math.max(
-          ...targetSubject.Marks.map((mark) => String(mark.Weight).length)
-        );
-
         if (!options.includes('m'))
           console.log(targetSubject.Subject.Name + '\n');
 
-        targetSubject.Marks.forEach((mark) => {
-          console.log(
-            `${mark.MarkText.padEnd(
-              longestMarkTextLength + CELL_SPACING,
-              ' '
-            )}${`(Váha: ${mark.Weight}):`.padEnd(
-              9 + longestMarkWeightLength + CELL_SPACING,
-              ' '
-            )}${mark.Caption.padEnd(
-              longestMarkCaptionLength + COLUMN_SPACING,
-              ' '
-            )}(${getFormattedDate(mark.MarkDate)})`
-          );
-        });
+        columnifyData(
+          [
+            targetSubject.Marks.map((mark) => mark.MarkText),
+            targetSubject.Marks.map((mark) => `(Váha: ${String(mark.Weight)})`),
+            targetSubject.Marks.map((mark) => mark.Caption),
+            targetSubject.Marks.map(
+              (mark) => `[${getFormattedDate(mark.MarkDate)}]`
+            ),
+          ],
+          CELL_SPACING,
+          [
+            {
+              position: 2,
+              size: COLUMN_SPACING,
+            },
+          ]
+        );
 
         if (!options.includes('m'))
           console.log(`\nPrůměr: ${targetSubject.AverageText}`);

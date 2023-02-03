@@ -20,7 +20,14 @@ import type {
   AbsenceResult,
 } from '../typings/apiTypes';
 
-export const columnifyData = (entries: string[][], spacing: number) => {
+export const columnifyData = (
+  entries: string[][],
+  spacing: number,
+  specialSpacings?: {
+    position: number;
+    size: number;
+  }[]
+) => {
   const maxItemLength = Math.max(...entries.map((entry) => entry.length));
   const maxColumnLengths = entries.map((entry) =>
     Math.max(...entry.map((item) => item.length))
@@ -29,7 +36,10 @@ export const columnifyData = (entries: string[][], spacing: number) => {
     let row = '';
     for (let j = 0; j < entries.length; j++) {
       row += entries[j][i].padEnd(maxColumnLengths[j], ' ');
-      row += ' '.repeat(spacing);
+      row += ' '.repeat(
+        specialSpacings?.find((spacing) => spacing.position === j)?.size ??
+          spacing
+      );
     }
     console.log(row);
   }
