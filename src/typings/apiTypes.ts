@@ -74,5 +74,17 @@ export type SubstitutionsResult = {
 };
 
 export type SubjectsResult = {
-  Subjects: any;
+  Subjects: {
+    SubjectID: Subject['Id'];
+    SubjectName: Subject['Name'];
+    SubjectAbbrev: Subject['Abbrev'];
+    TeacherID: Teacher['Id'];
+    TeacherName: Teacher['Name'];
+    TeacherAbbrev: Teacher['Abbrev'];
+    TeacherEmail: string | null;
+    TeacherWeb: string | null;
+    TeacherSchoolPhone: string | null;
+    TeacherHomePhone: string | null;
+    TeacherMobilePhone: string | null;
+  }[];
 };

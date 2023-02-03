@@ -112,7 +112,10 @@ export const handleCommand = async (
         token,
         '/subjects'
       )) as SubjectsResult;
-      console.log(Subjects);
+      Subjects.forEach((subject) => {
+        console.log(`${subject.SubjectName} (${subject.SubjectAbbrev})`);
+        console.log(`${subject.TeacherName} (${subject.TeacherAbbrev})`);
+      });
       break;
     }
 
