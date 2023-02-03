@@ -86,9 +86,13 @@ export const handleCommand = async (
         '/timetable/actual'
       )) as TimetableResult;
       if (!Hours) return;
-      Hours.forEach((hour) => {
-        console.log(`${hour.Caption}: ${hour.BeginTime}-${hour.EndTime}`);
-      });
+      columnifyData(
+        [
+          Hours.map((hour) => hour.Caption + ':'),
+          Hours.map((hour) => `${hour.BeginTime}:${hour.EndTime}`),
+        ],
+        CELL_SPACING
+      );
       break;
     }
 
