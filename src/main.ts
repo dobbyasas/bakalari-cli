@@ -10,8 +10,11 @@ import { handleCommand } from './functions/commandFunctions.js';
 import {
   HOSTNAME,
   RELEASE_NUMBER,
+  RELEASE_WIP,
   LOGGING_IN_TEXT,
   LOADING_DATA_TEXT,
+  C_YELLOW,
+  C_END,
 } from './constants.js';
 
 import type { UserAuth } from './typings/authTypes.js';
@@ -49,8 +52,15 @@ const handleLogin = async (): Promise<{
     newLine: true,
     placeholders: {
       release: RELEASE_NUMBER,
+      wip: RELEASE_WIP ? ' [WIP]' : '',
     },
   });
+
+  if (RELEASE_WIP) {
+    console.log(
+      `${C_YELLOW}Pracujete s WIP verzí! Může nastat nedefinované chování.${C_END}\n`
+    );
+  }
 
   const loginData = await handleLogin();
   if (!loginData) return;
