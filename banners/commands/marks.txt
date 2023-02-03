@@ -3,7 +3,7 @@ marks [znamky]
 Vypíše průměry ze všech předmětů v aktuálním pololetí.
 Po přidání zkratky předmětu za příkaz se zobrazí všechny
 známky z daného předmětu, společně s jejich váhami,
-popisem a celkovým průměrem předmětu.
+popisem a celkovým průměrem z předmětu.
 
 Zkratka může být psána velkými i malými písmeny:
 -> marks MAT = marks mat
@@ -11,9 +11,12 @@ Zkratka může být psána velkými i malými písmeny:
 Options
 -m -> minimální výpis
   (nevypíše název a průměr, pokud je volen předmět
+-l -> vypíše u každého předmětu známky
 [SUBJECT] -> vypíše známky z daného předmětu (např. marks MAT)
 
 Použití
 -> marks
 -> marks MAT
 -> marks -m MAT
+-> marks -l
+-> znamky

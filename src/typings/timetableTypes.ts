@@ -20,7 +20,7 @@ export type Room = {
 export type Change = {
   Day: string;
   Hours: string;
-  ChangeType: 'Added' | 'Canceled' | 'RoomChanged' | 'Substitution';
+  ChangeType: 'Added' | 'Canceled' | 'Removed' | 'RoomChanged' | 'Substitution';
   Description: string;
   TypeAbbrev: string;
 };
@@ -45,12 +45,4 @@ export type Teacher = {
   Id: string;
   Abbrev: string;
   Name: string;
-};
-
-export type Timetable = {
-  Hours: Hour[];
-  Days: Day[];
-  Teachers: Teacher[];
-  Subjects: Subject[];
-  Rooms: Room[];
 };

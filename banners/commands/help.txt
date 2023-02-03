@@ -17,3 +17,4 @@ Použití
 -> help
 -> help rozvrh
 -> help timetable
+-> napoveda

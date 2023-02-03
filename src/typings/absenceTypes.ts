@@ -16,9 +16,3 @@ export interface SubjectAbsence extends AbsenceBase {
   LessonsCount: number;
   Base: number;
 }
-
-export type AbsenceResult = {
-  PercentageThreshold: number;
-  Absences: Absence[];
-  AbsencesPerSubject: SubjectAbsence[];
-};

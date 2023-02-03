@@ -133,12 +133,14 @@ Enter your password
 | help      | napoveda  | vypíše nápovědu                          |
 | hours     | hodiny    | vypíše kdy začíná a končí jaká hodina    |
 | teachers  | ucitele   | vypíše všechny učitele ve stálém rozvrhu |
+| subjects  | predmety  | vypíše předměty a jejich učitele         |
 | timetable | rozvrh    | vypíše aktuální rozvrh                   |
 | marks     | znamky    | vypíše známky ze všech předmětů          |
 | changes   | zmeny     | vypíše změny v aktuálním rozvrhu         |
 | final     | pololeti  | vypíše konečné známky z každého pololetí |
 | absence   | absence   | vypíše absenci z předmětů                |
 | bfetch    | bfetch    | vypíše informace o aplikaci a API        |
+| clear     | cls       | vyčistí obrazovku                        |
 | logout    | odhlasit  | odhlásí uživatele a vymaže data o loginu |
 
 ### Možnosti
@@ -151,7 +153,9 @@ Enter your password
   - p (previous) -> minulý týden
   - n (next) -> další týden
   - m (minimal) -> nevypíše čísla hodin a názvy dnů
+  - r (rooms) -> vypíše názvy tříd namísto předmětů
 
 - marks (znamky)
-  - \[SUBJECT\] -> vypíše známky z daného předmětu (např. `marks MAT`)
   - m (minimal) -> nevypíše průměr a název předmětu
+  - l (list)    -> vypíše u každého předmětu známky
+  - \[SUBJECT\] -> vypíše známky z daného předmětu (např. `marks MAT`)

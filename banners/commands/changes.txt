@@ -10,4 +10,5 @@ Druhy změny
 -> Suplování
 
 Použití
-changes
+-> changes
+-> zmeny

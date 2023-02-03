@@ -1,13 +1,17 @@
 import { printBanner } from './bannerFunctions';
 import {
   formatTimetable,
-  displayChanges,
+  formatChanges,
   formatFinalMarks,
   formatAbsence,
+  columnifyData,
+} from './formattingFunctions';
+import {
   getPreviousWeekFormattedDate,
   getNextWeekFormattedDate,
   getFormattedDate,
-} from './formattingFunctions';
+  getCurrentHourNumber,
+} from './dateFunctions';
 import { fetchFromAPI } from './fetchFunctions';
 import { deleteAuth } from './authFunctions';
 import { shell } from '../main';
@@ -29,9 +33,15 @@ import {
 
 import type { UserAuth } from '../typings/authTypes';
 import type { APITokenObject, APIVersionResult } from '../typings/apiTypes';
-import type { Timetable, Change } from '../typings/timetableTypes';
-import type { MarksResult, FinalMarksResult } from '../typings/markTypes';
-import type { AbsenceResult } from '../typings/absenceTypes';
+import type { Hour } from '../typings/timetableTypes';
+import {
+  TimetableResult,
+  MarksResult,
+  FinalMarksResult,
+  AbsenceResult,
+  SubstitutionsResult,
+  SubjectsResult,
+} from '../typings/apiTypes';
 
 export const handleCommand = async (
   keywords: string[],
@@ -74,11 +84,15 @@ export const handleCommand = async (
         auth,
         token,
         '/timetable/actual'
-      )) as Timetable;
+      )) as TimetableResult;
       if (!Hours) return;
-      Hours.forEach((hour) => {
-        console.log(`${hour.Caption}: ${hour.BeginTime}-${hour.EndTime}`);
-      });
+      columnifyData(
+        [
+          Hours.map((hour) => hour.Caption + ':'),
+          Hours.map((hour) => `${hour.BeginTime}:${hour.EndTime}`),
+        ],
+        CELL_SPACING
+      );
       break;
     }
 
@@ -88,7 +102,7 @@ export const handleCommand = async (
         auth,
         token,
         '/timetable/permanent'
-      )) as Timetable;
+      )) as TimetableResult;
       if (!Teachers) return;
       Teachers.forEach((teacher) => {
         console.log(`${teacher.Abbrev} - ${teacher.Name}`);
@@ -96,9 +110,24 @@ export const handleCommand = async (
       break;
     }
 
+    case 'subjects':
+    case 'predmety': {
+      const { Subjects } = (await fetchFromAPI(
+        auth,
+        token,
+        '/subjects'
+      )) as SubjectsResult;
+      Subjects.forEach((subject) => {
+        console.log(`${subject.SubjectName} (${subject.SubjectAbbrev})`);
+        console.log(`${subject.TeacherName} (${subject.TeacherAbbrev})`);
+      });
+      break;
+    }
+
     case 'timetable':
     case 'rozvrh': {
-      let timetable: Timetable | null = null;
+      let timetable: TimetableResult | null = null;
+      let currentHour: Hour['Id'] | null = null;
 
       // Checking if the [s, p, n] options are not used at the same time
       if (
@@ -113,30 +142,37 @@ export const handleCommand = async (
           auth,
           token,
           '/timetable/permanent'
-        )) as Timetable;
+        )) as TimetableResult;
       } else if (options.includes('p')) {
         const previousWeekDate = getPreviousWeekFormattedDate();
         timetable = (await fetchFromAPI(
           auth,
           token,
           `/timetable/actual?date=${previousWeekDate}`
-        )) as Timetable;
+        )) as TimetableResult;
       } else if (options.includes('n')) {
         const nextWeekDate = getNextWeekFormattedDate();
         timetable = (await fetchFromAPI(
           auth,
           token,
           `/timetable/actual?date=${nextWeekDate}`
-        )) as Timetable;
+        )) as TimetableResult;
       } else {
         timetable = (await fetchFromAPI(
           auth,
           token,
           '/timetable/actual'
-        )) as Timetable;
+        )) as TimetableResult;
+        currentHour = getCurrentHourNumber(timetable.Hours);
       }
       if (!timetable) return;
-      formatTimetable(timetable, CELL_SPACING, options.includes('m'));
+      formatTimetable(
+        timetable,
+        CELL_SPACING,
+        options.includes('m'),
+        options.includes('r'),
+        currentHour ? currentHour.toString() : null
+      );
       break;
     }
 
@@ -145,17 +181,24 @@ export const handleCommand = async (
       const marks = (await fetchFromAPI(auth, token, '/marks')) as MarksResult;
       if (!marks) return;
       if (keywords.length === 1) {
-        const longestSubjectNameLength = Math.max(
-          ...marks.Subjects.map((subject) => subject.Subject.Abbrev.length)
+        columnifyData(
+          [
+            marks.Subjects.map((subject) => subject.Subject.Abbrev),
+            marks.Subjects.map((subject) => subject.AverageText),
+            marks.Subjects.map((subject) =>
+              subject.Marks.map((mark) => mark.MarkText.padEnd(2, ' ')).join(
+                ' '.repeat(CELL_SPACING)
+              )
+            ),
+          ],
+          CELL_SPACING,
+          [
+            {
+              position: 1,
+              size: COLUMN_SPACING,
+            },
+          ]
         );
-        marks.Subjects.forEach((subject) => {
-          console.log(
-            `${(subject.Subject.Abbrev.trimEnd() + ':').padEnd(
-              longestSubjectNameLength + 1,
-              ' '
-            )}${' '.repeat(CELL_SPACING)}${subject.AverageText}`
-          );
-        });
       } else {
         const subjectName = keywords[1].toLowerCase();
         const targetSubject = marks.Subjects.find(
@@ -167,33 +210,26 @@ export const handleCommand = async (
           return;
         }
 
-        const longestMarkTextLength = Math.max(
-          ...targetSubject.Marks.map((mark) => mark.MarkText.length)
-        );
-        const longestMarkCaptionLength = Math.max(
-          ...targetSubject.Marks.map((mark) => mark.Caption.length)
-        );
-        const longestMarkWeightLength = Math.max(
-          ...targetSubject.Marks.map((mark) => String(mark.Weight).length)
-        );
-
         if (!options.includes('m'))
           console.log(targetSubject.Subject.Name + '\n');
 
-        targetSubject.Marks.forEach((mark) => {
-          console.log(
-            `${mark.MarkText.padEnd(
-              longestMarkTextLength + CELL_SPACING,
-              ' '
-            )}${`(Váha: ${mark.Weight}):`.padEnd(
-              9 + longestMarkWeightLength + CELL_SPACING,
-              ' '
-            )}${mark.Caption.padEnd(
-              longestMarkCaptionLength + COLUMN_SPACING,
-              ' '
-            )}(${getFormattedDate(mark.MarkDate)})`
-          );
-        });
+        columnifyData(
+          [
+            targetSubject.Marks.map((mark) => mark.MarkText),
+            targetSubject.Marks.map((mark) => `(Váha: ${String(mark.Weight)})`),
+            targetSubject.Marks.map((mark) => mark.Caption),
+            targetSubject.Marks.map(
+              (mark) => `[${getFormattedDate(mark.MarkDate)}]`
+            ),
+          ],
+          CELL_SPACING,
+          [
+            {
+              position: 2,
+              size: COLUMN_SPACING,
+            },
+          ]
+        );
 
         if (!options.includes('m'))
           console.log(`\nPrůměr: ${targetSubject.AverageText}`);
@@ -203,21 +239,13 @@ export const handleCommand = async (
 
     case 'changes':
     case 'zmeny': {
-      const timetable = (await fetchFromAPI(
+      const { Changes } = (await fetchFromAPI(
         auth,
         token,
-        '/timetable/actual'
-      )) as Timetable;
-      if (!timetable) return;
-      const changes: Change[] = [];
-      timetable.Days.map((day) => day.Atoms.map((atom) => atom.Change)).forEach(
-        (change) => {
-          change.forEach((item) => {
-            if (item) changes.push(item);
-          });
-        }
-      );
-      displayChanges(changes);
+        '/substitutions'
+      )) as SubstitutionsResult;
+      if (!Changes) return;
+      formatChanges(Changes);
       break;
     }
 
@@ -255,6 +283,17 @@ export const handleCommand = async (
       break;
     }
 
+    case 'events': {
+      const events = (await fetchFromAPI(
+        auth,
+        token,
+        '/substitutions'
+      )) as TimetableResult;
+      if (!events) return;
+      console.log(events);
+      break;
+    }
+
     case 'bfetch': {
       const apiInfo = (await fetchFromAPI(auth, token, '')) as APIVersionResult;
       if (!apiInfo) return;
@@ -272,6 +311,12 @@ export const handleCommand = async (
           `${line}${' '.repeat(COLUMN_SPACING)}${dataLines[index] ?? ''}`
         );
       });
+      break;
+    }
+
+    case 'clear':
+    case 'cls': {
+      console.clear();
       break;
     }
 

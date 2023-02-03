@@ -1,4 +1,5 @@
 import {
+  C_BLACK,
   CELL_SPACING,
   COLUMN_SPACING,
   WEEK_DAYS,
@@ -9,30 +10,66 @@ import {
   C_BLUE,
   C_MAGENTA,
   C_END,
+  BG_WHITE,
 } from '../constants';
 
-import type { Timetable, Subject, Change } from '../typings/timetableTypes';
-import { FinalMarksResult } from '../typings/markTypes';
-import { AbsenceResult } from '../typings/absenceTypes';
+import type { Subject, Hour, Change } from '../typings/timetableTypes';
+import type {
+  TimetableResult,
+  FinalMarksResult,
+  AbsenceResult,
+} from '../typings/apiTypes';
+
+export const columnifyData = (
+  entries: string[][],
+  spacing: number,
+  specialSpacings?: {
+    position: number;
+    size: number;
+  }[]
+) => {
+  const maxItemLength = Math.max(...entries.map((entry) => entry.length));
+  const maxColumnLengths = entries.map((entry) =>
+    Math.max(...entry.map((item) => item.length))
+  );
+  for (let i = 0; i < maxItemLength; i++) {
+    let row = '';
+    for (let j = 0; j < entries.length; j++) {
+      row += entries[j][i].padEnd(maxColumnLengths[j], ' ');
+      row += ' '.repeat(
+        specialSpacings?.find((spacing) => spacing.position === j)?.size ??
+          spacing
+      );
+    }
+    console.log(row);
+  }
+};
 
 const getLongestWeekDayLength = (weekDays: string[]) => {
   return Math.max(...weekDays.map((weekDay) => weekDay.length));
 };
 
-const getLongestSubjectNameLength = (subjects: Timetable['Subjects']) => {
+const getLongestSubjectNameLength = (subjects: TimetableResult['Subjects']) => {
   return Math.max(...subjects.map((subject) => subject.Abbrev.length));
 };
 
+const getLongestRoomNameLength = (rooms: TimetableResult['Rooms']) => {
+  return Math.max(...rooms.map((room) => room.Abbrev.length));
+};
+
 export const formatTimetable = (
-  timetable: Timetable,
+  timetable: TimetableResult,
   cellSpacing: number,
-  minimal = false
+  minimal = false,
+  showRooms = false,
+  currentHour?: Hour['Caption'] | null
 ) => {
-  const { Hours, Days, Subjects } = timetable;
+  const { Hours, Days, Subjects, Rooms } = timetable;
 
   const minHour = Math.min(...Hours.map((hour) => hour.Id)) ?? 0;
   const longestWeekDayLength = getLongestWeekDayLength(WEEK_DAYS);
   const longestSubjectNameLength = getLongestSubjectNameLength(Subjects);
+  const longestRoomNameLength = getLongestRoomNameLength(Rooms);
 
   if (!minimal) {
     let hourRow = ' '.repeat(longestWeekDayLength + cellSpacing);
@@ -51,27 +88,54 @@ export const formatTimetable = (
       : `${WEEK_DAYS[day.DayOfWeek - 1]}${' '.repeat(cellSpacing)}`;
     for (let i = 0; i < Hours.length; i++) {
       const atom = day.Atoms.find((atom) => atom.HourId === i + minHour);
+      const currentDate = new Date();
+      const currentWeekDay =
+        currentDate.getDay() > 0 ? currentDate.getDay() : 7;
+      const isHourCurrent =
+        i === Number(currentHour) - minHour && currentWeekDay === day.DayOfWeek;
+      const hightlightStartString =
+        currentHour && isHourCurrent ? `${BG_WHITE}${C_BLACK}` : '';
+      const hightlightEndString = currentHour && isHourCurrent ? C_END : '';
+
       if (!atom) {
-        row += ' '.repeat(longestSubjectNameLength + CELL_SPACING);
+        row += `${hightlightStartString}${' '.repeat(
+          longestSubjectNameLength
+        )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
         continue;
       }
+
       const subject = Subjects.find(
         (subject) => subject.Id === atom?.SubjectId
       );
-      row += subject
-        ? `${(subject?.Abbrev ?? ' ').padEnd(
-            longestSubjectNameLength + cellSpacing,
-            ' '
-          )}`
-        : (() => {
-            const change = atom.Change;
-            if (!change || !change.TypeAbbrev)
-              return ' '.repeat(longestSubjectNameLength + CELL_SPACING);
-            return change.TypeAbbrev.padEnd(
-              longestSubjectNameLength + cellSpacing,
+      const room = Rooms.find((room) => room.Id === atom?.RoomId);
+
+      if (!showRooms) {
+        row += subject
+          ? `${hightlightStartString}${(subject?.Abbrev ?? ' ').padEnd(
+              longestSubjectNameLength,
               ' '
-            );
-          })();
+            )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`
+          : (() => {
+              const change = atom.Change;
+              if (!change || !change.TypeAbbrev)
+                return `${hightlightStartString}${' '.repeat(
+                  longestSubjectNameLength + CELL_SPACING
+                )}${hightlightEndString}`;
+              return `${hightlightStartString}${change.TypeAbbrev.padEnd(
+                longestSubjectNameLength,
+                ' '
+              )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
+            })();
+      } else {
+        row += room
+          ? `${hightlightStartString}${(room?.Abbrev ?? '').padEnd(
+              longestRoomNameLength + cellSpacing,
+              ' '
+            )}${hightlightEndString}`
+          : `${hightlightStartString}${'-'.repeat(
+              longestRoomNameLength
+            )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
+      }
     }
     console.log(row);
   });
@@ -82,14 +146,16 @@ export const formatDate = (dateString: string): string => {
   return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`;
 };
 
-export const displayChanges = (changes: Change[]) => {
-  changes.forEach((change) => {
-    console.log(
-      `${formatDate(change.Day)} (${change.Hours}): (${
-        CHANGE_TYPES[change.ChangeType]
-      }) ${change.Description}`
-    );
-  });
+export const formatChanges = (changes: Change[]) => {
+  columnifyData(
+    [
+      changes.map((change) => formatDate(change.Day)),
+      changes.map((change) => `(${change.Hours})`),
+      changes.map((change) => `[${CHANGE_TYPES[change.ChangeType]}]`),
+      changes.map((change) => change.Description),
+    ],
+    CELL_SPACING
+  );
 };
 
 export const formatFinalMarks = (finalMarks: FinalMarksResult) => {
@@ -139,7 +205,7 @@ export const formatFinalMarks = (finalMarks: FinalMarksResult) => {
   );
 
   let gradeRow =
-    'Ročník:'.padEnd(newFunction(longestLeftColumnTitle), ' ') +
+    'Ročník:'.padEnd(longestLeftColumnTitle + CELL_SPACING + 1, ' ') +
     ' '.repeat(CELL_SPACING);
   for (let i = 1; i <= totalGrades; i++) {
     gradeRow += `${i}${' '.repeat(CELL_SPACING * 2 + 1)}`;
@@ -226,29 +292,3 @@ export const formatAbsence = (
     console.log(row);
   });
 };
-
-export const getFormattedDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`;
-};
-
-export const getPreviousWeekFormattedDate = (): string => {
-  const date = new Date();
-  date.setDate(date.getDate() - 7);
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-    2,
-    '0'
-  )}-${String(date.getDate()).padStart(2, '0')}`;
-};
-
-export const getNextWeekFormattedDate = (): string => {
-  const date = new Date();
-  date.setDate(date.getDate() + 7);
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-    2,
-    '0'
-  )}-${String(date.getDate()).padStart(2, '0')}`;
-};
-function newFunction(longestLeftColumnTitle: number): number {
-  return longestLeftColumnTitle + CELL_SPACING + 1;
-}
