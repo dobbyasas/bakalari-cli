@@ -46,11 +46,3 @@ export type Teacher = {
   Abbrev: string;
   Name: string;
 };
-
-export type Timetable = {
-  Hours: Hour[];
-  Days: Day[];
-  Teachers: Teacher[];
-  Subjects: Subject[];
-  Rooms: Room[];
-};

@@ -32,10 +32,15 @@ import {
 
 import type { UserAuth } from '../typings/authTypes';
 import type { APITokenObject, APIVersionResult } from '../typings/apiTypes';
-import type { Timetable, Hour } from '../typings/timetableTypes';
-import { SubstitutionsResult } from '../typings/substitutionTypes';
-import type { MarksResult, FinalMarksResult } from '../typings/markTypes';
-import type { AbsenceResult } from '../typings/absenceTypes';
+import type { Hour } from '../typings/timetableTypes';
+import {
+  TimetableResult,
+  MarksResult,
+  FinalMarksResult,
+  AbsenceResult,
+  SubstitutionsResult,
+  SubjectsResult,
+} from '../typings/apiTypes';
 
 export const handleCommand = async (
   keywords: string[],
@@ -78,7 +83,7 @@ export const handleCommand = async (
         auth,
         token,
         '/timetable/actual'
-      )) as Timetable;
+      )) as TimetableResult;
       if (!Hours) return;
       Hours.forEach((hour) => {
         console.log(`${hour.Caption}: ${hour.BeginTime}-${hour.EndTime}`);
@@ -92,7 +97,7 @@ export const handleCommand = async (
         auth,
         token,
         '/timetable/permanent'
-      )) as Timetable;
+      )) as TimetableResult;
       if (!Teachers) return;
       Teachers.forEach((teacher) => {
         console.log(`${teacher.Abbrev} - ${teacher.Name}`);
@@ -100,9 +105,20 @@ export const handleCommand = async (
       break;
     }
 
+    case 'subjects':
+    case 'predmety': {
+      const { Subjects } = (await fetchFromAPI(
+        auth,
+        token,
+        '/subjects'
+      )) as SubjectsResult;
+      console.log(Subjects);
+      break;
+    }
+
     case 'timetable':
     case 'rozvrh': {
-      let timetable: Timetable | null = null;
+      let timetable: TimetableResult | null = null;
       let currentHour: Hour['Id'] | null = null;
 
       // Checking if the [s, p, n] options are not used at the same time
@@ -118,27 +134,27 @@ export const handleCommand = async (
           auth,
           token,
           '/timetable/permanent'
-        )) as Timetable;
+        )) as TimetableResult;
       } else if (options.includes('p')) {
         const previousWeekDate = getPreviousWeekFormattedDate();
         timetable = (await fetchFromAPI(
           auth,
           token,
           `/timetable/actual?date=${previousWeekDate}`
-        )) as Timetable;
+        )) as TimetableResult;
       } else if (options.includes('n')) {
         const nextWeekDate = getNextWeekFormattedDate();
         timetable = (await fetchFromAPI(
           auth,
           token,
           `/timetable/actual?date=${nextWeekDate}`
-        )) as Timetable;
+        )) as TimetableResult;
       } else {
         timetable = (await fetchFromAPI(
           auth,
           token,
           '/timetable/actual'
-        )) as Timetable;
+        )) as TimetableResult;
         currentHour = getCurrentHourNumber(timetable.Hours);
       }
       if (!timetable) return;
@@ -224,13 +240,13 @@ export const handleCommand = async (
 
     case 'changes':
     case 'zmeny': {
-      const changes = (await fetchFromAPI(
+      const { Changes } = (await fetchFromAPI(
         auth,
         token,
         '/substitutions'
       )) as SubstitutionsResult;
-      if (!changes) return;
-      formatChanges(changes);
+      if (!Changes) return;
+      formatChanges(Changes);
       break;
     }
 
@@ -273,7 +289,7 @@ export const handleCommand = async (
         auth,
         token,
         '/substitutions'
-      )) as Timetable;
+      )) as TimetableResult;
       if (!events) return;
       console.log(events);
       break;

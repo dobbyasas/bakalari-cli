@@ -1,7 +1,7 @@
 teachers [ucitele]
 
-Tento příkaz vypíše učitelé ze stálého rozvrhu.
-Přesněji zobrazí zkratku učitele a jeho jméno hnad za ní.
+Tento příkaz vypíše učitele ze stálého rozvrhu.
+Přesněji zobrazí zkratku učitele a jeho jméno hned za ní.
 
 Použití:
 -> teachers

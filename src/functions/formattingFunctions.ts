@@ -13,30 +13,27 @@ import {
   BG_WHITE,
 } from '../constants';
 
+import type { Subject, Hour, Change } from '../typings/timetableTypes';
 import type {
-  Timetable,
-  Subject,
-  Hour,
-  Change,
-} from '../typings/timetableTypes';
-import { SubstitutionsResult } from '../typings/substitutionTypes';
-import { FinalMarksResult } from '../typings/markTypes';
-import { AbsenceResult } from '../typings/absenceTypes';
+  TimetableResult,
+  FinalMarksResult,
+  AbsenceResult,
+} from '../typings/apiTypes';
 
 const getLongestWeekDayLength = (weekDays: string[]) => {
   return Math.max(...weekDays.map((weekDay) => weekDay.length));
 };
 
-const getLongestSubjectNameLength = (subjects: Timetable['Subjects']) => {
+const getLongestSubjectNameLength = (subjects: TimetableResult['Subjects']) => {
   return Math.max(...subjects.map((subject) => subject.Abbrev.length));
 };
 
-const getLongestRoomNameLength = (rooms: Timetable['Rooms']) => {
+const getLongestRoomNameLength = (rooms: TimetableResult['Rooms']) => {
   return Math.max(...rooms.map((room) => room.Abbrev.length));
 };
 
 export const formatTimetable = (
-  timetable: Timetable,
+  timetable: TimetableResult,
   cellSpacing: number,
   minimal = false,
   showRooms = false,
@@ -138,12 +135,12 @@ const getLongestChangeType = (changes: Change[]) => {
   );
 };
 
-export const formatChanges = (changes: SubstitutionsResult) => {
-  const longestChangeDateLength = getLongestChangeDateLength(changes.Changes);
-  const longestChangeHoursLength = getLongestChangeHoursLength(changes.Changes);
-  const longestChangeType = getLongestChangeType(changes.Changes);
+export const formatChanges = (changes: Change[]) => {
+  const longestChangeDateLength = getLongestChangeDateLength(changes);
+  const longestChangeHoursLength = getLongestChangeHoursLength(changes);
+  const longestChangeType = getLongestChangeType(changes);
 
-  changes.Changes.forEach((change) => {
+  changes.forEach((change) => {
     console.log(
       `${formatDate(change.Day).padEnd(
         longestChangeDateLength,

@@ -133,6 +133,7 @@ Enter your password
 | help      | napoveda  | vypíše nápovědu                          |
 | hours     | hodiny    | vypíše kdy začíná a končí jaká hodina    |
 | teachers  | ucitele   | vypíše všechny učitele ve stálém rozvrhu |
+| subjects  | predmety  | vypíše předměty a jejich učitele         |
 | timetable | rozvrh    | vypíše aktuální rozvrh                   |
 | marks     | znamky    | vypíše známky ze všech předmětů          |
 | changes   | zmeny     | vypíše změny v aktuálním rozvrhu         |
