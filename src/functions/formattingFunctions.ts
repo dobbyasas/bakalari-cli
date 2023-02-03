@@ -20,6 +20,21 @@ import type {
   AbsenceResult,
 } from '../typings/apiTypes';
 
+export const columnifyData = (entries: string[][], spacing: number) => {
+  const maxItemLength = Math.max(...entries.map((entry) => entry.length));
+  const maxColumnLengths = entries.map((entry) =>
+    Math.max(...entry.map((item) => item.length))
+  );
+  for (let i = 0; i < maxItemLength; i++) {
+    let row = '';
+    for (let j = 0; j < entries.length; j++) {
+      row += entries[j][i].padEnd(maxColumnLengths[j], ' ');
+      row += ' '.repeat(spacing);
+    }
+    console.log(row);
+  }
+};
+
 const getLongestWeekDayLength = (weekDays: string[]) => {
   return Math.max(...weekDays.map((weekDay) => weekDay.length));
 };
@@ -121,40 +136,16 @@ export const formatDate = (dateString: string): string => {
   return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`;
 };
 
-const getLongestChangeDateLength = (changes: Change[]) => {
-  return Math.max(...changes.map((change) => formatDate(change.Day).length));
-};
-
-const getLongestChangeHoursLength = (changes: Change[]) => {
-  return Math.max(...changes.map((change) => formatDate(change.Hours).length));
-};
-
-const getLongestChangeType = (changes: Change[]) => {
-  return Math.max(
-    ...changes.map((change) => CHANGE_TYPES[change.ChangeType].length)
-  );
-};
-
 export const formatChanges = (changes: Change[]) => {
-  const longestChangeDateLength = getLongestChangeDateLength(changes);
-  const longestChangeHoursLength = getLongestChangeHoursLength(changes);
-  const longestChangeType = getLongestChangeType(changes);
-
-  changes.forEach((change) => {
-    console.log(
-      `${formatDate(change.Day).padEnd(
-        longestChangeDateLength,
-        ' '
-      )}${' '.repeat(CELL_SPACING)}(${(change.Hours + ')').padEnd(
-        longestChangeHoursLength - 1,
-        ' '
-      )}${' '.repeat(CELL_SPACING)}(${(
-        CHANGE_TYPES[change.ChangeType] + ')'
-      ).padEnd(longestChangeType + 1, ' ')}${' '.repeat(CELL_SPACING)}${
-        change.Description
-      }`
-    );
-  });
+  columnifyData(
+    [
+      changes.map((change) => formatDate(change.Day)),
+      changes.map((change) => `(${change.Hours})`),
+      changes.map((change) => `[${CHANGE_TYPES[change.ChangeType]}]`),
+      changes.map((change) => change.Description),
+    ],
+    CELL_SPACING
+  );
 };
 
 export const formatFinalMarks = (finalMarks: FinalMarksResult) => {
