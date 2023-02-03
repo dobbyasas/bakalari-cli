@@ -20,7 +20,7 @@ export type Room = {
 export type Change = {
   Day: string;
   Hours: string;
-  ChangeType: 'Added' | 'Canceled' | 'RoomChanged' | 'Substitution';
+  ChangeType: 'Added' | 'Canceled' | 'Removed' | 'RoomChanged' | 'Substitution';
   Description: string;
   TypeAbbrev: string;
 };

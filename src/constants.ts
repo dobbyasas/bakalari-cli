@@ -52,7 +52,8 @@ export const COMMAND_LOOKUP_TABLE = {
 export const WEEK_DAYS = ['Po', 'Út', 'St', 'Čt', 'Pá'];
 export const CHANGE_TYPES: { [key in Change['ChangeType']]: string } = {
   Added: 'Přidáno',
-  Canceled: 'Odebráno',
+  Canceled: 'Zrušeno',
+  Removed: 'Odebráno',
   RoomChanged: 'Změna třídy',
   Substitution: 'Suplování',
 };

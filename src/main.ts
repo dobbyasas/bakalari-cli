@@ -33,6 +33,7 @@ const handleLogin = async (): Promise<{
 };
 
 (async () => {
+  console.clear();
   shell.setHostname(HOSTNAME);
   printBanner('welcome', {
     newLine: true,

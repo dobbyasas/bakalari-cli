@@ -1,7 +1,7 @@
 import { printBanner } from './bannerFunctions';
 import {
   formatTimetable,
-  displayChanges,
+  formatChanges,
   formatFinalMarks,
   formatAbsence,
 } from './formattingFunctions';
@@ -32,7 +32,8 @@ import {
 
 import type { UserAuth } from '../typings/authTypes';
 import type { APITokenObject, APIVersionResult } from '../typings/apiTypes';
-import type { Timetable, Hour, Change } from '../typings/timetableTypes';
+import type { Timetable, Hour } from '../typings/timetableTypes';
+import { SubstitutionsResult } from '../typings/substitutionTypes';
 import type { MarksResult, FinalMarksResult } from '../typings/markTypes';
 import type { AbsenceResult } from '../typings/absenceTypes';
 
@@ -223,21 +224,13 @@ export const handleCommand = async (
 
     case 'changes':
     case 'zmeny': {
-      const timetable = (await fetchFromAPI(
+      const changes = (await fetchFromAPI(
         auth,
         token,
-        '/timetable/actual'
-      )) as Timetable;
-      if (!timetable) return;
-      const changes: Change[] = [];
-      timetable.Days.map((day) => day.Atoms.map((atom) => atom.Change)).forEach(
-        (change) => {
-          change.forEach((item) => {
-            if (item) changes.push(item);
-          });
-        }
-      );
-      displayChanges(changes);
+        '/substitutions'
+      )) as SubstitutionsResult;
+      if (!changes) return;
+      formatChanges(changes);
       break;
     }
 
@@ -272,6 +265,17 @@ export const handleCommand = async (
         },
       });
       formatAbsence(AbsencesPerSubject);
+      break;
+    }
+
+    case 'events': {
+      const events = (await fetchFromAPI(
+        auth,
+        token,
+        '/substitutions'
+      )) as Timetable;
+      if (!events) return;
+      console.log(events);
       break;
     }
 

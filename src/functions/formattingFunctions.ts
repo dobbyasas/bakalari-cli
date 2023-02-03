@@ -19,6 +19,7 @@ import type {
   Hour,
   Change,
 } from '../typings/timetableTypes';
+import { SubstitutionsResult } from '../typings/substitutionTypes';
 import { FinalMarksResult } from '../typings/markTypes';
 import { AbsenceResult } from '../typings/absenceTypes';
 
@@ -111,7 +112,7 @@ export const formatTimetable = (
             )}${hightlightEndString}`
           : `${hightlightStartString}${'-'.repeat(
               longestRoomNameLength
-            )}${' '.repeat(CELL_SPACING)}${hightlightEndString}`;
+            )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
       }
     }
     console.log(row);
@@ -123,12 +124,38 @@ export const formatDate = (dateString: string): string => {
   return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`;
 };
 
-export const displayChanges = (changes: Change[]) => {
-  changes.forEach((change) => {
+const getLongestChangeDateLength = (changes: Change[]) => {
+  return Math.max(...changes.map((change) => formatDate(change.Day).length));
+};
+
+const getLongestChangeHoursLength = (changes: Change[]) => {
+  return Math.max(...changes.map((change) => formatDate(change.Hours).length));
+};
+
+const getLongestChangeType = (changes: Change[]) => {
+  return Math.max(
+    ...changes.map((change) => CHANGE_TYPES[change.ChangeType].length)
+  );
+};
+
+export const formatChanges = (changes: SubstitutionsResult) => {
+  const longestChangeDateLength = getLongestChangeDateLength(changes.Changes);
+  const longestChangeHoursLength = getLongestChangeHoursLength(changes.Changes);
+  const longestChangeType = getLongestChangeType(changes.Changes);
+
+  changes.Changes.forEach((change) => {
     console.log(
-      `${formatDate(change.Day)} (${change.Hours}): (${
-        CHANGE_TYPES[change.ChangeType]
-      }) ${change.Description}`
+      `${formatDate(change.Day).padEnd(
+        longestChangeDateLength,
+        ' '
+      )}${' '.repeat(CELL_SPACING)}(${(change.Hours + ')').padEnd(
+        longestChangeHoursLength - 1,
+        ' '
+      )}${' '.repeat(CELL_SPACING)}(${(
+        CHANGE_TYPES[change.ChangeType] + ')'
+      ).padEnd(longestChangeType + 1, ' ')}${' '.repeat(CELL_SPACING)}${
+        change.Description
+      }`
     );
   });
 };

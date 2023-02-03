@@ -5,7 +5,8 @@ export type APIEndpointRoute =
   | '/timetable/permanent'
   | '/marks'
   | '/marks/final'
-  | '/absence/student';
+  | '/absence/student'
+  | '/substitutions';
 
 export type APITokenObject = {
   access_token: string;
