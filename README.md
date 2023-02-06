@@ -139,6 +139,7 @@ Enter your password
 | changes   | zmeny     | vypíše změny v aktuálním rozvrhu         |
 | final     | pololeti  | vypíše konečné známky z každého pololetí |
 | absence   | absence   | vypíše absenci z předmětů                |
+| komens    | komens    | vypíše záznamy z komensu                 |
 | bfetch    | bfetch    | vypíše informace o aplikaci a API        |
 | clear     | cls       | vyčistí obrazovku                        |
 | logout    | odhlasit  | odhlásí uživatele a vymaže data o loginu |

@@ -313,11 +313,14 @@ export const handleCommand = async (
         'POST'
       )) as KomensResult;
       if (!Messages) return;
-      Messages.forEach((message) => {
-        console.log(message.RelevantName);
-        console.log(message.Title);
-        console.log(formatKomensMessage(message.Text));
-      });
+      columnifyData(
+        [
+          [...Messages.map((_, index) => `[${index}]`)],
+          [...Messages.map((message) => message.RelevantName)],
+          [...Messages.map((mesage) => `[${formatDate(mesage.SentDate)}]`)],
+        ],
+        CELL_SPACING
+      );
       break;
     }
 
