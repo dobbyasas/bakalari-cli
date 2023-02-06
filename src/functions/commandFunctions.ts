@@ -316,9 +316,7 @@ export const handleCommand = async (
       Messages.forEach((message) => {
         console.log(message.RelevantName);
         console.log(message.Title);
-        console.log(
-          message.Text.replace(/<[^>]*>/g, '').replace(/\s\s+/g, ' ')
-        );
+        console.log(formatKomensMessage(message.Text));
       });
       break;
     }

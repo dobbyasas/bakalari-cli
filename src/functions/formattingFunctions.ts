@@ -292,3 +292,11 @@ export const formatAbsence = (
     console.log(row);
   });
 };
+
+export const formatKomensMessage = (message: string) =>
+  message
+    .replace(/<br[^>]*>*\/>/g, '\n')
+    .replace(/<[^>]*>/g, '')
+    .replace(/  +/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .trim();

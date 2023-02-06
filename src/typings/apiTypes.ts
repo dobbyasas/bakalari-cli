@@ -19,7 +19,7 @@ export type APIEndpointRoute =
   | '/absence/student'
   | '/substitutions'
   | '/subjects'
-  | any;
+  | '/komens/messages/received';
 
 export type APITokenObject = {
   access_token: string;
