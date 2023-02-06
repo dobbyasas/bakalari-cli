@@ -305,6 +305,24 @@ export const handleCommand = async (
       break;
     }
 
+    case 'komens': {
+      const { Messages } = (await fetchFromAPI(
+        auth,
+        token,
+        '/komens/messages/received',
+        'POST'
+      )) as KomensResult;
+      if (!Messages) return;
+      Messages.forEach((message) => {
+        console.log(message.RelevantName);
+        console.log(message.Title);
+        console.log(
+          message.Text.replace(/<[^>]*>/g, '').replace(/\s\s+/g, ' ')
+        );
+      });
+      break;
+    }
+
     case 'bfetch': {
       const apiInfo = (await fetchFromAPI(auth, token, '')) as APIVersionResult;
       completionFunction();

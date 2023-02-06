@@ -27,11 +27,12 @@ export const fetchToken = async (
 export const fetchFromAPI = async (
   auth: UserAuth,
   token: APITokenObject['access_token'],
-  endpointUrl: APIEndpointRoute
+  endpointUrl: APIEndpointRoute,
+  method: 'GET' | 'POST' = 'GET'
 ) => {
   try {
     const req = await fetch(`${auth.apiEndpoint}/api/3${endpointUrl}`, {
-      method: 'GET',
+      method,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: `Bearer ${token}`,
