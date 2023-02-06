@@ -100,7 +100,7 @@ export const formatTimetable = (
       if (!atom) {
         row += `${hightlightStartString}${' '.repeat(
           longestSubjectNameLength
-        )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
+        )}${hightlightEndString}${' '.repeat(cellSpacing)}`;
         continue;
       }
 
@@ -114,27 +114,27 @@ export const formatTimetable = (
           ? `${hightlightStartString}${(subject?.Abbrev ?? ' ').padEnd(
               longestSubjectNameLength,
               ' '
-            )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`
+            )}${hightlightEndString}${' '.repeat(cellSpacing)}`
           : (() => {
               const change = atom.Change;
               if (!change || !change.TypeAbbrev)
                 return `${hightlightStartString}${' '.repeat(
-                  longestSubjectNameLength + CELL_SPACING
+                  longestSubjectNameLength + cellSpacing
                 )}${hightlightEndString}`;
               return `${hightlightStartString}${change.TypeAbbrev.padEnd(
                 longestSubjectNameLength,
                 ' '
-              )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
+              )}${hightlightEndString}${' '.repeat(cellSpacing)}`;
             })();
       } else {
         row += room
           ? `${hightlightStartString}${(room?.Abbrev ?? '').padEnd(
-              longestRoomNameLength + cellSpacing,
+              longestRoomNameLength,
               ' '
-            )}${hightlightEndString}`
+            )}${hightlightEndString}${' '.repeat(cellSpacing)}`
           : `${hightlightStartString}${'-'.repeat(
               longestRoomNameLength
-            )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
+            )}${hightlightEndString}${' '.repeat(cellSpacing)}`;
       }
     }
     console.log(row);
