@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@types/prompt-sync": "^4.2.0",
+    "cli-spinners": "^2.7.0",
     "crypto-js": "^4.1.1",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",

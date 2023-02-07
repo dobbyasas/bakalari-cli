@@ -45,14 +45,13 @@ const handleLogin = async (): Promise<{
     },
   });
 
-  shell.spinnerTest();
-
   const loginData = await handleLogin();
   if (!loginData) return;
 
   let programRunning = true;
   while (programRunning) {
     const command = shell.getCommand();
+    shell.spinner.start();
     await handleCommand(
       command.keywords,
       command.options,
@@ -61,7 +60,10 @@ const handleLogin = async (): Promise<{
       () => {
         programRunning = false;
       },
-      handleLogin
+      handleLogin,
+      () => {
+        shell.spinner.stop();
+      }
     );
   }
 })();

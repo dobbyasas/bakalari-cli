@@ -1,6 +1,7 @@
 import prompt from 'prompt-sync';
 import promptHistory from 'prompt-sync-history';
 import ora from 'ora';
+import cliSpinners from 'cli-spinners';
 
 import {
   EN_COMMANDS,
@@ -21,6 +22,11 @@ export class Shell {
   userName = 'user';
   hostName = 'host';
   inputPrompt = '> ';
+  spinner = ora({
+    spinner: cliSpinners.dots,
+    discardStdin: true,
+    text: 'Načítám data',
+  });
 
   getInput = (): string => {
     const input = defaultPrompt(this.inputPrompt);
@@ -32,10 +38,6 @@ export class Shell {
       echo: PASSWORD_SYMBOL,
     });
     return input;
-  };
-
-  spinnerTest = () => {
-    ora('a').start();
   };
 
   getCommand = (): {
