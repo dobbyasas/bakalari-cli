@@ -25,7 +25,6 @@ export class Shell {
   spinner = ora({
     spinner: cliSpinners.dots,
     discardStdin: true,
-    text: 'Načítám data',
   });
 
   getInput = (): string => {

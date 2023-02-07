@@ -7,7 +7,12 @@ import {
 import { fetchToken } from './functions/fetchFunctions.js';
 import { saveAuth } from './functions/authFunctions.js';
 import { handleCommand } from './functions/commandFunctions.js';
-import { HOSTNAME, RELEASE_NUMBER } from './constants.js';
+import {
+  HOSTNAME,
+  RELEASE_NUMBER,
+  LOGGING_IN_TEXT,
+  LOADING_DATA_TEXT,
+} from './constants.js';
 
 import type { UserAuth } from './typings/authTypes.js';
 import type { APITokenObject } from './typings/apiTypes.js';
@@ -19,7 +24,9 @@ const handleLogin = async (): Promise<{
   tokenData: APITokenObject;
 } | null> => {
   const auth = getAuthFromCache() ?? getAuthFromInput();
+  shell.spinner.start(LOGGING_IN_TEXT);
   const tokenData = await fetchToken(auth);
+  shell.spinner.stop();
 
   if (!tokenData) {
     console.log('Incorrect login!');
@@ -51,7 +58,7 @@ const handleLogin = async (): Promise<{
   let programRunning = true;
   while (programRunning) {
     const command = shell.getCommand();
-    shell.spinner.start();
+    shell.spinner.start(LOADING_DATA_TEXT);
     await handleCommand(
       command.keywords,
       command.options,

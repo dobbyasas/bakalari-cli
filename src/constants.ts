@@ -4,6 +4,10 @@ import type { Change } from './typings/timetableTypes.js';
 export const RELEASE_NUMBER = '1.0.3';
 export const RELEASE_PLACEHOLDER = '{release}';
 
+// Texts
+export const LOGGING_IN_TEXT = 'Probíhá přihlašování';
+export const LOADING_DATA_TEXT = 'Načítání data';
+
 // Constants
 export const PASSWORD_KEY = 'qLGT7kpULFOc';
 export const PASSWORD_SYMBOL = '*';

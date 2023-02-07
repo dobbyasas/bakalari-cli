@@ -328,12 +328,14 @@ export const handleCommand = async (
 
     case 'clear':
     case 'cls': {
+      completionFunction();
       console.clear();
       break;
     }
 
     case 'logout':
     case 'odhlasit': {
+      completionFunction();
       deleteAuth();
       console.log('Byl jste úspěšně odhlášen.');
       console.log('Chcete se znovu přihlásit? [Y/n]');
@@ -351,10 +353,12 @@ export const handleCommand = async (
     }
 
     case 'exit':
+      completionFunction();
       quitFunction();
       break;
 
     default:
+      completionFunction();
       console.log(`Neznámý příkaz: ${keywords[0]}`);
       break;
   }
