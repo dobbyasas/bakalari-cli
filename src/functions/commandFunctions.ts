@@ -5,6 +5,8 @@ import {
   formatFinalMarks,
   formatAbsence,
   columnifyData,
+  formatDate,
+  formatKomensMessage,
 } from './formattingFunctions.js';
 import {
   getPreviousWeekFormattedDate,
@@ -32,7 +34,11 @@ import {
 } from '../constants.js';
 
 import type { UserAuth } from '../typings/authTypes.js';
-import type { APITokenObject, APIVersionResult } from '../typings/apiTypes.js';
+import type {
+  APITokenObject,
+  APIVersionResult,
+  KomensResult,
+} from '../typings/apiTypes.js';
 import type { Hour } from '../typings/timetableTypes.js';
 import {
   TimetableResult,
@@ -188,24 +194,25 @@ export const handleCommand = async (
       completionFunction();
       if (!marks) return;
       if (keywords.length === 1) {
-        columnifyData(
-          [
-            marks.Subjects.map((subject) => subject.Subject.Abbrev),
-            marks.Subjects.map((subject) => subject.AverageText),
+        const columns = [
+          marks.Subjects.map((subject) => subject.Subject.Abbrev),
+          marks.Subjects.map((subject) => subject.AverageText),
+        ];
+        if (options.includes('l'))
+          columns.push(
             marks.Subjects.map((subject) =>
               subject.Marks.map((mark) => mark.MarkText.padEnd(2, ' ')).join(
                 ' '.repeat(CELL_SPACING)
               )
-            ),
-          ],
-          CELL_SPACING,
-          [
-            {
-              position: 1,
-              size: COLUMN_SPACING,
-            },
-          ]
-        );
+            )
+          );
+
+        columnifyData(columns, CELL_SPACING, [
+          {
+            position: 1,
+            size: COLUMN_SPACING,
+          },
+        ]);
       } else {
         const subjectName = keywords[1].toLowerCase();
         const targetSubject = marks.Subjects.find(
@@ -306,6 +313,10 @@ export const handleCommand = async (
     }
 
     case 'komens': {
+      if (keywords.length > 1 && isNaN(Number(keywords[1]))) {
+        return;
+      }
+
       const { Messages } = (await fetchFromAPI(
         auth,
         token,
@@ -313,14 +324,26 @@ export const handleCommand = async (
         'POST'
       )) as KomensResult;
       if (!Messages) return;
-      columnifyData(
-        [
-          [...Messages.map((_, index) => `[${index}]`)],
-          [...Messages.map((message) => message.RelevantName)],
-          [...Messages.map((mesage) => `[${formatDate(mesage.SentDate)}]`)],
-        ],
-        CELL_SPACING
-      );
+      if (keywords.length === 1) {
+        columnifyData(
+          [
+            [...Messages.map((_, index) => `[${index}]`)],
+            [...Messages.map((message) => message.RelevantName)],
+            [...Messages.map((mesage) => `[${formatDate(mesage.SentDate)}]`)],
+          ],
+          CELL_SPACING
+        );
+      } else {
+        const targetMessage = Messages[Number(keywords[1])];
+        if (!targetMessage) {
+          console.log(`Zpráva s ID ${keywords[1]} neexistuje!`);
+          return 0;
+        }
+        console.log(targetMessage.RelevantName);
+        console.log(targetMessage.Title);
+        console.log(formatDate(targetMessage.SentDate) + '\n');
+        console.log(formatKomensMessage(targetMessage.Text));
+      }
       break;
     }
 
