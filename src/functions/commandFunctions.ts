@@ -62,6 +62,7 @@ export const handleCommand = async (
   switch (keywords[0].toLowerCase()) {
     case 'help':
     case 'napoveda': {
+      completionFunction();
       const lowercaseKeywords = keywords.map((keyword) =>
         keyword.toLowerCase()
       );
@@ -323,6 +324,7 @@ export const handleCommand = async (
         '/komens/messages/received',
         'POST'
       )) as KomensResult;
+      completionFunction();
       if (!Messages) return;
       if (keywords.length === 1) {
         columnifyData(

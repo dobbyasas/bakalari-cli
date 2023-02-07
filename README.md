@@ -160,3 +160,6 @@ Enter your password
   - m (minimal) -> nevypíše průměr a název předmětu
   - l (list)    -> vypíše u každého předmětu známky
   - \[SUBJECT\] -> vypíše známky z daného předmětu (např. `marks MAT`)
+
+- komens (komens)
+  - \[ID\] -> vypíše zprávu z komensu dle jejího ID

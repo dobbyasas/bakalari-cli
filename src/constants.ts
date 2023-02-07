@@ -7,7 +7,7 @@ export const RELEASE_WIP = true;
 
 // Texts
 export const LOGGING_IN_TEXT = 'Probíhá přihlašování';
-export const LOADING_DATA_TEXT = 'Načítání data';
+export const LOADING_DATA_TEXT = 'Načítání dat';
 
 // Constants
 export const PASSWORD_KEY = 'qLGT7kpULFOc';

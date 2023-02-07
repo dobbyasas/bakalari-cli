@@ -1,0 +1,16 @@
+komens [komens]
+
+Vypíše seznam všech zpráv z komensu. Zobrazí pouze jejich
+autory a datum odeslání. Mimo to vypisuje i ID, podle
+kterého lze zobrazit danou zprávu.
+
+Po použití příkazu ve formátu "komens [ID]" je
+zobrazen zprávy, společně s autorem, datem a druhem zvolené
+zprávy.
+
+Options
+[SUBJECT] -> vypíše zprávu z komensu dle jejího ID
+
+Použití:
+-> komens
+-> komens 2
