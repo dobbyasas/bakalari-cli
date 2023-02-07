@@ -1,6 +1,6 @@
-import * as fs from 'fs';
+import fs from 'fs';
 
-import { BANNER_FOLDER } from '../constants';
+import { BANNER_FOLDER } from '../constants.js';
 
 export const printBanner = (
   banner: string,

@@ -1,4 +1,4 @@
-import type { Change } from './typings/timetableTypes';
+import type { Change } from './typings/timetableTypes.js';
 
 // Release Constants
 export const RELEASE_NUMBER = '1.0.3';

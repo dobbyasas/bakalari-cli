@@ -23,6 +23,7 @@ export type APIEndpointRoute =
 export type APITokenObject = {
   access_token: string;
   refresh_token: string;
+  error?: string;
 };
 
 export type APIVersionResult = {

@@ -1,5 +1,6 @@
 import prompt from 'prompt-sync';
 import promptHistory from 'prompt-sync-history';
+import ora from 'ora';
 
 import {
   EN_COMMANDS,
@@ -8,7 +9,7 @@ import {
   C_GREEN,
   C_CYAN,
   C_END,
-} from './constants';
+} from './constants.js';
 
 const defaultPrompt = prompt({
   sigint: true,
@@ -31,6 +32,10 @@ export class Shell {
       echo: PASSWORD_SYMBOL,
     });
     return input;
+  };
+
+  spinnerTest = () => {
+    ora('a').start();
   };
 
   getCommand = (): {

@@ -1,13 +1,16 @@
-import { Shell } from './shell';
-import { printBanner } from './functions/bannerFunctions';
-import { getAuthFromCache, getAuthFromInput } from './functions/authFunctions';
-import { fetchToken } from './functions/fetchFunctions';
-import { saveAuth } from './functions/authFunctions';
-import { handleCommand } from './functions/commandFunctions';
-import { HOSTNAME, RELEASE_NUMBER } from './constants';
+import { Shell } from './shell.js';
+import { printBanner } from './functions/bannerFunctions.js';
+import {
+  getAuthFromCache,
+  getAuthFromInput,
+} from './functions/authFunctions.js';
+import { fetchToken } from './functions/fetchFunctions.js';
+import { saveAuth } from './functions/authFunctions.js';
+import { handleCommand } from './functions/commandFunctions.js';
+import { HOSTNAME, RELEASE_NUMBER } from './constants.js';
 
-import type { UserAuth } from './typings/authTypes';
-import type { APITokenObject } from './typings/apiTypes';
+import type { UserAuth } from './typings/authTypes.js';
+import type { APITokenObject } from './typings/apiTypes.js';
 
 export const shell = new Shell();
 
@@ -41,6 +44,8 @@ const handleLogin = async (): Promise<{
       release: RELEASE_NUMBER,
     },
   });
+
+  shell.spinnerTest();
 
   const loginData = await handleLogin();
   if (!loginData) return;

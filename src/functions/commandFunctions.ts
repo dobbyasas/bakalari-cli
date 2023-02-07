@@ -1,20 +1,20 @@
-import { printBanner } from './bannerFunctions';
+import { printBanner } from './bannerFunctions.js';
 import {
   formatTimetable,
   formatChanges,
   formatFinalMarks,
   formatAbsence,
   columnifyData,
-} from './formattingFunctions';
+} from './formattingFunctions.js';
 import {
   getPreviousWeekFormattedDate,
   getNextWeekFormattedDate,
   getFormattedDate,
   getCurrentHourNumber,
-} from './dateFunctions';
-import { fetchFromAPI } from './fetchFunctions';
-import { deleteAuth } from './authFunctions';
-import { shell } from '../main';
+} from './dateFunctions.js';
+import { fetchFromAPI } from './fetchFunctions.js';
+import { deleteAuth } from './authFunctions.js';
+import { shell } from '../main.js';
 import {
   HOSTNAME,
   RELEASE_NUMBER,
@@ -29,11 +29,11 @@ import {
   C_BLUE,
   C_MAGENTA,
   C_END,
-} from '../constants';
+} from '../constants.js';
 
-import type { UserAuth } from '../typings/authTypes';
-import type { APITokenObject, APIVersionResult } from '../typings/apiTypes';
-import type { Hour } from '../typings/timetableTypes';
+import type { UserAuth } from '../typings/authTypes.js';
+import type { APITokenObject, APIVersionResult } from '../typings/apiTypes.js';
+import type { Hour } from '../typings/timetableTypes.js';
 import {
   TimetableResult,
   MarksResult,
@@ -41,7 +41,7 @@ import {
   AbsenceResult,
   SubstitutionsResult,
   SubjectsResult,
-} from '../typings/apiTypes';
+} from '../typings/apiTypes.js';
 
 export const handleCommand = async (
   keywords: string[],
