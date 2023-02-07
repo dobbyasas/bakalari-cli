@@ -1,20 +1,20 @@
-import { printBanner } from './bannerFunctions';
+import { printBanner } from './bannerFunctions.js';
 import {
   formatTimetable,
   formatChanges,
   formatFinalMarks,
   formatAbsence,
   columnifyData,
-} from './formattingFunctions';
+} from './formattingFunctions.js';
 import {
   getPreviousWeekFormattedDate,
   getNextWeekFormattedDate,
   getFormattedDate,
   getCurrentHourNumber,
-} from './dateFunctions';
-import { fetchFromAPI } from './fetchFunctions';
-import { deleteAuth } from './authFunctions';
-import { shell } from '../main';
+} from './dateFunctions.js';
+import { fetchFromAPI } from './fetchFunctions.js';
+import { deleteAuth } from './authFunctions.js';
+import { shell } from '../main.js';
 import {
   HOSTNAME,
   RELEASE_NUMBER,
@@ -29,11 +29,11 @@ import {
   C_BLUE,
   C_MAGENTA,
   C_END,
-} from '../constants';
+} from '../constants.js';
 
-import type { UserAuth } from '../typings/authTypes';
-import type { APITokenObject, APIVersionResult } from '../typings/apiTypes';
-import type { Hour } from '../typings/timetableTypes';
+import type { UserAuth } from '../typings/authTypes.js';
+import type { APITokenObject, APIVersionResult } from '../typings/apiTypes.js';
+import type { Hour } from '../typings/timetableTypes.js';
 import {
   TimetableResult,
   MarksResult,
@@ -41,7 +41,7 @@ import {
   AbsenceResult,
   SubstitutionsResult,
   SubjectsResult,
-} from '../typings/apiTypes';
+} from '../typings/apiTypes.js';
 
 export const handleCommand = async (
   keywords: string[],
@@ -49,7 +49,8 @@ export const handleCommand = async (
   auth: UserAuth,
   token: APITokenObject['access_token'],
   quitFunction: () => void,
-  loginFunction: () => Promise<unknown>
+  loginFunction: () => Promise<unknown>,
+  completionFunction: () => void
 ) => {
   if (keywords.length === 0) return;
   switch (keywords[0].toLowerCase()) {
@@ -85,6 +86,7 @@ export const handleCommand = async (
         token,
         '/timetable/actual'
       )) as TimetableResult;
+      completionFunction();
       if (!Hours) return;
       columnifyData(
         [
@@ -103,6 +105,7 @@ export const handleCommand = async (
         token,
         '/timetable/permanent'
       )) as TimetableResult;
+      completionFunction();
       if (!Teachers) return;
       Teachers.forEach((teacher) => {
         console.log(`${teacher.Abbrev} - ${teacher.Name}`);
@@ -117,6 +120,8 @@ export const handleCommand = async (
         token,
         '/subjects'
       )) as SubjectsResult;
+      completionFunction();
+      if (!Subjects) return;
       Subjects.forEach((subject) => {
         console.log(`${subject.SubjectName} (${subject.SubjectAbbrev})`);
         console.log(`${subject.TeacherName} (${subject.TeacherAbbrev})`);
@@ -165,6 +170,7 @@ export const handleCommand = async (
         )) as TimetableResult;
         currentHour = getCurrentHourNumber(timetable.Hours);
       }
+      completionFunction();
       if (!timetable) return;
       formatTimetable(
         timetable,
@@ -179,6 +185,7 @@ export const handleCommand = async (
     case 'marks':
     case 'znamky': {
       const marks = (await fetchFromAPI(auth, token, '/marks')) as MarksResult;
+      completionFunction();
       if (!marks) return;
       if (keywords.length === 1) {
         columnifyData(
@@ -244,6 +251,7 @@ export const handleCommand = async (
         token,
         '/substitutions'
       )) as SubstitutionsResult;
+      completionFunction();
       if (!Changes) return;
       formatChanges(Changes);
       break;
@@ -256,6 +264,7 @@ export const handleCommand = async (
         token,
         '/marks/final'
       )) as FinalMarksResult;
+      completionFunction();
       if (!finalMarks) return;
       formatFinalMarks(finalMarks);
       break;
@@ -267,6 +276,7 @@ export const handleCommand = async (
         token,
         '/absence/student'
       )) as AbsenceResult;
+      completionFunction();
       if (!AbsencesPerSubject) return;
       printBanner('absenceLegend', {
         newLine: true,
@@ -289,6 +299,7 @@ export const handleCommand = async (
         token,
         '/substitutions'
       )) as TimetableResult;
+      completionFunction();
       if (!events) return;
       console.log(events);
       break;
@@ -296,6 +307,7 @@ export const handleCommand = async (
 
     case 'bfetch': {
       const apiInfo = (await fetchFromAPI(auth, token, '')) as APIVersionResult;
+      completionFunction();
       if (!apiInfo) return;
 
       const hostLine = `${C_BLUE}${auth.userName}${C_END}@${C_BLUE}${HOSTNAME}${C_BLUE}`;
@@ -316,12 +328,14 @@ export const handleCommand = async (
 
     case 'clear':
     case 'cls': {
+      completionFunction();
       console.clear();
       break;
     }
 
     case 'logout':
     case 'odhlasit': {
+      completionFunction();
       deleteAuth();
       console.log('Byl jste úspěšně odhlášen.');
       console.log('Chcete se znovu přihlásit? [Y/n]');
@@ -339,10 +353,12 @@ export const handleCommand = async (
     }
 
     case 'exit':
+      completionFunction();
       quitFunction();
       break;
 
     default:
+      completionFunction();
       console.log(`Neznámý příkaz: ${keywords[0]}`);
       break;
   }

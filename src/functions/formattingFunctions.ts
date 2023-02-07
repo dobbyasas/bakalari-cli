@@ -11,14 +11,14 @@ import {
   C_MAGENTA,
   C_END,
   BG_WHITE,
-} from '../constants';
+} from '../constants.js';
 
-import type { Subject, Hour, Change } from '../typings/timetableTypes';
+import type { Subject, Hour, Change } from '../typings/timetableTypes.js';
 import type {
   TimetableResult,
   FinalMarksResult,
   AbsenceResult,
-} from '../typings/apiTypes';
+} from '../typings/apiTypes.js';
 
 export const columnifyData = (
   entries: string[][],

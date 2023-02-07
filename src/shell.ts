@@ -1,5 +1,7 @@
 import prompt from 'prompt-sync';
 import promptHistory from 'prompt-sync-history';
+import ora from 'ora';
+import cliSpinners from 'cli-spinners';
 
 import {
   EN_COMMANDS,
@@ -8,7 +10,7 @@ import {
   C_GREEN,
   C_CYAN,
   C_END,
-} from './constants';
+} from './constants.js';
 
 const defaultPrompt = prompt({
   sigint: true,
@@ -20,6 +22,10 @@ export class Shell {
   userName = 'user';
   hostName = 'host';
   inputPrompt = '> ';
+  spinner = ora({
+    spinner: cliSpinners.dots,
+    discardStdin: true,
+  });
 
   getInput = (): string => {
     const input = defaultPrompt(this.inputPrompt);

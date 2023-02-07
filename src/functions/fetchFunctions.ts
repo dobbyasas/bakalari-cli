@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
-import type { UserAuth } from '../typings/authTypes';
-import { APITokenObject, APIEndpointRoute } from '../typings/apiTypes';
+import type { UserAuth } from '../typings/authTypes.js';
+import { APITokenObject, APIEndpointRoute } from '../typings/apiTypes.js';
 
 export const fetchToken = async (
   auth: UserAuth
@@ -16,8 +16,8 @@ export const fetchToken = async (
     });
 
     const data = await req.json();
-    if (data.error) return null;
-    return data;
+    if ((data as APITokenObject).error) return null;
+    return data as APITokenObject;
   } catch (error) {
     console.log(error);
     return null;
@@ -39,7 +39,7 @@ export const fetchFromAPI = async (
     });
 
     const data = await req.json();
-    if (data.error) return null;
+    if ((data as APITokenObject).error) return null;
     return data;
   } catch (error) {
     console.log(error);
