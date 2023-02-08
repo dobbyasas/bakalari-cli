@@ -129,19 +129,24 @@ export const handleCommand = async (
       )) as SubjectsResult;
       completionFunction();
       if (!Subjects) return;
-      columnifyData(
-        [
-          [...Subjects.map((subject) => subject.SubjectName)],
-          [...Subjects.map((subject) => `[${subject.SubjectAbbrev}]`)],
-        ],
-        CELL_SPACING,
-        [
-          {
-            position: 1,
-            size: COLUMN_SPACING,
-          },
-        ]
-      );
+
+      const columns = [
+        [...Subjects.map((subject) => subject.SubjectName)],
+        [...Subjects.map((subject) => `[${subject.SubjectAbbrev}]`)],
+      ];
+      if (options.includes('t')) {
+        columns.push([...Subjects.map((subject) => subject.TeacherName)]);
+        columns.push([
+          ...Subjects.map((subject) => `[${subject.TeacherAbbrev}]`),
+        ]);
+      }
+
+      columnifyData(columns, CELL_SPACING, [
+        {
+          position: 1,
+          size: COLUMN_SPACING,
+        },
+      ]);
       break;
     }
 
