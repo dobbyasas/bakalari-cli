@@ -155,6 +155,7 @@ Enter your password
   - n (next) -> další týden
   - m (minimal) -> nevypíše čísla hodin a názvy dnů
   - r (rooms) -> vypíše názvy tříd namísto předmětů
+  - d (dates) -> vypíše čísla dnů
 
 - marks (znamky)
   - m (minimal) -> nevypíše průměr a název předmětu

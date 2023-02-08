@@ -12,10 +12,11 @@ Options:
 -m (minimal)  -> minimální výpis
   (nevypíše čísla hodin a názvy dnů)
 -r (rooms)    -> vypíše názvy tříd namísto předmětů
+-d (dates)    -> vypíše čísla dnů
 
 Použití:
 -> timetable
 -> timetable -n
 -> timetable -pm
--> timetable
+-> timetable -d
 -> rozvrh

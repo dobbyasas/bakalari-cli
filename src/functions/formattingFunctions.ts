@@ -61,6 +61,7 @@ export const formatTimetable = (
   timetable: TimetableResult,
   cellSpacing: number,
   minimal = false,
+  showDates = false,
   showRooms = false,
   currentHour?: Hour['Caption'] | null
 ) => {
@@ -72,7 +73,7 @@ export const formatTimetable = (
   const longestRoomNameLength = getLongestRoomNameLength(Rooms);
 
   if (!minimal) {
-    let hourRow = ' '.repeat(longestWeekDayLength + cellSpacing);
+    let hourRow = ' '.repeat(longestWeekDayLength + CELL_SPACING);
     Hours.forEach((hour) => {
       hourRow += hour.Caption.padEnd(
         longestSubjectNameLength + cellSpacing,
@@ -83,7 +84,10 @@ export const formatTimetable = (
   }
 
   Days.forEach((day) => {
-    let row = minimal
+    let row = showDates
+      ? String(new Date(day.Date).getDate()).padEnd(2 + CELL_SPACING, ' ')
+      : '';
+    row += minimal
       ? ''
       : `${WEEK_DAYS[day.DayOfWeek - 1]}${' '.repeat(cellSpacing)}`;
     for (let i = 0; i < Hours.length; i++) {
@@ -237,7 +241,7 @@ export const formatAbsence = (
     ...absencesPerSubject.map((subject) => subject.SubjectName.length)
   );
   const longestLessonsCountLength = Math.max(
-    ...absencesPerSubject.map((subject) => String(subject.School).length)
+    ...absencesPerSubject.map((subject) => String(subject.LessonsCount).length)
   );
   const longestBaseLength = Math.max(
     ...absencesPerSubject.map((subject) => String(subject.Base).length)

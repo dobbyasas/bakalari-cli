@@ -183,6 +183,7 @@ export const handleCommand = async (
         timetable,
         CELL_SPACING,
         options.includes('m'),
+        options.includes('d'),
         options.includes('r'),
         currentHour ? currentHour.toString() : null
       );
