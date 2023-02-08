@@ -129,10 +129,19 @@ export const handleCommand = async (
       )) as SubjectsResult;
       completionFunction();
       if (!Subjects) return;
-      Subjects.forEach((subject) => {
-        console.log(`${subject.SubjectName} (${subject.SubjectAbbrev})`);
-        console.log(`${subject.TeacherName} (${subject.TeacherAbbrev})`);
-      });
+      columnifyData(
+        [
+          [...Subjects.map((subject) => subject.SubjectName)],
+          [...Subjects.map((subject) => `[${subject.SubjectAbbrev}]`)],
+        ],
+        CELL_SPACING,
+        [
+          {
+            position: 1,
+            size: COLUMN_SPACING,
+          },
+        ]
+      );
       break;
     }
 
