@@ -1,5 +1,13 @@
 subjects [predmety]
 
+Vypíše všechny předměty v aktuálním ročníku společně
+s jejich zkratkou. Při použití s option -t je možné výpis
+s učiteli a jejich zkratkami.
+
+Options
+-t (teachers) -> zobrazit učitele
+
 Použití
 -> subjects
+-> subjects -t
 -> predmety
