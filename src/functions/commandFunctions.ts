@@ -185,6 +185,7 @@ export const handleCommand = async (
         options.includes('m'),
         options.includes('d'),
         options.includes('r'),
+        options.includes('t'),
         currentHour ? currentHour.toString() : null
       );
       break;
