@@ -221,7 +221,7 @@ export const handleCommand = async (
       if (keywords.length === 1) {
         const columns = [
           marks.Subjects.map((subject) => subject.Subject.Abbrev),
-          marks.Subjects.map((subject) => subject.AverageText),
+          marks.Subjects.map((subject) => subject.AverageText.trim() || '?'),
         ];
         if (options.includes('l'))
           columns.push(
