@@ -159,7 +159,15 @@ export const handleCommand = async (
       if (
         options.filter((option) => ['s', 'p', 'n'].includes(option)).length > 1
       ) {
+        completionFunction();
         console.log(`${keywords[0]}: Možnosti -s, -p a -n nelze kombinovat!`);
+        return;
+      }
+
+      // Checking if the [r, t] options are not used at the same time
+      if (options.filter((option) => ['r', 't'].includes(option)).length > 1) {
+        completionFunction();
+        console.log(`${keywords[0]}: Možnosti -r a -t nelze kombinovat!`);
         return;
       }
 
@@ -197,7 +205,9 @@ export const handleCommand = async (
         timetable,
         CELL_SPACING,
         options.includes('m'),
+        options.includes('d'),
         options.includes('r'),
+        options.includes('t'),
         currentHour ? currentHour.toString() : null
       );
       break;
