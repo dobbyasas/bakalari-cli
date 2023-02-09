@@ -149,12 +149,17 @@ Enter your password
 - help (napoveda)
   - \[COMMAND\] -> vypíše nápovědu k příkazu (např. `help timetable`)
 
+- subjects (predmety)
+  - t (teachers) -> zobrazit učitele
+
 - timetable (rozvrh)
   - s (stable) -> stálý
   - p (previous) -> minulý týden
   - n (next) -> další týden
   - m (minimal) -> nevypíše čísla hodin a názvy dnů
   - r (rooms) -> vypíše názvy tříd namísto předmětů
+  - t (teachers) -> vypíše názvy učitelů namísto předmětů
+  - d (dates) -> vypíše čísla dnů
 
 - marks (znamky)
   - m (minimal) -> nevypíše průměr a název předmětu
