@@ -256,7 +256,9 @@ export const handleCommand = async (
           [
             targetSubject.Marks.map((mark) => mark.MarkText),
             targetSubject.Marks.map((mark) => `(Váha: ${String(mark.Weight)})`),
-            targetSubject.Marks.map((mark) => mark.Caption),
+            targetSubject.Marks.map((mark) =>
+              options.includes('m') ? '' : mark.Caption
+            ),
             targetSubject.Marks.map(
               (mark) => `[${getFormattedDate(mark.MarkDate)}]`
             ),
@@ -265,7 +267,7 @@ export const handleCommand = async (
           [
             {
               position: 2,
-              size: COLUMN_SPACING,
+              size: options.includes('m') ? 0 : COLUMN_SPACING,
             },
           ]
         );
