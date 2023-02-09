@@ -9,6 +9,9 @@ Druhy změny
 -> Změna třídy
 -> Suplování
 
+Options
+-s (sort) -> seřádí změny dle jejich druhu
+
 Použití
 -> changes
 -> zmeny

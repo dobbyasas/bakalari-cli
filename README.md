@@ -166,5 +166,8 @@ Enter your password
   - l (list)    -> vypíše u každého předmětu známky
   - \[SUBJECT\] -> vypíše známky z daného předmětu (např. `marks MAT`)
 
+- changes (zmeny)
+  - s (sort) -> seřádí změny dle jejich druhu
+
 - komens (komens)
   - \[ID\] -> vypíše zprávu z komensu dle jejího ID

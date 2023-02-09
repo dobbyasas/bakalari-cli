@@ -17,6 +17,7 @@ marks     [znamky]   - vypíše známky ze všech předmětů
   -m (minimal) -> nevypíše průměr a název předmětu
   -l (list)    -> vypíše u každého předmětu známky
 changes   [zmeny]    - vypíše změny v aktuálním rozvrhu
+  -s (sort) -> seřádí změny dle jejich druhu
 final     [pololeti] - vypíše konečné známky z každého pololetí
 absence   [absence]  - vypíše absenci z předmětů
 komens    [komens]   - vypíše záznamy z komensu

@@ -25,6 +25,7 @@ import {
   COLUMN_SPACING,
   EN_COMMANDS,
   COMMAND_LOOKUP_TABLE,
+  CHANGE_TYPES,
   C_RED,
   C_YELLOW,
   C_GREEN,
@@ -287,7 +288,15 @@ export const handleCommand = async (
       )) as SubstitutionsResult;
       completionFunction();
       if (!Changes) return;
-      formatChanges(Changes);
+      formatChanges(
+        !options.includes('s')
+          ? Changes
+          : Changes.sort((c1, c2) => {
+              const changeOne = CHANGE_TYPES[c1.ChangeType].toUpperCase();
+              const changeTwo = CHANGE_TYPES[c2.ChangeType].toUpperCase();
+              return changeOne < changeTwo ? -1 : changeOne > changeTwo ? 1 : 0;
+            })
+      );
       break;
     }
 
