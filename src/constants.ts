@@ -3,7 +3,7 @@ import type { Change } from './typings/timetableTypes.js';
 // Release Constants
 export const RELEASE_NUMBER = '1.0.4';
 export const RELEASE_PLACEHOLDER = '{release}';
-export const RELEASE_WIP = true;
+export const RELEASE_WIP = false;
 
 // Texts
 export const LOGGING_IN_TEXT = 'Probíhá přihlašování';
