@@ -18,11 +18,13 @@ export type APIEndpointRoute =
   | '/marks/final'
   | '/absence/student'
   | '/substitutions'
-  | '/subjects';
+  | '/subjects'
+  | '/komens/messages/received';
 
 export type APITokenObject = {
   access_token: string;
   refresh_token: string;
+  error?: string;
 };
 
 export type APIVersionResult = {
@@ -86,5 +88,15 @@ export type SubjectsResult = {
     TeacherSchoolPhone: string | null;
     TeacherHomePhone: string | null;
     TeacherMobilePhone: string | null;
+  }[];
+};
+
+export type KomensResult = {
+  Messages: {
+    Id: string;
+    Title: string;
+    Text: string;
+    SentDate: string;
+    RelevantName: string;
   }[];
 };

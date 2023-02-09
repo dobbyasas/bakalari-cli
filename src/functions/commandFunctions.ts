@@ -1,20 +1,22 @@
-import { printBanner } from './bannerFunctions';
+import { printBanner } from './bannerFunctions.js';
 import {
   formatTimetable,
   formatChanges,
   formatFinalMarks,
   formatAbsence,
   columnifyData,
-} from './formattingFunctions';
+  formatDate,
+  formatKomensMessage,
+} from './formattingFunctions.js';
 import {
   getPreviousWeekFormattedDate,
   getNextWeekFormattedDate,
   getFormattedDate,
   getCurrentHourNumber,
-} from './dateFunctions';
-import { fetchFromAPI } from './fetchFunctions';
-import { deleteAuth } from './authFunctions';
-import { shell } from '../main';
+} from './dateFunctions.js';
+import { fetchFromAPI } from './fetchFunctions.js';
+import { deleteAuth } from './authFunctions.js';
+import { shell } from '../main.js';
 import {
   HOSTNAME,
   RELEASE_NUMBER,
@@ -23,17 +25,22 @@ import {
   COLUMN_SPACING,
   EN_COMMANDS,
   COMMAND_LOOKUP_TABLE,
+  CHANGE_TYPES,
   C_RED,
   C_YELLOW,
   C_GREEN,
   C_BLUE,
   C_MAGENTA,
   C_END,
-} from '../constants';
+} from '../constants.js';
 
-import type { UserAuth } from '../typings/authTypes';
-import type { APITokenObject, APIVersionResult } from '../typings/apiTypes';
-import type { Hour } from '../typings/timetableTypes';
+import type { UserAuth } from '../typings/authTypes.js';
+import type {
+  APITokenObject,
+  APIVersionResult,
+  KomensResult,
+} from '../typings/apiTypes.js';
+import type { Hour } from '../typings/timetableTypes.js';
 import {
   TimetableResult,
   MarksResult,
@@ -41,7 +48,7 @@ import {
   AbsenceResult,
   SubstitutionsResult,
   SubjectsResult,
-} from '../typings/apiTypes';
+} from '../typings/apiTypes.js';
 
 export const handleCommand = async (
   keywords: string[],
@@ -49,12 +56,14 @@ export const handleCommand = async (
   auth: UserAuth,
   token: APITokenObject['access_token'],
   quitFunction: () => void,
-  loginFunction: () => Promise<unknown>
+  loginFunction: () => Promise<unknown>,
+  completionFunction: () => void
 ) => {
   if (keywords.length === 0) return;
   switch (keywords[0].toLowerCase()) {
     case 'help':
     case 'napoveda': {
+      completionFunction();
       const lowercaseKeywords = keywords.map((keyword) =>
         keyword.toLowerCase()
       );
@@ -85,6 +94,7 @@ export const handleCommand = async (
         token,
         '/timetable/actual'
       )) as TimetableResult;
+      completionFunction();
       if (!Hours) return;
       columnifyData(
         [
@@ -103,6 +113,7 @@ export const handleCommand = async (
         token,
         '/timetable/permanent'
       )) as TimetableResult;
+      completionFunction();
       if (!Teachers) return;
       Teachers.forEach((teacher) => {
         console.log(`${teacher.Abbrev} - ${teacher.Name}`);
@@ -117,10 +128,26 @@ export const handleCommand = async (
         token,
         '/subjects'
       )) as SubjectsResult;
-      Subjects.forEach((subject) => {
-        console.log(`${subject.SubjectName} (${subject.SubjectAbbrev})`);
-        console.log(`${subject.TeacherName} (${subject.TeacherAbbrev})`);
-      });
+      completionFunction();
+      if (!Subjects) return;
+
+      const columns = [
+        [...Subjects.map((subject) => subject.SubjectName)],
+        [...Subjects.map((subject) => `[${subject.SubjectAbbrev}]`)],
+      ];
+      if (options.includes('t')) {
+        columns.push([...Subjects.map((subject) => subject.TeacherName)]);
+        columns.push([
+          ...Subjects.map((subject) => `[${subject.TeacherAbbrev}]`),
+        ]);
+      }
+
+      columnifyData(columns, CELL_SPACING, [
+        {
+          position: 1,
+          size: COLUMN_SPACING,
+        },
+      ]);
       break;
     }
 
@@ -133,7 +160,15 @@ export const handleCommand = async (
       if (
         options.filter((option) => ['s', 'p', 'n'].includes(option)).length > 1
       ) {
+        completionFunction();
         console.log(`${keywords[0]}: Možnosti -s, -p a -n nelze kombinovat!`);
+        return;
+      }
+
+      // Checking if the [r, t] options are not used at the same time
+      if (options.filter((option) => ['r', 't'].includes(option)).length > 1) {
+        completionFunction();
+        console.log(`${keywords[0]}: Možnosti -r a -t nelze kombinovat!`);
         return;
       }
 
@@ -165,12 +200,15 @@ export const handleCommand = async (
         )) as TimetableResult;
         currentHour = getCurrentHourNumber(timetable.Hours);
       }
+      completionFunction();
       if (!timetable) return;
       formatTimetable(
         timetable,
         CELL_SPACING,
         options.includes('m'),
+        options.includes('d'),
         options.includes('r'),
+        options.includes('t'),
         currentHour ? currentHour.toString() : null
       );
       break;
@@ -179,26 +217,28 @@ export const handleCommand = async (
     case 'marks':
     case 'znamky': {
       const marks = (await fetchFromAPI(auth, token, '/marks')) as MarksResult;
+      completionFunction();
       if (!marks) return;
       if (keywords.length === 1) {
-        columnifyData(
-          [
-            marks.Subjects.map((subject) => subject.Subject.Abbrev),
-            marks.Subjects.map((subject) => subject.AverageText),
+        const columns = [
+          marks.Subjects.map((subject) => subject.Subject.Abbrev),
+          marks.Subjects.map((subject) => subject.AverageText.trim() || '?'),
+        ];
+        if (options.includes('l'))
+          columns.push(
             marks.Subjects.map((subject) =>
               subject.Marks.map((mark) => mark.MarkText.padEnd(2, ' ')).join(
                 ' '.repeat(CELL_SPACING)
               )
-            ),
-          ],
-          CELL_SPACING,
-          [
-            {
-              position: 1,
-              size: COLUMN_SPACING,
-            },
-          ]
-        );
+            )
+          );
+
+        columnifyData(columns, CELL_SPACING, [
+          {
+            position: 1,
+            size: COLUMN_SPACING,
+          },
+        ]);
       } else {
         const subjectName = keywords[1].toLowerCase();
         const targetSubject = marks.Subjects.find(
@@ -217,7 +257,9 @@ export const handleCommand = async (
           [
             targetSubject.Marks.map((mark) => mark.MarkText),
             targetSubject.Marks.map((mark) => `(Váha: ${String(mark.Weight)})`),
-            targetSubject.Marks.map((mark) => mark.Caption),
+            targetSubject.Marks.map((mark) =>
+              options.includes('m') ? '' : mark.Caption
+            ),
             targetSubject.Marks.map(
               (mark) => `[${getFormattedDate(mark.MarkDate)}]`
             ),
@@ -226,7 +268,7 @@ export const handleCommand = async (
           [
             {
               position: 2,
-              size: COLUMN_SPACING,
+              size: options.includes('m') ? 0 : COLUMN_SPACING,
             },
           ]
         );
@@ -244,8 +286,17 @@ export const handleCommand = async (
         token,
         '/substitutions'
       )) as SubstitutionsResult;
+      completionFunction();
       if (!Changes) return;
-      formatChanges(Changes);
+      formatChanges(
+        !options.includes('s')
+          ? Changes
+          : Changes.sort((c1, c2) => {
+              const changeOne = CHANGE_TYPES[c1.ChangeType].toUpperCase();
+              const changeTwo = CHANGE_TYPES[c2.ChangeType].toUpperCase();
+              return changeOne < changeTwo ? -1 : changeOne > changeTwo ? 1 : 0;
+            })
+      );
       break;
     }
 
@@ -256,6 +307,7 @@ export const handleCommand = async (
         token,
         '/marks/final'
       )) as FinalMarksResult;
+      completionFunction();
       if (!finalMarks) return;
       formatFinalMarks(finalMarks);
       break;
@@ -267,6 +319,7 @@ export const handleCommand = async (
         token,
         '/absence/student'
       )) as AbsenceResult;
+      completionFunction();
       if (!AbsencesPerSubject) return;
       printBanner('absenceLegend', {
         newLine: true,
@@ -289,13 +342,51 @@ export const handleCommand = async (
         token,
         '/substitutions'
       )) as TimetableResult;
+      completionFunction();
       if (!events) return;
       console.log(events);
       break;
     }
 
+    case 'komens': {
+      if (keywords.length > 1 && isNaN(Number(keywords[1]))) {
+        return;
+      }
+
+      const { Messages } = (await fetchFromAPI(
+        auth,
+        token,
+        '/komens/messages/received',
+        'POST'
+      )) as KomensResult;
+      completionFunction();
+      if (!Messages) return;
+      if (keywords.length === 1) {
+        columnifyData(
+          [
+            [...Messages.map((_, index) => `[${index}]`)],
+            [...Messages.map((message) => message.RelevantName)],
+            [...Messages.map((mesage) => `[${formatDate(mesage.SentDate)}]`)],
+          ],
+          CELL_SPACING
+        );
+      } else {
+        const targetMessage = Messages[Number(keywords[1])];
+        if (!targetMessage) {
+          console.log(`Zpráva s ID ${keywords[1]} neexistuje!`);
+          return 0;
+        }
+        console.log(targetMessage.RelevantName);
+        console.log(targetMessage.Title);
+        console.log(formatDate(targetMessage.SentDate) + '\n');
+        console.log(formatKomensMessage(targetMessage.Text));
+      }
+      break;
+    }
+
     case 'bfetch': {
       const apiInfo = (await fetchFromAPI(auth, token, '')) as APIVersionResult;
+      completionFunction();
       if (!apiInfo) return;
 
       const hostLine = `${C_BLUE}${auth.userName}${C_END}@${C_BLUE}${HOSTNAME}${C_BLUE}`;
@@ -316,12 +407,14 @@ export const handleCommand = async (
 
     case 'clear':
     case 'cls': {
+      completionFunction();
       console.clear();
       break;
     }
 
     case 'logout':
     case 'odhlasit': {
+      completionFunction();
       deleteAuth();
       console.log('Byl jste úspěšně odhlášen.');
       console.log('Chcete se znovu přihlásit? [Y/n]');
@@ -339,10 +432,12 @@ export const handleCommand = async (
     }
 
     case 'exit':
+      completionFunction();
       quitFunction();
       break;
 
     default:
+      completionFunction();
       console.log(`Neznámý příkaz: ${keywords[0]}`);
       break;
   }

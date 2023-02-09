@@ -3,19 +3,25 @@ help      [napoveda] - vypíše nápovědu
 hours     [hodiny]   - vypíše kdy začíná a končí jaká hodina
 teachers  [ucitele]  - vypíše všechny učitele ve stálém rozvrhu
 subjects  [predmety] - vypíše předměty a jejich učitele
+  -t (teachers) -> zobrazit učitele
 timetable [rozvrh]   - vypíše aktuální rozvrh
   -s (stable)   -> stálý
   -p (previous) -> minulý týden
   -n (next)     -> další týden
   -m (minimal)  -> nevypíše čísla hodin a názvy dnů
   -r (rooms)    -> vypíše názvy tříd namísto předmětů
+  -t (teachers) -> vypíše názvy učitelů namísto předmětů
+  -d (dates)    -> vypíše čísla dnů
 marks     [znamky]   - vypíše známky ze všech předmětů
   [SUBJECT]    -> vypíše známky z daného předmětu (např. marks MAT)
   -m (minimal) -> nevypíše průměr a název předmětu
   -l (list)    -> vypíše u každého předmětu známky
 changes   [zmeny]    - vypíše změny v aktuálním rozvrhu
+  -s (sort) -> seřádí změny dle jejich druhu
 final     [pololeti] - vypíše konečné známky z každého pololetí
 absence   [absence]  - vypíše absenci z předmětů
+komens    [komens]   - vypíše záznamy z komensu
+  [ID] -> vypíše zprávu z komensu dle jejího ID
 bfetch    [bfetch]   - vypíše informace o aplikaci a API
 clear     [cls]      - vyčistí obrazovku
 logout    [odhlasit] - odhlásí uživatele a vymaže data o loginu

@@ -9,10 +9,10 @@ Zkratka může být psána velkými i malými písmeny:
 -> marks MAT = marks mat
 
 Options
--m -> minimální výpis
+[SUBJECT]    -> vypíše známky z daného předmětu (např. marks MAT)
+-m (minimal) -> minimální výpis
   (nevypíše název a průměr, pokud je volen předmět
--l -> vypíše u každého předmětu známky
-[SUBJECT] -> vypíše známky z daného předmětu (např. marks MAT)
+-l (list)    -> vypíše u každého předmětu známky
 
 Použití
 -> marks

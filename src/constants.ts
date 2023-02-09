@@ -1,8 +1,13 @@
-import type { Change } from './typings/timetableTypes';
+import type { Change } from './typings/timetableTypes.js';
 
 // Release Constants
-export const RELEASE_NUMBER = '1.0.3';
+export const RELEASE_NUMBER = '1.0.4';
 export const RELEASE_PLACEHOLDER = '{release}';
+export const RELEASE_WIP = false;
+
+// Texts
+export const LOGGING_IN_TEXT = 'Probíhá přihlašování';
+export const LOADING_DATA_TEXT = 'Načítání dat';
 
 // Constants
 export const PASSWORD_KEY = 'qLGT7kpULFOc';
@@ -22,6 +27,7 @@ export const EN_COMMANDS: string[] = [
   'changes',
   'final',
   'absence',
+  'komens',
   'bfetch',
   'clear',
   'logout',
@@ -36,6 +42,7 @@ export const CZ_COMMANDS: string[] = [
   'zmeny',
   'pololeti',
   'absence',
+  'komens',
   'bfetch',
   'cls',
   'odhlasit',

@@ -11,14 +11,14 @@ import {
   C_MAGENTA,
   C_END,
   BG_WHITE,
-} from '../constants';
+} from '../constants.js';
 
-import type { Subject, Hour, Change } from '../typings/timetableTypes';
+import type { Subject, Hour, Change } from '../typings/timetableTypes.js';
 import type {
   TimetableResult,
   FinalMarksResult,
   AbsenceResult,
-} from '../typings/apiTypes';
+} from '../typings/apiTypes.js';
 
 export const columnifyData = (
   entries: string[][],
@@ -50,40 +50,56 @@ const getLongestWeekDayLength = (weekDays: string[]) => {
 };
 
 const getLongestSubjectNameLength = (subjects: TimetableResult['Subjects']) => {
-  return Math.max(...subjects.map((subject) => subject.Abbrev.length));
+  return Math.max(
+    ...subjects.map((subject) => subject.Abbrev.trimEnd().length)
+  );
 };
 
 const getLongestRoomNameLength = (rooms: TimetableResult['Rooms']) => {
-  return Math.max(...rooms.map((room) => room.Abbrev.length));
+  return Math.max(...rooms.map((room) => room.Abbrev.trimEnd().length));
+};
+
+const getLongestTeacherNameLength = (teachers: TimetableResult['Teachers']) => {
+  return Math.max(
+    ...teachers.map((teacher) => teacher.Abbrev.trimEnd().length)
+  );
 };
 
 export const formatTimetable = (
   timetable: TimetableResult,
   cellSpacing: number,
   minimal = false,
+  showDates = false,
   showRooms = false,
+  showTeachers = false,
   currentHour?: Hour['Caption'] | null
 ) => {
-  const { Hours, Days, Subjects, Rooms } = timetable;
-
+  const { Hours, Days, Subjects, Rooms, Teachers } = timetable;
   const minHour = Math.min(...Hours.map((hour) => hour.Id)) ?? 0;
+
   const longestWeekDayLength = getLongestWeekDayLength(WEEK_DAYS);
   const longestSubjectNameLength = getLongestSubjectNameLength(Subjects);
   const longestRoomNameLength = getLongestRoomNameLength(Rooms);
+  const longestTeacherNameLength = getLongestTeacherNameLength(Teachers);
+
+  let cellContentSize = longestSubjectNameLength;
+  if (showRooms) cellContentSize = longestRoomNameLength;
+  if (showTeachers) cellContentSize = longestTeacherNameLength;
 
   if (!minimal) {
-    let hourRow = ' '.repeat(longestWeekDayLength + cellSpacing);
+    let hourRow = ' '.repeat(longestWeekDayLength + CELL_SPACING);
+    if (showDates) hourRow += ' '.repeat(2 + CELL_SPACING);
     Hours.forEach((hour) => {
-      hourRow += hour.Caption.padEnd(
-        longestSubjectNameLength + cellSpacing,
-        ' '
-      );
+      hourRow += hour.Caption.padEnd(cellContentSize + cellSpacing, ' ');
     });
     console.log(hourRow);
   }
 
   Days.forEach((day) => {
-    let row = minimal
+    let row = showDates
+      ? String(new Date(day.Date).getDate()).padEnd(2 + CELL_SPACING, ' ')
+      : '';
+    row += minimal
       ? ''
       : `${WEEK_DAYS[day.DayOfWeek - 1]}${' '.repeat(cellSpacing)}`;
     for (let i = 0; i < Hours.length; i++) {
@@ -99,42 +115,54 @@ export const formatTimetable = (
 
       if (!atom) {
         row += `${hightlightStartString}${' '.repeat(
-          longestSubjectNameLength
-        )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
+          cellContentSize
+        )}${hightlightEndString}${' '.repeat(cellSpacing)}`;
         continue;
       }
 
       const subject = Subjects.find(
         (subject) => subject.Id === atom?.SubjectId
       );
-      const room = Rooms.find((room) => room.Id === atom?.RoomId);
 
-      if (!showRooms) {
+      if (!showRooms && !showTeachers) {
         row += subject
           ? `${hightlightStartString}${(subject?.Abbrev ?? ' ').padEnd(
               longestSubjectNameLength,
               ' '
-            )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`
+            )}${hightlightEndString}${' '.repeat(cellSpacing)}`
           : (() => {
               const change = atom.Change;
               if (!change || !change.TypeAbbrev)
                 return `${hightlightStartString}${' '.repeat(
-                  longestSubjectNameLength + CELL_SPACING
+                  longestSubjectNameLength + cellSpacing
                 )}${hightlightEndString}`;
               return `${hightlightStartString}${change.TypeAbbrev.padEnd(
                 longestSubjectNameLength,
                 ' '
-              )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
+              )}${hightlightEndString}${' '.repeat(cellSpacing)}`;
             })();
-      } else {
+      } else if (showRooms) {
+        const room = Rooms.find((room) => room.Id === atom?.RoomId);
         row += room
           ? `${hightlightStartString}${(room?.Abbrev ?? '').padEnd(
-              longestRoomNameLength + cellSpacing,
+              longestRoomNameLength,
               ' '
-            )}${hightlightEndString}`
+            )}${hightlightEndString}${' '.repeat(cellSpacing)}`
           : `${hightlightStartString}${'-'.repeat(
               longestRoomNameLength
-            )}${hightlightEndString}${' '.repeat(CELL_SPACING)}`;
+            )}${hightlightEndString}${' '.repeat(cellSpacing)}`;
+      } else {
+        const teacher = Teachers.find(
+          (teacher) => teacher.Id === atom?.TeacherId
+        );
+        row += teacher
+          ? `${hightlightStartString}${(teacher?.Abbrev.trimEnd() ?? '').padEnd(
+              longestTeacherNameLength,
+              ' '
+            )}${hightlightEndString}${' '.repeat(cellSpacing)}`
+          : `${hightlightStartString}${'-'.repeat(
+              longestTeacherNameLength
+            )}${hightlightEndString}${' '.repeat(cellSpacing)}`;
       }
     }
     console.log(row);
@@ -146,12 +174,32 @@ export const formatDate = (dateString: string): string => {
   return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`;
 };
 
+export const getChangeColor = (changeType: Change['ChangeType']): string => {
+  switch (changeType) {
+    case 'Added':
+      return C_GREEN;
+    case 'Canceled':
+      return C_RED;
+    case 'Removed':
+      return C_RED;
+    case 'RoomChanged':
+      return C_BLUE;
+    case 'Substitution':
+      return C_YELLOW;
+  }
+};
+
 export const formatChanges = (changes: Change[]) => {
   columnifyData(
     [
       changes.map((change) => formatDate(change.Day)),
       changes.map((change) => `(${change.Hours})`),
-      changes.map((change) => `[${CHANGE_TYPES[change.ChangeType]}]`),
+      changes.map(
+        (change) =>
+          `${getChangeColor(change.ChangeType)}[${
+            CHANGE_TYPES[change.ChangeType]
+          }]${C_END}`
+      ),
       changes.map((change) => change.Description),
     ],
     CELL_SPACING
@@ -237,7 +285,7 @@ export const formatAbsence = (
     ...absencesPerSubject.map((subject) => subject.SubjectName.length)
   );
   const longestLessonsCountLength = Math.max(
-    ...absencesPerSubject.map((subject) => String(subject.School).length)
+    ...absencesPerSubject.map((subject) => String(subject.LessonsCount).length)
   );
   const longestBaseLength = Math.max(
     ...absencesPerSubject.map((subject) => String(subject.Base).length)
@@ -292,3 +340,11 @@ export const formatAbsence = (
     console.log(row);
   });
 };
+
+export const formatKomensMessage = (message: string) =>
+  message
+    .replace(/<br[^>]*>*\/>/g, '\n')
+    .replace(/<[^>]*>/g, '')
+    .replace(/  +/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .trim();

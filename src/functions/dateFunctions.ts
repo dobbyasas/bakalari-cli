@@ -1,4 +1,4 @@
-import type { Hour } from '../typings/timetableTypes';
+import type { Hour } from '../typings/timetableTypes.js';
 
 export const getFormattedDate = (dateString: string): string => {
   const date = new Date(dateString);

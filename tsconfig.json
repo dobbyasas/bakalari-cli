@@ -1,0 +1,11 @@
+{
+  "target": "es5",
+  "compilerOptions": {
+    "module": "node16",
+    "moduleResolution": "node16",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

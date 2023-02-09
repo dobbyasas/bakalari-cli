@@ -1,13 +1,24 @@
-import { Shell } from './shell';
-import { printBanner } from './functions/bannerFunctions';
-import { getAuthFromCache, getAuthFromInput } from './functions/authFunctions';
-import { fetchToken } from './functions/fetchFunctions';
-import { saveAuth } from './functions/authFunctions';
-import { handleCommand } from './functions/commandFunctions';
-import { HOSTNAME, RELEASE_NUMBER } from './constants';
+import { Shell } from './shell.js';
+import { printBanner } from './functions/bannerFunctions.js';
+import {
+  getAuthFromCache,
+  getAuthFromInput,
+} from './functions/authFunctions.js';
+import { fetchToken } from './functions/fetchFunctions.js';
+import { saveAuth } from './functions/authFunctions.js';
+import { handleCommand } from './functions/commandFunctions.js';
+import {
+  HOSTNAME,
+  RELEASE_NUMBER,
+  RELEASE_WIP,
+  LOGGING_IN_TEXT,
+  LOADING_DATA_TEXT,
+  C_YELLOW,
+  C_END,
+} from './constants.js';
 
-import type { UserAuth } from './typings/authTypes';
-import type { APITokenObject } from './typings/apiTypes';
+import type { UserAuth } from './typings/authTypes.js';
+import type { APITokenObject } from './typings/apiTypes.js';
 
 export const shell = new Shell();
 
@@ -16,7 +27,9 @@ const handleLogin = async (): Promise<{
   tokenData: APITokenObject;
 } | null> => {
   const auth = getAuthFromCache() ?? getAuthFromInput();
+  shell.spinner.start(LOGGING_IN_TEXT);
   const tokenData = await fetchToken(auth);
+  shell.spinner.stop();
 
   if (!tokenData) {
     console.log('Incorrect login!');
@@ -39,8 +52,15 @@ const handleLogin = async (): Promise<{
     newLine: true,
     placeholders: {
       release: RELEASE_NUMBER,
+      wip: RELEASE_WIP ? ' [WIP]' : '',
     },
   });
+
+  if (RELEASE_WIP) {
+    console.log(
+      `${C_YELLOW}Pracujete s WIP verzí! Může nastat nedefinované chování.${C_END}\n`
+    );
+  }
 
   const loginData = await handleLogin();
   if (!loginData) return;
@@ -48,6 +68,7 @@ const handleLogin = async (): Promise<{
   let programRunning = true;
   while (programRunning) {
     const command = shell.getCommand();
+    shell.spinner.start(LOADING_DATA_TEXT);
     await handleCommand(
       command.keywords,
       command.options,
@@ -56,7 +77,10 @@ const handleLogin = async (): Promise<{
       () => {
         programRunning = false;
       },
-      handleLogin
+      handleLogin,
+      () => {
+        shell.spinner.stop();
+      }
     );
   }
 })();
