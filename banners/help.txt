@@ -3,6 +3,7 @@ help      [napoveda] - vypíše nápovědu
 hours     [hodiny]   - vypíše kdy začíná a končí jaká hodina
 teachers  [ucitele]  - vypíše všechny učitele ve stálém rozvrhu
 subjects  [predmety] - vypíše předměty a jejich učitele
+  -t (teachers) -> zobrazit učitele
 timetable [rozvrh]   - vypíše aktuální rozvrh
   -s (stable)   -> stálý
   -p (previous) -> minulý týden

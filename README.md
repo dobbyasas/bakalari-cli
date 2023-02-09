@@ -149,6 +149,9 @@ Enter your password
 - help (napoveda)
   - \[COMMAND\] -> vypíše nápovědu k příkazu (např. `help timetable`)
 
+- subjects (predmety)
+  - t (teachers) -> zobrazit učitele
+
 - timetable (rozvrh)
   - s (stable) -> stálý
   - p (previous) -> minulý týden
