@@ -174,12 +174,32 @@ export const formatDate = (dateString: string): string => {
   return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`;
 };
 
+export const getChangeColor = (changeType: Change['ChangeType']): string => {
+  switch (changeType) {
+    case 'Added':
+      return C_GREEN;
+    case 'Canceled':
+      return C_RED;
+    case 'Removed':
+      return C_RED;
+    case 'RoomChanged':
+      return C_BLUE;
+    case 'Substitution':
+      return C_YELLOW;
+  }
+};
+
 export const formatChanges = (changes: Change[]) => {
   columnifyData(
     [
       changes.map((change) => formatDate(change.Day)),
       changes.map((change) => `(${change.Hours})`),
-      changes.map((change) => `[${CHANGE_TYPES[change.ChangeType]}]`),
+      changes.map(
+        (change) =>
+          `${getChangeColor(change.ChangeType)}[${
+            CHANGE_TYPES[change.ChangeType]
+          }]${C_END}`
+      ),
       changes.map((change) => change.Description),
     ],
     CELL_SPACING
