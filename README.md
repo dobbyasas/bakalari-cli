@@ -34,9 +34,11 @@ Pokud tyto aplikace máš, pak si ulož zdrojový kód aplikace. Je hned několi
 
 Pokud chceš stáhnout release (1.):
 
-Jdi na hlavní stránku repozitáře a v pravém bočním panelu najdeš sekci Releases. Najdeš zde
-release, který má štítek *Latest*. Klikni na něj a na konci stránky najdeš sekci Assets.
-Klikni na `Source code (zip)` a kód se ti v tomto formátu stáhne.
+Jdi na tento odkaz:
+https://github.com/rpsloup/bakalari-cli/releases/latest
+
+Až se na něj dostaneš, klikni dole v sekci `Assets` na `Source code (zip)`. Archiv .zip se
+ti pak stáhne do zařízení.
 
 Pokud chceš stáhnout kód z větve `master` (2.):
 
