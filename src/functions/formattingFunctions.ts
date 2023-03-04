@@ -55,6 +55,15 @@ const getLongestSubjectNameLength = (subjects: TimetableResult['Subjects']) => {
   );
 };
 
+const getLongestChangeSubjectLength = (days: TimetableResult['Days']) => {
+  return Math.max(
+    ...days
+      .map((day) =>
+        day.Atoms.map((atom) => atom.Change?.TypeAbbrev?.length ?? 0)
+      )
+      .flat()
+  );
+};
 const getLongestRoomNameLength = (rooms: TimetableResult['Rooms']) => {
   return Math.max(...rooms.map((room) => room.Abbrev.trimEnd().length));
 };
@@ -77,12 +86,29 @@ export const formatTimetable = (
   const { Hours, Days, Subjects, Rooms, Teachers } = timetable;
   const minHour = Math.min(...Hours.map((hour) => hour.Id)) ?? 0;
 
-  const longestWeekDayLength = getLongestWeekDayLength(WEEK_DAYS);
-  const longestSubjectNameLength = getLongestSubjectNameLength(Subjects);
-  const longestRoomNameLength = getLongestRoomNameLength(Rooms);
-  const longestTeacherNameLength = getLongestTeacherNameLength(Teachers);
+  const longestChangeSubjectLength = getLongestChangeSubjectLength(Days);
+  const longestWeekDayLength = Math.max(
+    getLongestWeekDayLength(WEEK_DAYS),
+    longestChangeSubjectLength
+  );
+  const longestSubjectNameLength = Math.max(
+    getLongestSubjectNameLength(Subjects),
+    longestChangeSubjectLength
+  );
+  const longestRoomNameLength = Math.max(
+    getLongestRoomNameLength(Rooms),
+    longestChangeSubjectLength
+  );
+  const longestTeacherNameLength = Math.max(
+    getLongestTeacherNameLength(Teachers),
+    longestChangeSubjectLength
+  );
 
-  let cellContentSize = longestSubjectNameLength;
+  let cellContentSize =
+    longestSubjectNameLength < 0
+      ? longestChangeSubjectLength
+      : longestSubjectNameLength;
+
   if (showRooms) cellContentSize = longestRoomNameLength;
   if (showTeachers) cellContentSize = longestTeacherNameLength;
 

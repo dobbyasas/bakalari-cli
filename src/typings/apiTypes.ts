@@ -5,9 +5,9 @@ import type {
   Subject,
   Room,
   Change,
-} from './timetableTypes';
-import type { SubjectMark, FinalMark } from './markTypes';
-import type { Absence, SubjectAbsence } from './absenceTypes';
+} from './timetableTypes.js';
+import type { SubjectMark, FinalMark } from './markTypes.js';
+import type { Absence, SubjectAbsence } from './absenceTypes.js';
 
 export type APIEndpointRoute =
   | ''
