@@ -7,11 +7,11 @@ import { DATA_FOLDER, PASSWORD_KEY } from '../constants.js';
 import type { UserAuth } from '../typings/authTypes.js';
 
 export const getAuthFromInput = (): UserAuth => {
-  console.log('Zadejte URL k aplikaci Bakaláři');
+  console.log('dej mi adresu baskalářů kurva');
   const apiEndpoint = shell.getInput();
-  console.log('Zadejte vaše uživatelské jméno');
+  console.log('teď tvoje jméno');
   const userName = shell.getInput();
-  console.log('Zadejte vaše heslo');
+  console.log('teď kurva heslo');
   const password = shell.getPassword();
   console.log('');
 

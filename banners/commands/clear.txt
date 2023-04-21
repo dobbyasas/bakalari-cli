@@ -1,5 +1,6 @@
 clear [cls]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Vyčistí obsah obrazovky.
 
 Použití

@@ -32,7 +32,7 @@ const handleLogin = async (): Promise<{
   shell.spinner.stop();
 
   if (!tokenData) {
-    console.log('Incorrect login!');
+    console.log('bro špatnej kogin');
     return null;
   }
 
@@ -58,7 +58,7 @@ const handleLogin = async (): Promise<{
 
   if (RELEASE_WIP) {
     console.log(
-      `${C_YELLOW}Pracujete s WIP verzí! Může nastat nedefinované chování.${C_END}\n`
+      `${C_YELLOW}macatý penis.${C_END}\n`
     );
   }
 

@@ -1,5 +1,6 @@
 subjects [predmety]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Vypíše všechny předměty v aktuálním ročníku společně
 s jejich zkratkou. Při použití s option -t je možné výpis
 s učiteli a jejich zkratkami.

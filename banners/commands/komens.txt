@@ -1,5 +1,6 @@
 komens [komens]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Vypíše seznam všech zpráv z komensu. Zobrazí pouze jejich
 autory a datum odeslání. Mimo to vypisuje i ID, podle
 kterého lze zobrazit danou zprávu.

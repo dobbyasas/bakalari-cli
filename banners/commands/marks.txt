@@ -1,5 +1,6 @@
 marks [znamky]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Vypíše průměry ze všech předmětů v aktuálním pololetí.
 Po přidání zkratky předmětu za příkaz se zobrazí všechny
 známky z daného předmětu, společně s jejich váhami,

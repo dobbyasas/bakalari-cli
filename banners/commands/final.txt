@@ -1,5 +1,6 @@
 final [pololeti]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Vypíše finální známky ze všech pololetí. Zobrazují se
 předměty ze všech ročníků, nevadí tedy, že předmět již
 v aktuálním ročníku není.

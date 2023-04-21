@@ -1,5 +1,6 @@
 changes [zmeny]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Vypíše změny v rozvrhu z aktuálního týdne. Zobrazí se
 jejich datum, interval hodin, druh změny a její popis.
 

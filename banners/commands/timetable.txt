@@ -1,5 +1,6 @@
 timetable [rozvrh]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Tento příkaz vypíše aktuální rozvrh. Vypíše i čísla hodin
 a názvy jednotlivých dní. V případě, že chceš zobrazit
 stálý rozvrh nebo rozvrh z minulého či následujícího

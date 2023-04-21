@@ -82,7 +82,7 @@ export const handleCommand = async (
       });
       if (!bannerExists)
         console.log(
-          `Nápověda pro příkaz ${lowercaseKeywords[1]} zatím neexistuje!`
+          `Nápověda pro příkaz ${lowercaseKeywords[1]} prostě není, smiř se s tim`
         );
       break;
     }
@@ -161,14 +161,14 @@ export const handleCommand = async (
         options.filter((option) => ['s', 'p', 'n'].includes(option)).length > 1
       ) {
         completionFunction();
-        console.log(`${keywords[0]}: Možnosti -s, -p a -n nelze kombinovat!`);
+        console.log(`${keywords[0]}: Možnosti -s, -p a -n kurva nejde kombinovat!`);
         return;
       }
 
       // Checking if the [r, t] options are not used at the same time
       if (options.filter((option) => ['r', 't'].includes(option)).length > 1) {
         completionFunction();
-        console.log(`${keywords[0]}: Možnosti -r a -t nelze kombinovat!`);
+        console.log(`${keywords[0]}: Možnosti -r a -t prostěn nejde kombinovat ty kundo tupá!`);
         return;
       }
 
@@ -246,7 +246,7 @@ export const handleCommand = async (
             subject.Subject.Abbrev.trimEnd().toLowerCase() === subjectName
         );
         if (!targetSubject) {
-          console.log(`Předmět ${subjectName.toUpperCase()} nebyl nalezen!`);
+          console.log(`Předmět ${subjectName.toUpperCase()} neexistuje ty hloupá kundo!`);
           return;
         }
 
@@ -274,7 +274,7 @@ export const handleCommand = async (
         );
 
         if (!options.includes('m'))
-          console.log(`\nPrůměr: ${targetSubject.AverageText}`);
+          console.log(`\nPrůměr ty kundo: ${targetSubject.AverageText}`);
       }
       break;
     }
@@ -373,7 +373,7 @@ export const handleCommand = async (
       } else {
         const targetMessage = Messages[Number(keywords[1])];
         if (!targetMessage) {
-          console.log(`Zpráva s ID ${keywords[1]} neexistuje!`);
+          console.log(`Zpráva s ID ${keywords[1]} není ty kokote zajebanej!`);
           return 0;
         }
         console.log(targetMessage.RelevantName);
@@ -416,8 +416,9 @@ export const handleCommand = async (
     case 'odhlasit': {
       completionFunction();
       deleteAuth();
-      console.log('Byl jste úspěšně odhlášen.');
-      console.log('Chcete se znovu přihlásit? [Y/n]');
+      console.log('fajn odhláisil jsem tě.');
+      console.log('idiote');
+      console.log('pičo chceš se znovu přihlásit? [Y/n]');
 
       const response = shell.getInput();
       if (response.length && response[0].trim().toLowerCase() === 'n') {
@@ -438,7 +439,7 @@ export const handleCommand = async (
 
     default:
       completionFunction();
-      console.log(`Neznámý příkaz: ${keywords[0]}`);
+      console.log(`Neznámý příkaz ty kundo blbá: ${keywords[0]}`);
       break;
   }
 };

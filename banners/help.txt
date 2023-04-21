@@ -1,3 +1,4 @@
+TAD MÁŠ NÁPOVĚDU TY KRETÉNSKEJ IDIOTE
 help      [napoveda] - vypíše nápovědu
   [COMMAND] -> vypíše nápovědu k příkazu (např. help timetable)
 hours     [hodiny]   - vypíše kdy začíná a končí jaká hodina

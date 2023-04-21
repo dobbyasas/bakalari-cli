@@ -13,7 +13,7 @@ export const printBanner = (
   try {
     if (!fs.existsSync(`${BANNER_FOLDER}/${banner}.txt`)) {
       if (options ? options.displayError : true)
-        console.log(`Banner ${banner} does not exist!`);
+        console.log(`Banner ${banner} neexistuje kurva!`);
       if (options?.newLine) console.log('');
       return false;
     }

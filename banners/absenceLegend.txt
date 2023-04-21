@@ -1,4 +1,4 @@
-Celkový počet hodin
+Celkový počet hodin kokote
 {baseColor}Obecná{end}
 {schoolColor}Nezapočtená{end}
 {lateColor}Pozdní příchod{end}

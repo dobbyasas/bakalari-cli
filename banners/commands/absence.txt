@@ -1,5 +1,6 @@
 absence [absence]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Vypíše absenci ze všech předmětů. Nad výpisem absence se
 vypíše legenda která říká, jaká barva koresponduje s jakým
 druhem absence.

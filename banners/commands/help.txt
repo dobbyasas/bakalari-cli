@@ -1,5 +1,6 @@
 help [napoveda]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Vypíše nápovědu ke všem příkazům, které v aplikaci
 existují. Také vypíše options a parametry k nim, společně
 s jejich popisem.

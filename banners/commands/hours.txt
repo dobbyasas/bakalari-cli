@@ -1,5 +1,6 @@
 hours [hodiny]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Tento příkaz vypíše začátky a konce jednotlivých hodin.
 Můžeš tak snadno zjistit, kolik času zbývá do konce hodiny
 nebo jak dlouhá je přestávka mezi hodinami.

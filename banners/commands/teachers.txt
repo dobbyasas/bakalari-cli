@@ -1,5 +1,6 @@
 teachers [ucitele]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Tento příkaz vypíše učitele ze stálého rozvrhu.
 Přesněji zobrazí zkratku učitele a jeho jméno hned za ní.
 

@@ -1,5 +1,6 @@
 logout [odhlasit]
 
+Protože jsi hloupá piča tady máš vysvětlení.
 Odhlásí aktivního uživatele. Po odhlášení se zobrazí
 možnost pro nové přihlášení. Tento příkaz také smaže
 soubor, kde jsou uloženy přihlašovací údaje.
